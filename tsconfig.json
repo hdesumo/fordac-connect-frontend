@@ -1,26 +1,31 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    /* 🔹 Structure & Base */
+    "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "noEmit": true,
+
+    /* 🔹 Modules & Résolution */
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+
+    /* 🔹 Alias d'importation (@/...) */
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
-    }
+      "@/*": ["*"]
+    },
+
+    /* 🔹 Incrémentation & Plugins Next.js */
+    "incremental": true,
+    "plugins": [{ "name": "next" }]
   },
   "include": [
     "next-env.d.ts",
@@ -28,7 +33,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "types/**/*.d.ts"
   ],
   "exclude": ["node_modules"]
 }

@@ -2,138 +2,182 @@
 
 import Image from "next/image";
 
-interface Member {
-  name: string;
-  title: string;
-  region?: string;
-  image?: string;
-}
-
-const members: Member[] = [
-  {
-    name: "Romaric Yebchue Semenou",
-    title: "Président national",
-    image: "/president.png",
-  },
-  {
-    name: "Martine Ngassa",
-    title: "Secrétaire générale",
-    image: "/hero/hero2.jpeg",
-  },
-  {
-    name: "Jean-Paul Kalla",
-    title: "Coordinateur régional – Littoral",
-    image: "/hero/hero3.jpeg",
-  },
-  {
-    name: "Rosine Nguetchoua",
-    title: "Responsable Communication nationale",
-    image: "/hero/hero1.jpeg",
-  },
-  {
-    name: "Benoît Ebongué",
-    title: "Trésorier national",
-    image: "/hero/hero2.jpeg",
-  },
-  {
-    name: "Claudine Mbah",
-    title: "Coordinatrice régionale – Ouest",
-    image: "/hero/hero3.jpeg",
-  },
-  {
-    name: "Alain Tchoumi",
-    title: "Chargé des Relations extérieures",
-    image: "/hero/hero1.jpeg",
-  },
-];
-
 export default function OrganisationPage() {
+  const bureau = [
+    {
+      nom: "Romaric Yebchue Semenou",
+      fonction: "Président national",
+      photo: "/president.png",
+    },
+    {
+      nom: "Clarisse Mbarga",
+      fonction: "Secrétaire générale",
+      photo: "/hero/hero1.jpeg",
+    },
+    {
+      nom: "Moussa Ndong",
+      fonction: "Trésorier national",
+      photo: "/hero/hero2.jpeg",
+    },
+    {
+      nom: "Aline Tchamda",
+      fonction: "Porte-parole du parti",
+      photo: "/hero/hero3.jpeg",
+    },
+  ];
+
+  const coordinations = [
+    { region: "Nord", coordonnateur: "Amadou Issa" },
+    { region: "Centre", coordonnateur: "Marie Onana" },
+    { region: "Littoral", coordonnateur: "Jean-Paul Kalla" },
+    { region: "Sud", coordonnateur: "Rosine Nguetchoua" },
+    { region: "Ouest", coordonnateur: "Martine Ngassa" },
+  ];
+
   return (
-    <main className="min-h-screen bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-950 text-gray-800 dark:text-gray-100 transition-colors duration-500">
-      <section className="max-w-7xl mx-auto px-4 py-20">
-        {/* 🟩 Titre principal */}
-        <header className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-green-700 dark:text-green-400 mb-4">
-            Organisation du FORDAC
-          </h1>
-          <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Le FORDAC est structuré autour d’une présidence nationale, d’un
-            secrétariat général, et de coordinations régionales assurant la
-            cohésion et la mise en œuvre des actions sur tout le territoire.
-          </p>
-        </header>
+    <section className="min-h-screen bg-gray-50 dark:bg-gray-900 py-16 px-6">
+      <div className="max-w-6xl mx-auto">
+        {/* --- Introduction + Mot du Président --- */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start mb-16">
+          {/* Bloc texte introductif */}
+          <div className="md:col-span-2">
+            <h1 className="text-3xl font-bold text-green-700 mb-4">
+              Organisation du FORDAC
+            </h1>
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+              Le <strong>FORDAC</strong> – <em>Forces Démocratiques pour l’Action et le Changement</em> – 
+              est un parti politique moderne et engagé, fondé sur les valeurs de démocratie, de justice 
+              sociale et de développement inclusif. 
+            </p>
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+              Son organisation repose sur un <strong>Bureau politique national</strong> représentatif, 
+              des <strong>Coordinations régionales</strong> actives, et des <strong>Sections locales</strong> 
+              proches des populations, afin d’assurer une gouvernance participative et une action politique
+              efficace sur l’ensemble du territoire.
+            </p>
+          </div>
 
-        {/* 🟢 Présidence nationale */}
-        <section className="text-center mb-16">
-          <h2 className="text-2xl font-semibold text-green-700 dark:text-green-400 mb-8">
-            Présidence nationale
-          </h2>
+          {/* Bloc Mot du Président */}
+          <div className="bg-green-100 dark:bg-green-900 p-5 rounded-2xl shadow-lg border-l-4 border-green-700">
+            <div className="flex items-center mb-4">
+              <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-green-700 mr-4">
+                <Image
+                  src="/president.png"
+                  alt="Romaric Yebchue Semenou"
+                  width={100}
+                  height={100}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+              <div>
+                <h3 className="font-bold text-green-800 dark:text-green-300 text-lg">
+                  Romaric Yebchue Semenou
+                </h3>
+                <p className="text-gray-700 dark:text-gray-300 text-sm">
+                  Président national du FORDAC
+                </p>
+              </div>
+            </div>
 
-          <div className="flex flex-col items-center space-y-6">
-            <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-green-700 dark:border-green-400 shadow-lg">
-              <Image
-                src="/president.png"
-                alt="Président national"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-green-700 dark:text-green-400">
-                Romaric Yebchue Semenou
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Président national du FORDAC
-              </p>
-            </div>
-            <blockquote className="max-w-2xl text-center italic text-gray-700 dark:text-gray-300 border-l-4 border-green-600 dark:border-green-400 pl-4 leading-relaxed">
-              “Une organisation forte est celle qui place la confiance, la
-              transparence et le sens du devoir au cœur de son action.”
+            <blockquote className="italic text-gray-800 dark:text-gray-200 text-sm leading-relaxed">
+              « Notre engagement, c’est de rendre la politique à ceux qui la vivent au quotidien : 
+              le peuple. Le FORDAC est né de la conviction que l’action publique doit redevenir 
+              l’expression de la justice, de l’unité et de l’espérance. »
             </blockquote>
           </div>
-        </section>
+        </div>
 
-        {/* 🟩 Membres du bureau national */}
-        <section className="mb-20">
-          <h2 className="text-2xl font-semibold text-green-700 dark:text-green-400 mb-10 text-center">
-            Bureau national
+        {/* --- Bureau Politique National --- */}
+        <div className="mb-16">
+          <h2 className="text-2xl font-semibold text-green-700 text-center mb-8">
+            Bureau politique national
           </h2>
-
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
-            {members.map((member, index) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            {bureau.map((membre) => (
               <div
-                key={index}
-                className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-md p-6 text-center hover:shadow-lg transition-all"
+                key={membre.nom}
+                className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center hover:shadow-xl transition"
               >
-                <div className="relative w-28 h-28 mx-auto mb-4 rounded-full overflow-hidden border-4 border-green-600 dark:border-green-400 shadow-md">
+                <div className="w-28 h-28 mx-auto mb-4 rounded-full overflow-hidden border-4 border-green-700">
                   <Image
-                    src={member.image || "/hero/hero1.jpeg"}
-                    alt={member.name}
-                    fill
-                    className="object-cover"
+                    src={membre.photo}
+                    alt={membre.nom}
+                    width={200}
+                    height={200}
+                    className="object-cover w-full h-full"
                   />
                 </div>
-                <h3 className="font-semibold text-green-700 dark:text-green-300 text-lg">
-                  {member.name}
+                <h3 className="font-bold text-lg text-gray-900 dark:text-white">
+                  {membre.nom}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  {member.title}
-                </p>
-                {member.region && (
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    {member.region}
-                  </p>
-                )}
+                <p className="text-green-700 font-medium">{membre.fonction}</p>
               </div>
             ))}
           </div>
-        </section>
+        </div>
 
-        {/* 🟢 Footer */}
-        <footer className="text-center py-8 text-sm text-gray-500 dark:text-gray-400 mt-12 border-t border-gray-200 dark:border-gray-800">
-          © {new Date().getFullYear()} FORDAC Connect — Mouvement Citoyen pour un Cameroun Juste et Responsable.
-        </footer>
-      </section>
-    </main>
+        {/* --- Coordinations régionales --- */}
+        <div className="mb-16">
+          <h2 className="text-2xl font-semibold text-green-700 text-center mb-8">
+            Coordinations régionales
+          </h2>
+          <p className="text-center text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
+            Les coordinations régionales assurent la représentation du FORDAC dans chaque 
+            circonscription. Elles traduisent localement la vision du Bureau politique national 
+            et veillent à la cohésion du parti sur le terrain.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {coordinations.map((coord) => (
+              <div
+                key={coord.region}
+                className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 hover:shadow-lg transition"
+              >
+                <h3 className="text-lg font-bold text-green-700 mb-2">
+                  Région du {coord.region}
+                </h3>
+                <p className="text-gray-700 dark:text-gray-300">
+                  Coordonnateur :{" "}
+                  <span className="font-medium">{coord.coordonnateur}</span>
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* --- Frise hiérarchique --- */}
+        <div className="text-center mt-20">
+          <h2 className="text-2xl font-semibold text-green-700 mb-4">
+            Structure hiérarchique du parti
+          </h2>
+          <p className="text-gray-700 dark:text-gray-300 max-w-2xl mx-auto mb-6">
+            L’organisation du FORDAC reflète son engagement pour la démocratie interne, 
+            la discipline et la participation citoyenne à la vie politique.
+          </p>
+
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+            <div className="bg-green-700 text-white px-6 py-3 rounded-full shadow-md">
+              Congrès National
+            </div>
+            <span className="text-gray-400 text-2xl">↓</span>
+            <div className="bg-green-600 text-white px-6 py-3 rounded-full shadow-md">
+              Bureau Politique National
+            </div>
+            <span className="text-gray-400 text-2xl">↓</span>
+            <div className="bg-green-500 text-white px-6 py-3 rounded-full shadow-md">
+              Coordinations Régionales
+            </div>
+            <span className="text-gray-400 text-2xl">↓</span>
+            <div className="bg-green-400 text-white px-6 py-3 rounded-full shadow-md">
+              Sections Locales & Cellules Communales
+            </div>
+            <span className="text-gray-400 text-2xl">↓</span>
+            <div className="bg-green-300 text-white px-6 py-3 rounded-full shadow-md">
+              Adhérents & Militants
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

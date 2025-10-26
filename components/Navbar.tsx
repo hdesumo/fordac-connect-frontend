@@ -1,148 +1,79 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
-import Image from "next/image";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
+  // ✅ Ordre protocolaire : Accueil → Président → Le Parti → Organisation → ...
+  const links = [
+    { name: "Accueil", href: "/" },
+    { name: "Le Président", href: "/president" },
+    { name: "Le Parti", href: "/mouvement" }, // renommé depuis "Mouvement"
+    { name: "Organisation", href: "/organisation" },
+    { name: "Actualités", href: "/actualites" },
+    { name: "Événements", href: "/evenements" },
+    { name: "Adhérer", href: "/adherer" },
+    { name: "Contact", href: "/contact" },
+  ];
+
   return (
-    <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-sm"
-          : "bg-transparent"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
-        {/* 🟩 Logo */}
-        <Link href="/" className="flex items-center space-x-3">
-          <Image
-            src="/logo-dark.png"
-            alt="FORDAC Connect logo"
-            width={40}
-            height={40}
-            className="rounded-full"
-          />
-          <span className="text-2xl font-bold text-green-800 dark:text-green-400">
-            FORDAC Connect
-          </span>
-        </Link>
+    <nav className="bg-white dark:bg-gray-900 shadow-md fixed top-0 left-0 w-full z-50 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* --- Logo et nom --- */}
+          <div className="flex items-center space-x-2">
+            <img
+              src="/logo-dark.png"
+              alt="FORDAC Logo"
+              className="w-9 h-9 rounded-md"
+            />
+            <span className="text-green-700 dark:text-green-400 font-bold text-lg tracking-wide">
+              FORDAC Connect
+            </span>
+          </div>
 
-        {/* 🟩 Menu desktop */}
-        <div className="hidden md:flex space-x-8 text-sm font-semibold text-gray-800 dark:text-gray-200">
-          <Link
-            href="/"
-            className="hover:text-green-700 dark:hover:text-green-400 transition-colors"
-          >
-            Accueil
-          </Link>
-          <Link
-            href="/mouvement"
-            className="hover:text-green-700 dark:hover:text-green-400 transition-colors"
-          >
-            Le Mouvement
-          </Link>
-          <Link
-            href="/organisation"
-            className="hover:text-green-700 dark:hover:text-green-400 transition-colors"
-          >
-            Organisation
-          </Link>
-          <Link
-            href="/actualites"
-            className="hover:text-green-700 dark:hover:text-green-400 transition-colors"
-          >
-            Actualités
-          </Link>
-          <Link
-            href="/adherer"
-            className="hover:text-green-700 dark:hover:text-green-400 transition-colors"
-          >
-            Adhérer
-          </Link>
-          <Link
-            href="/contact"
-            className="hover:text-green-700 dark:hover:text-green-400 transition-colors"
-          >
-            Contact
-          </Link>
+          {/* --- Menu Desktop --- */}
+          <div className="hidden md:flex space-x-6">
+            {links.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                className="text-gray-700 dark:text-gray-200 hover:text-green-700 dark:hover:text-green-400 font-medium transition-colors"
+              >
+                {link.name}
+              </Link>
+            ))}
+          </div>
+
+          {/* --- Bouton Mobile --- */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={toggleMenu}
+              className="text-gray-700 dark:text-gray-200 hover:text-green-700 dark:hover:text-green-400 focus:outline-none"
+            >
+              {menuOpen ? <X size={26} /> : <Menu size={26} />}
+            </button>
+          </div>
         </div>
-
-        {/* 🟩 Bouton mobile */}
-        <button
-          onClick={toggleMenu}
-          className="md:hidden p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          aria-label="Menu"
-        >
-          {menuOpen ? (
-            <X className="text-green-800 dark:text-green-300" size={26} />
-          ) : (
-            <Menu className="text-green-800 dark:text-green-300" size={26} />
-          )}
-        </button>
       </div>
 
-      {/* 🟩 Menu mobile */}
+      {/* --- Menu Mobile --- */}
       {menuOpen && (
-        <div className="md:hidden bg-white dark:bg-gray-900 shadow-lg border-t border-gray-100 dark:border-gray-800">
-          <div className="flex flex-col space-y-3 py-4 px-6 text-gray-800 dark:text-gray-200">
+        <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 px-4 py-3 space-y-2 shadow-md">
+          {links.map((link) => (
             <Link
-              href="/"
-              className="hover:text-green-700 dark:hover:text-green-400 transition-colors"
+              key={link.name}
+              href={link.href}
               onClick={() => setMenuOpen(false)}
+              className="block text-gray-700 dark:text-gray-200 hover:text-green-700 dark:hover:text-green-400 font-medium transition-colors"
             >
-              Accueil
+              {link.name}
             </Link>
-            <Link
-              href="/mouvement"
-              className="hover:text-green-700 dark:hover:text-green-400 transition-colors"
-              onClick={() => setMenuOpen(false)}
-            >
-              Le Mouvement
-            </Link>
-            <Link
-              href="/organisation"
-              className="hover:text-green-700 dark:hover:text-green-400 transition-colors"
-              onClick={() => setMenuOpen(false)}
-            >
-              Organisation
-            </Link>
-            <Link
-              href="/actualites"
-              className="hover:text-green-700 dark:hover:text-green-400 transition-colors"
-              onClick={() => setMenuOpen(false)}
-            >
-              Actualités
-            </Link>
-            <Link
-              href="/adherer"
-              className="hover:text-green-700 dark:hover:text-green-400 transition-colors"
-              onClick={() => setMenuOpen(false)}
-            >
-              Adhérer
-            </Link>
-            <Link
-              href="/contact"
-              className="hover:text-green-700 dark:hover:text-green-400 transition-colors"
-              onClick={() => setMenuOpen(false)}
-            >
-              Contact
-            </Link>
-          </div>
+          ))}
         </div>
       )}
     </nav>

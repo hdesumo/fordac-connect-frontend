@@ -2,40 +2,44 @@
 
 import { useState } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "@/lib/api";
+import Link from "next/link";
+import { moungoData } from "@/data/moungoData";
 
 export default function AdhererPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    arrondissement: "",
-    departement: "",
-    region: "",
     membership_level: "Bronze",
+    secteur: "",
+    departement: "Moungo",
+    arrondissement: "",
   });
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const handleChange = (e) => {
+  // ✅ Typage explicite de l’événement pour éviter l’erreur TypeScript
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+
     try {
-      const res = await axios.post(
-        "https://api.fordac-connect.org/api/members",
-        formData
-      );
+      const res = await axios.post(`${API_BASE_URL}/api/members`, formData);
       if (res.status === 201) {
         setSuccess(true);
       }
-    } catch (err) {
-      setError("Une erreur est survenue. Veuillez réessayer.");
+    } catch (err: any) {
+      setError("Erreur lors de l’envoi du formulaire. Veuillez réessayer.");
     } finally {
       setLoading(false);
     }
@@ -43,187 +47,174 @@ export default function AdhererPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center text-center p-8">
+      <section className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 text-center px-6">
         <h1 className="text-3xl font-bold text-green-700 dark:text-green-400 mb-4">
-          🎉 Votre adhésion est enregistrée !
+          🎉 Adhésion enregistrée !
         </h1>
-        <p className="text-gray-700 dark:text-gray-300 max-w-lg">
-          Merci pour votre confiance. Votre dossier est en cours de validation.
-          Vous recevrez un e-mail de confirmation dès son approbation.
+        <p className="text-gray-700 dark:text-gray-300 mb-6 max-w-md">
+          Merci pour votre confiance. Votre demande d’adhésion au FORDAC est
+          actuellement en cours de validation. Vous recevrez un e-mail de
+          confirmation dès qu’elle sera approuvée.
         </p>
-      </div>
+        <Link
+          href="/"
+          className="bg-green-700 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-800 transition"
+        >
+          Retour à l’accueil
+        </Link>
+      </section>
     );
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 py-20 px-4 md:px-16">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-center text-green-700 dark:text-green-400 mb-10">
-          Adhérez au FORDAC
+    <section className="min-h-screen bg-gray-50 dark:bg-gray-900 py-20 px-6">
+      <div className="max-w-2xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
+        <h1 className="text-3xl font-bold text-center text-green-700 dark:text-green-400 mb-8">
+          Adhérer au FORDAC
         </h1>
 
-        {/* 🟢 Explication des niveaux d’adhésion et mutuelle */}
-        <section className="bg-green-700/10 dark:bg-green-900/30 rounded-2xl p-8 mb-10 shadow-md">
-          <h2 className="text-2xl font-semibold text-green-700 dark:text-green-400 mb-6 text-center">
-            Choisissez votre niveau d’adhésion
-          </h2>
-
-          <p className="text-center text-gray-700 dark:text-gray-300 mb-10 max-w-3xl mx-auto leading-relaxed">
-            Chaque niveau d’adhésion vous donne accès à la{" "}
-            <span className="font-semibold text-green-700 dark:text-green-400">
-              Mutuelle de Solidarité FORDAC
-            </span>, qui soutient ses membres dans les domaines de la santé,
-            l’éducation, la solidarité et la prévention sociale.
-          </p>
-
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-            {/* Bronze */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-green-200 dark:border-green-700 shadow-sm hover:shadow-lg transition-all">
-              <div className="text-4xl mb-3">🥉</div>
-              <h3 className="text-xl font-bold text-green-700 dark:text-green-300 mb-2">
-                Niveau Bronze
-              </h3>
-              <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-                Adhésion de base — participation citoyenne.
-              </p>
-              <ul className="text-sm text-gray-600 dark:text-gray-400 text-left list-disc list-inside space-y-1">
-                <li>Accès aux activités locales du mouvement</li>
-                <li>Couverture mutuelle <strong>de base</strong> (soins courants, assistance)</li>
-                <li>Participation à la vie associative</li>
-              </ul>
-            </div>
-
-            {/* Argent */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-green-200 dark:border-green-700 shadow-sm hover:shadow-lg transition-all">
-              <div className="text-4xl mb-3">🥈</div>
-              <h3 className="text-xl font-bold text-green-700 dark:text-green-300 mb-2">
-                Niveau Argent
-              </h3>
-              <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-                Adhésion renforcée — engagement régional.
-              </p>
-              <ul className="text-sm text-gray-600 dark:text-gray-400 text-left list-disc list-inside space-y-1">
-                <li>Participation aux programmes régionaux</li>
-                <li>Couverture mutuelle <strong>étendue</strong> (soins, maternité, éducation)</li>
-                <li>Formations citoyennes et leadership</li>
-              </ul>
-            </div>
-
-            {/* Or */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-green-200 dark:border-green-700 shadow-sm hover:shadow-lg transition-all">
-              <div className="text-4xl mb-3">🥇</div>
-              <h3 className="text-xl font-bold text-green-700 dark:text-green-300 mb-2">
-                Niveau Or
-              </h3>
-              <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-                Adhésion bienfaiteur — solidarité élargie.
-              </p>
-              <ul className="text-sm text-gray-600 dark:text-gray-400 text-left list-disc list-inside space-y-1">
-                <li>Participation aux instances nationales</li>
-                <li>Couverture mutuelle <strong>complète</strong> (santé, éducation, décès)</li>
-                <li>Reconnaissance officielle comme bienfaiteur</li>
-              </ul>
-            </div>
-          </div>
-
-          {/* 📘 Lien vers la charte de la mutuelle */}
-          <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-8">
-            📘 Consultez la{" "}
-            <a
-              href="/documents/charte-mutuelle.pdf"
-              target="_blank"
-              className="text-green-700 dark:text-green-400 font-medium underline hover:no-underline"
-            >
-              Charte de la Mutuelle FORDAC
-            </a>{" "}
-            pour connaître le détail des garanties, conditions et avantages.
-          </p>
-        </section>
-
-        {/* 🟩 Formulaire d’adhésion */}
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-8 max-w-3xl mx-auto"
-        >
-          <div className="grid md:grid-cols-2 gap-6">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* --- Informations personnelles --- */}
+          <div>
+            <label className="block text-gray-700 dark:text-gray-200 mb-1">
+              Nom complet
+            </label>
             <input
               type="text"
               name="name"
-              placeholder="Nom complet"
+              value={formData.name}
               onChange={handleChange}
               required
-              className="p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-transparent text-gray-800 dark:text-gray-100"
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Adresse e-mail"
-              onChange={handleChange}
-              required
-              className="p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-transparent text-gray-800 dark:text-gray-100"
-            />
-            <input
-              type="text"
-              name="phone"
-              placeholder="Téléphone"
-              onChange={handleChange}
-              required
-              className="p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-transparent text-gray-800 dark:text-gray-100"
-            />
-            <input
-              type="text"
-              name="arrondissement"
-              placeholder="Arrondissement"
-              onChange={handleChange}
-              required
-              className="p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-transparent text-gray-800 dark:text-gray-100"
-            />
-            <input
-              type="text"
-              name="departement"
-              placeholder="Département"
-              onChange={handleChange}
-              required
-              className="p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-transparent text-gray-800 dark:text-gray-100"
-            />
-            <input
-              type="text"
-              name="region"
-              placeholder="Région"
-              onChange={handleChange}
-              required
-              className="p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-transparent text-gray-800 dark:text-gray-100"
+              className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 focus:ring-2 focus:ring-green-600"
             />
           </div>
 
-          <div className="mt-6">
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          <div>
+            <label className="block text-gray-700 dark:text-gray-200 mb-1">
+              Adresse e-mail
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 focus:ring-2 focus:ring-green-600"
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 dark:text-gray-200 mb-1">
+              Téléphone
+            </label>
+            <input
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+              className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 focus:ring-2 focus:ring-green-600"
+            />
+          </div>
+
+          {/* --- Niveau d’adhésion --- */}
+          <div>
+            <label className="block text-gray-700 dark:text-gray-200 mb-1">
               Niveau d’adhésion
             </label>
             <select
               name="membership_level"
+              value={formData.membership_level}
               onChange={handleChange}
-              className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-transparent text-gray-800 dark:text-gray-100"
+              className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 focus:ring-2 focus:ring-green-600"
             >
               <option value="Bronze">Bronze</option>
               <option value="Argent">Argent</option>
               <option value="Or">Or</option>
             </select>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              Chaque niveau d’adhésion correspond à une catégorie de
+              contribution et de couverture de la mutuelle.  
+              📜{" "}
+              <Link
+                href="/documents/charte-mutuelle.pdf"
+                target="_blank"
+                className="text-green-700 hover:underline"
+              >
+                Consulter la Charte du FORDAC
+              </Link>
+            </p>
           </div>
 
+          {/* --- Localisation (Moungo uniquement) --- */}
+          <div className="space-y-5">
+            <div>
+              <label className="block text-gray-700 dark:text-gray-200 mb-1">
+                Département
+              </label>
+              <input
+                type="text"
+                value="Moungo"
+                readOnly
+                className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-600"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-700 dark:text-gray-200 mb-1">
+                Secteur du Moungo
+              </label>
+              <select
+                name="secteur"
+                value={formData.secteur}
+                onChange={handleChange}
+                className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 focus:ring-2 focus:ring-green-600"
+                required
+              >
+                <option value="">Sélectionner</option>
+                <option value="Moungo Nord">Moungo Nord</option>
+                <option value="Moungo Sud">Moungo Sud</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-gray-700 dark:text-gray-200 mb-1">
+                Arrondissement
+              </label>
+              <select
+                name="arrondissement"
+                value={formData.arrondissement}
+                onChange={handleChange}
+                required
+                disabled={!formData.secteur}
+                className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 focus:ring-2 focus:ring-green-600"
+              >
+                <option value="">Sélectionner</option>
+                {formData.secteur &&
+                  moungoData[formData.secteur]?.map((arr) => (
+                    <option key={arr} value={arr}>
+                      {arr}
+                    </option>
+                  ))}
+              </select>
+            </div>
+          </div>
+
+          {/* --- Erreur éventuelle --- */}
           {error && (
-            <p className="text-red-600 dark:text-red-400 mt-4 text-center">{error}</p>
+            <p className="text-red-600 text-sm font-medium">{error}</p>
           )}
 
+          {/* --- Bouton d’envoi --- */}
           <button
             type="submit"
             disabled={loading}
-            className="mt-8 w-full bg-green-700 hover:bg-green-800 dark:bg-green-600 dark:hover:bg-green-500 text-white py-3 rounded-lg font-semibold transition-all"
+            className="w-full bg-green-700 text-white py-3 rounded-lg font-semibold hover:bg-green-800 transition"
           >
-            {loading ? "Envoi en cours..." : "Soumettre ma demande d’adhésion"}
+            {loading ? "Envoi en cours..." : "Soumettre ma demande  d'adhésion"}
           </button>
         </form>
       </div>
-    </main>
+    </section>
   );
 }
