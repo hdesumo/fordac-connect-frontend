@@ -21,7 +21,6 @@ export default function AdhererPage() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  // ✅ Typage explicite de l’événement pour éviter l’erreur TypeScript
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -45,27 +44,41 @@ export default function AdhererPage() {
     }
   };
 
+  // ✅ Message de confirmation visuelle
   if (success) {
     return (
-      <section className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 text-center px-6">
-        <h1 className="text-3xl font-bold text-green-700 dark:text-green-400 mb-4">
-          🎉 Adhésion enregistrée !
-        </h1>
-        <p className="text-gray-700 dark:text-gray-300 mb-6 max-w-md">
-          Merci pour votre confiance. Votre demande d’adhésion au FORDAC est
-          actuellement en cours de validation. Vous recevrez un e-mail de
-          confirmation dès qu’elle sera approuvée.
-        </p>
-        <Link
-          href="/"
-          className="bg-green-700 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-800 transition"
-        >
-          Retour à l’accueil
-        </Link>
+      <section className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 px-6">
+        <div className="bg-green-100 dark:bg-green-900 border border-green-500 rounded-2xl p-8 max-w-lg text-center shadow-lg">
+          <div className="text-5xl mb-4">✅</div>
+          <h1 className="text-2xl font-bold text-green-800 dark:text-green-300 mb-3">
+            Adhésion enregistrée avec succès !
+          </h1>
+          <p className="text-gray-700 dark:text-gray-200 mb-6 leading-relaxed">
+            Merci pour votre engagement envers le{" "}
+            <strong>FORDAC (Forces Démocratiques pour l’Action et le Changement)</strong>.
+            <br />
+            Votre adhésion a été reçue et est{" "}
+            <span className="font-semibold text-green-800 dark:text-green-400">
+              en cours de validation
+            </span>{" "}
+            par les équipes du mouvement.
+          </p>
+          <p className="text-gray-600 dark:text-gray-300 mb-6">
+            Vous recevrez un message de confirmation dès que votre adhésion sera
+            officiellement validée.
+          </p>
+          <Link
+            href="/"
+            className="bg-green-700 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-800 transition"
+          >
+            Retour à l’accueil
+          </Link>
+        </div>
       </section>
     );
   }
 
+  // ✅ Formulaire d’adhésion
   return (
     <section className="min-h-screen bg-gray-50 dark:bg-gray-900 py-20 px-6">
       <div className="max-w-2xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
@@ -74,7 +87,6 @@ export default function AdhererPage() {
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* --- Informations personnelles --- */}
           <div>
             <label className="block text-gray-700 dark:text-gray-200 mb-1">
               Nom complet
@@ -117,7 +129,7 @@ export default function AdhererPage() {
             />
           </div>
 
-          {/* --- Niveau d’adhésion --- */}
+          {/* Niveau d’adhésion */}
           <div>
             <label className="block text-gray-700 dark:text-gray-200 mb-1">
               Niveau d’adhésion
@@ -134,7 +146,7 @@ export default function AdhererPage() {
             </select>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
               Chaque niveau d’adhésion correspond à une catégorie de
-              contribution et de couverture de la mutuelle.  
+              contribution et de couverture de la mutuelle.
               📜{" "}
               <Link
                 href="/documents/charte-mutuelle.pdf"
@@ -146,7 +158,7 @@ export default function AdhererPage() {
             </p>
           </div>
 
-          {/* --- Localisation (Moungo uniquement) --- */}
+          {/* Localisation */}
           <div className="space-y-5">
             <div>
               <label className="block text-gray-700 dark:text-gray-200 mb-1">
@@ -200,18 +212,16 @@ export default function AdhererPage() {
             </div>
           </div>
 
-          {/* --- Erreur éventuelle --- */}
           {error && (
             <p className="text-red-600 text-sm font-medium">{error}</p>
           )}
 
-          {/* --- Bouton d’envoi --- */}
           <button
             type="submit"
             disabled={loading}
             className="w-full bg-green-700 text-white py-3 rounded-lg font-semibold hover:bg-green-800 transition"
           >
-            {loading ? "Envoi en cours..." : "Soumettre ma demande  d'adhésion"}
+            {loading ? "Envoi en cours..." : "Soumettre mon adhésion"}
           </button>
         </form>
       </div>
