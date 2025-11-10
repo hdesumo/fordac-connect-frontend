@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { loginMember } from "@/lib/api";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [form, setForm] = useState({ email: "", password: "" });
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,6 +26,10 @@ export default function LoginPage() {
       if (res.token) {
         localStorage.setItem("fordac_token", res.token);
         setMessage("✅ Connexion réussie !");
+        // Redirection vers le dashboard après 500ms
+        setTimeout(() => {
+          router.push("/dashboard");
+        }, 500);
       } else {
         setMessage("❌ Identifiants invalides ou compte non actif.");
       }
