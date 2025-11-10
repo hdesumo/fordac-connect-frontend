@@ -1,18 +1,25 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
+  const router = useRouter();
   const [token, setToken] = useState("");
 
   useEffect(() => {
     const stored = localStorage.getItem("fordac_token");
-    if (stored) setToken(stored);
-  }, []);
+    if (stored) {
+      setToken(stored);
+    } else {
+      // Redirection vers /login si pas de token
+      router.push("/login");
+    }
+  }, [router]);
 
   if (!token)
     return (
       <div className="text-center py-20 text-accent">
-        Vous devez vous connecter pour accéder à cette page.
+        Redirection vers la page de connexion...
       </div>
     );
 
