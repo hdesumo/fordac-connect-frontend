@@ -5,45 +5,46 @@ import Link from "next/link";
 
 export default function HeroSection() {
   return (
-    <section className="relative overflow-hidden bg-green-700 text-white py-24 md:py-32 shadow-lg">
-      <div className="absolute inset-0 bg-gradient-to-b from-green-700 via-green-800 to-green-900 opacity-95"></div>
+    <section className="relative w-full h-[90vh] overflow-hidden bg-gradient-to-br from-green-900 via-green-700 to-yellow-400 flex flex-col justify-center items-center text-center text-white">
+      {/* Voile léger pour lisibilité */}
+      <div className="absolute inset-0 bg-black/25"></div>
 
-      <div className="relative max-w-7xl mx-auto px-6 text-center md:text-left grid md:grid-cols-2 gap-10 items-center">
-        {/* Texte principal */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
+      {/* Contenu du Hero */}
+      <div className="relative z-10 px-6 max-w-4xl">
+        <motion.h1
+          initial={{ y: -50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 1 }}
+          className="text-4xl md:text-6xl font-extrabold mb-6 drop-shadow-lg"
         >
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6">
-            FORDAC Connect
-          </h1>
-          <p className="text-lg md:text-xl mb-8 text-green-100 max-w-lg">
-            Le Mouvement Citoyen pour un Cameroun Juste et Responsable.  
-            Ensemble, construisons l’avenir sur les valeurs d’action, de dignité et de solidarité.
-          </p>
+          OSEZ AGIR POUR LE CHANGEMENT
+        </motion.h1>
+
+        <motion.p
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.4, duration: 1 }}
+          className="text-lg md:text-xl max-w-3xl mx-auto mb-8 text-green-50 drop-shadow-md"
+        >
+          Ensemble, bâtissons une gouvernance juste, moderne et responsable.
+        </motion.p>
+
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.8, duration: 0.8 }}
+        >
           <Link
-            href="/adherer"
-            className="inline-block bg-white text-green-800 px-8 py-3 rounded-full text-lg font-semibold shadow-md hover:bg-green-100 transition-all duration-300"
+            href="/adhesion"
+            className="bg-green-700 hover:bg-green-800 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105"
           >
-            Adhérer maintenant
+            Adhérer au FORDAC
           </Link>
         </motion.div>
-
-        {/* Illustration */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1 }}
-          className="flex justify-center"
-        >
-          <img
-            src="/hero/hero1.jpeg"
-            alt="FORDAC illustration"
-            className="rounded-2xl shadow-2xl w-full max-w-md border-4 border-white/30"
-          />
-        </motion.div>
       </div>
+
+      {/* Motif subtil en fond */}
+      <div className="absolute inset-0 opacity-10 bg-[url('/textures/pattern.svg')] bg-repeat"></div>
     </section>
   );
 }

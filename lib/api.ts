@@ -1,83 +1,104 @@
 import axios from "axios";
 
-export const API_BASE_URL = "https://api.fordac-connect.org";
+export const API_BASE_URL = "https://api.fordac-connect.org/api";
 
-/**
- * 🟩 Authentification membre
- * @param email
- * @param password
- * @returns token ou message d’erreur
- */
-export const loginMember = async (email: string, password: string) => {
+// ✅ Création d'une instance Axios avec baseURL
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+// ======================================
+// 🔐 AUTHENTIFICATION
+// ======================================
+
+// 🔹 Connexion SuperAdmin
+export async function loginSuperAdmin(credentials: {
+  email: string;
+  password: string;
+}) {
   try {
-    const response = await axios.post(`${API_BASE_URL}/api/login`, {
-      email,
-      password,
+    const response = await api.post("/superadmin/login", credentials);
+
+    if (response.data?.token) {
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("superadmin", JSON.stringify(response.data.superadmin));
+    }
+
+    return { success: true, data: response.data };
+  } catch (error: any) {
+    console.error("Erreur de connexion SuperAdmin :", error);
+    return { success: false, message: "Erreur de connexion au serveur" };
+  }
+}
+
+// 🔹 Connexion Admin (si utilisée)
+export async function loginAdmin(credentials: {
+  email: string;
+  password: string;
+}) {
+  try {
+    const response = await api.post("/admins/login", credentials);
+
+    if (response.data?.token) {
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("admin", JSON.stringify(response.data.admin));
+    }
+
+    return { success: true, data: response.data };
+  } catch (error: any) {
+    console.error("Erreur de connexion Admin :", error);
+    return { success: false, message: "Erreur de connexion au serveur" };
+  }
+}
+
+// ======================================
+// 🧭 GESTION DU TOKEN
+// ======================================
+
+// Récupération du token depuis le stockage local
+export function getAuthToken() {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem("token");
+}
+
+// Vérifie si l'utilisateur est connecté
+export function isAuthenticated() {
+  return typeof window !== "undefined" && !!localStorage.getItem("token");
+}
+
+// Déconnexion
+export function logout() {
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("token");
+    localStorage.removeItem("superadmin");
+    localStorage.removeItem("admin");
+    window.location.href = "/login";
+  }
+}
+
+// ======================================
+// 🔄 Requête API avec Token
+// ======================================
+
+// Exemple d'appel authentifié (à titre de modèle)
+export async function fetchProtectedData(endpoint: string) {
+  const token = getAuthToken();
+  if (!token) {
+    return { success: false, message: "Utilisateur non authentifié" };
+  }
+
+  try {
+    const response = await api.get(endpoint, {
+      headers: { Authorization: `Bearer ${token}` },
     });
-    return response.data;
+    return { success: true, data: response.data };
   } catch (error: any) {
-    console.error("Erreur de connexion :", error.message);
-    throw new Error("Impossible de se connecter au serveur.");
+    console.error("Erreur lors de la récupération :", error);
+    return { success: false, message: "Erreur lors de la récupération des données" };
   }
-};
+}
 
-/**
- * 🟦 Enregistrement d’un nouveau membre (adhésion)
- * @param data Données du formulaire d’adhésion
- */
-export const registerMember = async (data: any) => {
-  try {
-    const response = await axios.post(`${API_BASE_URL}/api/members`, data);
-    return response.data;
-  } catch (error: any) {
-    console.error("Erreur d’enregistrement :", error.message);
-    throw new Error("Erreur lors de l’adhésion du membre.");
-  }
-};
-
-/**
- * 🟨 Récupération de la liste des membres (admin/dashboard)
- */
-export const getMembers = async (token: string) => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/api/members`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error: any) {
-    console.error("Erreur lors de la récupération des membres :", error.message);
-    throw new Error("Impossible de charger les membres.");
-  }
-};
-
-/**
- * 🟥 Récupération des événements (page Agenda)
- */
-export const getEvents = async () => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/api/events`);
-    return response.data;
-  } catch (error: any) {
-    console.error("Erreur lors de la récupération des événements :", error.message);
-    throw new Error("Impossible de charger les événements.");
-  }
-};
-
-/**
- * 🟪 Création d’un nouvel événement (admin)
- */
-export const createEvent = async (eventData: any, token: string) => {
-  try {
-    const response = await axios.post(`${API_BASE_URL}/api/events`, eventData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error: any) {
-    console.error("Erreur lors de la création de l’événement :", error.message);
-    throw new Error("Impossible d’ajouter l’événement.");
-  }
-};
+export default api;
