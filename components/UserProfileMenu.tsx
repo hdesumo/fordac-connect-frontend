@@ -1,95 +1,102 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
+
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { User, LogOut, Edit, Settings } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function UserProfileMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const menuRef = useRef(null);
+  const [user, setUser] = useState<{ name: string; email: string } | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  // Vérifie si l'utilisateur est connecté
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token);
+    const storedUser = localStorage.getItem("fordac_user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
 
-    // Fermer le menu au clic extérieur
-    const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
+    // ✅ Fermer le menu au clic extérieur
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    router.push("/");
+    localStorage.removeItem("fordac_user");
+    router.push("/login");
   };
 
-  if (!isLoggedIn) return null; // n'affiche rien si non connecté
+  if (!user) return null;
 
   return (
     <div className="relative" ref={menuRef}>
-      {/* Avatar */}
+      {/* Avatar rond avec initiale */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="focus:outline-none"
+        className="flex items-center justify-center w-10 h-10 rounded-full bg-green-700 text-white font-semibold hover:bg-green-800 transition-colors"
       >
-        <Image
-          src="/avatars/default.jpg"
-          alt="Profil utilisateur"
-          width={40}
-          height={40}
-          className="rounded-full border-2 border-green-700"
-        />
+        {user.name ? user.name.charAt(0).toUpperCase() : "U"}
       </button>
 
-      {/* Menu déroulant */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="absolute right-0 mt-3 w-48 bg-white shadow-lg rounded-xl border border-gray-100 z-50"
-          >
-            <ul className="py-2 text-sm text-gray-700">
-              <li>
-                <Link
-                  href="/profil"
-                  className="block px-4 py-2 hover:bg-gray-50"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Mon profil
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/forum"
-                  className="block px-4 py-2 hover:bg-gray-50"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Forum des Militants
-                </Link>
-              </li>
-              <li>
-                <button
-                  onClick={handleLogout}
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-50 text-red-600"
-                >
-                  Déconnexion
-                </button>
-              </li>
-            </ul>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isOpen && (
+        <div className="absolute right-0 mt-3 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+          <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+            <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+              {user.name}
+            </p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              {user.email}
+            </p>
+          </div>
+
+          <ul className="py-2">
+            <li>
+              <Link
+                href="/profil"
+                className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+              >
+                <User className="w-4 h-4 mr-2" />
+                Mon profil
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/profil/edit"
+                className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+              >
+                <Edit className="w-4 h-4 mr-2" />
+                Modifier le profil
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/parametres"
+                className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+              >
+                <Settings className="w-4 h-4 mr-2" />
+                Paramètres
+              </Link>
+            </li>
+          </ul>
+
+          <div className="border-t border-gray-200 dark:border-gray-700">
+            <button
+              onClick={handleLogout}
+              className="flex items-center w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Déconnexion
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

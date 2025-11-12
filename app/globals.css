@@ -1,26 +1,88 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ===============================
+   🌿 Thème global FORDAC Connect
+   =============================== */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply bg-white text-gray-900 antialiased;
+}
+
+/* Mode sombre automatique */
+@media (prefers-color-scheme: dark) {
+  body {
+    @apply bg-gray-950 text-gray-100;
+  }
+}
+
+/* ===============================
+   Titres de section cohérents
+   =============================== */
+.section-title {
+  @apply text-3xl md:text-4xl font-bold text-fordacGreen mb-6 animate-fadeIn;
+}
+
+.section-subtitle {
+  @apply text-lg text-gray-700 dark:text-gray-300 mb-4;
+}
+
+/* ===============================
+   Boutons principaux
+   =============================== */
+.btn-primary {
+  @apply inline-block bg-fordacGreen text-white font-medium px-5 py-2 rounded-lg hover:bg-green-700 transition-colors duration-300;
+}
+
+.btn-secondary {
+  @apply inline-block border border-fordacGreen text-fordacGreen font-medium px-5 py-2 rounded-lg hover:bg-fordacGreen hover:text-white transition-colors duration-300;
+}
+
+/* ===============================
+   Liens et effets visuels
+   =============================== */
+a {
+  @apply transition-colors duration-200;
+}
+
+a:hover {
+  @apply text-fordacLight;
+}
+
+/* ===============================
+   Animations globales
+   =============================== */
+@layer utilities {
+  .animate-fadeIn {
+    @apply animation-fadeIn;
+  }
+
+  .animation-fadeIn {
+    animation: fadeIn 0.8s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    0% {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
 }

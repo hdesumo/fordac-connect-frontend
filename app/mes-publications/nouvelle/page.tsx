@@ -1,123 +1,81 @@
 "use client";
-import { useEffect, useState } from "react";
+
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import Image from "next/image";
-import Link from "next/link";
 
 export default function NouvellePublicationPage() {
   const router = useRouter();
-  const [authenticated, setAuthenticated] = useState(false);
-  const [user, setUser] = useState({
-    name: "",
-    avatar: "/avatars/default.jpg",
-  });
   const [content, setContent] = useState("");
   const [message, setMessage] = useState("");
 
+  // ✅ Protection basique : si pas de session, redirige vers /login
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
+    const user = localStorage.getItem("fordac_user");
+    if (!user) {
       router.push("/login");
-      return;
     }
-    setAuthenticated(true);
-
-    const stored = localStorage.getItem("fordac_profile");
-    const profile = stored
-      ? JSON.parse(stored)
-      : { name: "Clarisse Nguimfack", avatar: "/avatars/clarisse.jpg" };
-    setUser(profile);
   }, [router]);
 
-  const handlePublish = (e) => {
+  // ✅ Fonction corrigée avec typage explicite
+  const handlePublish = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!content.trim()) {
       setMessage("⚠️ Veuillez saisir un texte avant de publier.");
       return;
     }
 
-    // Simulation d’enregistrement du post
-    const newPost = {
-      id: Date.now(),
-      author: user.name,
-      avatar: user.avatar,
-      content,
-      date: new Date().toLocaleDateString("fr-FR", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }),
-      likes: 0,
-      comments: 0,
-    };
-
-    // Enregistrer temporairement dans le localStorage
-    const existingPosts = JSON.parse(localStorage.getItem("fordac_posts") || "[]");
-    localStorage.setItem("fordac_posts", JSON.stringify([newPost, ...existingPosts]));
-
-    setMessage("✅ Publication envoyée avec succès !");
-    setTimeout(() => router.push("/mes-publications"), 1500);
+    // Simulation d’une publication réussie
+    setMessage("✅ Votre message a été publié avec succès !");
+    setContent("");
   };
 
-  if (!authenticated) return null;
-
   return (
-    <main className="min-h-screen bg-gray-100 pt-24 pb-16">
-      <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-8">
-        <h1 className="text-3xl font-bold text-green-800 text-center mb-6">
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 py-12 px-4">
+      <section className="max-w-3xl mx-auto">
+        <h1 className="text-3xl md:text-4xl font-bold text-green-700 dark:text-green-400 text-center mb-10">
           Nouvelle publication
         </h1>
 
-        <div className="flex items-center space-x-3 mb-6">
-          <Image
-            src={user.avatar}
-            alt={user.name}
-            width={50}
-            height={50}
-            className="rounded-full border border-gray-300"
-          />
-          <div>
-            <p className="font-semibold text-green-800">{user.name}</p>
-            <p className="text-gray-500 text-sm">Publie un message</p>
-          </div>
-        </div>
+        <form
+          onSubmit={handlePublish}
+          className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700"
+        >
+          <label
+            htmlFor="content"
+            className="block text-lg font-semibold mb-3 text-green-700 dark:text-green-300"
+          >
+            Exprimez-vous 🗣️
+          </label>
 
-        <form onSubmit={handlePublish}>
           <textarea
+            id="content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="Exprimez vos idées, partagez vos réflexions..."
-            className="w-full h-40 p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600 resize-none"
-          ></textarea>
+            rows={6}
+            placeholder="Partagez vos idées, vos réflexions ou vos actions locales..."
+            className="w-full p-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-green-600 mb-4"
+          />
+
+          <button
+            type="submit"
+            className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-lg transition-transform transform hover:scale-[1.02]"
+          >
+            Publier
+          </button>
 
           {message && (
-            <p className="text-center mt-4 text-green-700 font-medium">
+            <p
+              className={`mt-4 text-center font-medium ${
+                message.startsWith("⚠️")
+                  ? "text-yellow-600 dark:text-yellow-400"
+                  : "text-green-700 dark:text-green-400"
+              }`}
+            >
               {message}
             </p>
           )}
-
-          <div className="mt-6 flex justify-center space-x-4">
-            <button
-              type="submit"
-              className="bg-green-700 hover:bg-green-800 text-white font-semibold px-8 py-2 rounded-full shadow-md transition"
-            >
-              Publier
-            </button>
-            <Link
-              href="/mes-publications"
-              className="border border-green-700 text-green-700 px-8 py-2 rounded-full hover:bg-green-50 transition"
-            >
-              Annuler
-            </Link>
-          </div>
         </form>
-
-        <p className="text-xs text-gray-400 text-center mt-8">
-          Une fois publiée, votre publication ne pourra plus être modifiée ni supprimée.  
-          Seul l’administrateur du forum peut intervenir.
-        </p>
-      </div>
+      </section>
     </main>
   );
 }
