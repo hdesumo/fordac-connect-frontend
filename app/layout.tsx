@@ -34,9 +34,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr" className="scroll-smooth">
+    <html lang="fr" suppressHydrationWarning>
       <body
-        className={`${inter.className} bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 antialiased`}
+        className={`${inter.className} scroll-smooth bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 antialiased`}
       >
         {/* 🟩 En-tête principale */}
         <Header />

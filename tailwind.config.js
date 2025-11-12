@@ -1,31 +1,25 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./app/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}", // 👈 ajouté pour couvrir tous les cas
   ],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
-        fordacGreen: "#166534", // Vert principal FORDAC
-        fordacLight: "#22c55e", // Vert clair
+        fordacGreen: "#0E7356",
+        fordacLight: "#1FA37C",
       },
-      fontFamily: {
-        sans: ["Inter", "sans-serif"],
+      animation: {
+        fadeIn: "fadeIn 1s ease-in-out",
       },
       keyframes: {
         fadeIn: {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
+          from: { opacity: 0 },
+          to: { opacity: 1 },
         },
-        slideUp: {
-          "0%": { transform: "translateY(20px)", opacity: "0" },
-          "100%": { transform: "translateY(0)", opacity: "1" },
-        },
-      },
-      animation: {
-        fadeIn: "fadeIn 0.8s ease-in-out",
-        slideUp: "slideUp 0.6s ease-out",
       },
     },
   },
