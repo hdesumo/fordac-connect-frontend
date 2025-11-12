@@ -3,11 +3,29 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
 
-  // ❌ Supprimer cette ligne (elle force Turbopack)
-  // turbopack: {},
-
-  // ✅ Option de fallback Webpack (plus stable avec Tailwind)
-  webpack: (config) => {
+  webpack(config) {
+    // 👇 Forcer la prise en compte de PostCSS
+    config.module.rules.push({
+      test: /\.css$/,
+      use: [
+        require.resolve("style-loader"),
+        {
+          loader: require.resolve("css-loader"),
+          options: { importLoaders: 1 },
+        },
+        {
+          loader: require.resolve("postcss-loader"),
+          options: {
+            postcssOptions: {
+              plugins: [
+                "tailwindcss",
+                "autoprefixer",
+              ],
+            },
+          },
+        },
+      ],
+    });
     return config;
   },
 
