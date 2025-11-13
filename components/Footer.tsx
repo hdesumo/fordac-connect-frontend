@@ -1,67 +1,67 @@
 "use client";
-
+import React from "react";
 import Link from "next/link";
-import { Facebook, Twitter, Youtube, Mail } from "lucide-react";
+import { Mail, Facebook, Twitter, Youtube } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-b from-fordac-dark to-fordacGreen text-white py-12 mt-20">
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10">
-        {/* 🏛️ Colonne 1 : présentation */}
+    <footer className="bg-fordacDark text-white py-12 mt-12 border-t border-fordacGreen/40">
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+        {/* Bloc 1 */}
         <div>
-          <h2 className="text-xl font-bold mb-3">FORDAC Connect</h2>
-          <p className="text-sm text-gray-100 leading-relaxed">
-            Les <span className="font-semibold">Forces Démocratiques pour l’Action et le Changement</span> œuvrent pour
-            une société plus juste, solidaire et tournée vers l’avenir.
+          <h3 className="text-xl font-semibold text-fordacGold mb-4">
+            FORDAC Connect
+          </h3>
+          <p className="text-sm leading-relaxed text-gray-100">
+            <strong>Les Forces Démocratiques pour l’Action et le Changement</strong> œuvrent pour une société plus juste, solidaire et tournée vers l’avenir.  
             <br />
             Rejoignez le mouvement et participez à la construction d’un Cameroun meilleur.
           </p>
         </div>
 
-        {/* 🔗 Colonne 2 : navigation */}
+        {/* Bloc 2 */}
         <div>
-          <h2 className="text-xl font-bold mb-3">Navigation</h2>
-          <ul className="space-y-2 text-gray-100 text-sm">
-            <li><Link href="/" className="hover:underline">Accueil</Link></li>
-            <li><Link href="/le-parti" className="hover:underline">Le Parti</Link></li>
-            <li><Link href="/forum" className="hover:underline">Forum des Militants</Link></li>
-            <li><Link href="/adhesion" className="hover:underline">Adhésion</Link></li>
-            <li><Link href="/connexion" className="hover:underline">Connexion</Link></li>
-            <li><Link href="/contact" className="hover:underline">Nous Contacter</Link></li>
-            <li><Link href="/confidentialite" className="hover:underline">Politique de Confidentialité</Link></li>
-            <li><Link href="/mentions-legales" className="hover:underline">Mentions Légales</Link></li>
+          <h4 className="font-semibold text-fordacGold mb-3">Navigation</h4>
+          <ul className="space-y-2 text-sm">
+            <li><Link href="/" className="hover:text-fordacGold">Accueil</Link></li>
+            <li><Link href="/le-parti" className="hover:text-fordacGold">Le Parti</Link></li>
+            <li><Link href="/forum" className="hover:text-fordacGold">Forum des Militants</Link></li>
+            <li><Link href="/adhesion" className="hover:text-fordacGold">Adhésion</Link></li>
+            <li><Link href="/login" className="hover:text-fordacGold">Connexion</Link></li>
           </ul>
         </div>
 
-        {/* 🌍 Colonne 3 : liens utiles et réseaux */}
+        {/* Bloc 3 */}
         <div>
-          <h2 className="text-xl font-bold mb-3">Liens utiles</h2>
-          <ul className="text-sm text-gray-100 space-y-2 mb-4">
-            <li><Link href="/superadmin" className="hover:underline">Connexion Super Admin</Link></li>
-            <li><Link href="/admins" className="hover:underline">Connexion Admins</Link></li>
+          <h4 className="font-semibold text-fordacGold mb-3">Liens utiles</h4>
+          <ul className="space-y-2 text-sm">
+            <li><Link href="/contact" className="hover:text-fordacGold">Nous Contacter</Link></li>
+            <li><Link href="/politique-de-confidentialite" className="hover:text-fordacGold">Politique de Confidentialité</Link></li>
+            <li><Link href="/mentions-legales" className="hover:text-fordacGold">Mentions Légales</Link></li>
+            <li><Link href="/superadmin" className="hover:text-fordacGold">Connexion Super Admin</Link></li>
+            <li><Link href="/admin" className="hover:text-fordacGold">Connexion Admins</Link></li>
           </ul>
+        </div>
 
-          <h3 className="text-lg font-semibold mb-2">Contact & Réseaux</h3>
-          <ul className="text-sm text-gray-100 space-y-2">
-            <li className="flex items-center space-x-2">
-              <Mail size={16} />
-              <span>contact@fordac-connect.org</span>
+        {/* Bloc 4 */}
+        <div>
+          <h4 className="font-semibold text-fordacGold mb-3">Contact</h4>
+          <ul className="space-y-2 text-sm">
+            <li className="flex items-center gap-2">
+              <Mail size={16} /> contact@fordac-connect.org
             </li>
-            <li className="flex items-center space-x-4 mt-3">
-              <a href="#" className="hover:text-yellow-400" aria-label="Facebook"><Facebook size={18} /></a>
-              <a href="#" className="hover:text-yellow-400" aria-label="Twitter"><Twitter size={18} /></a>
-              <a href="#" className="hover:text-yellow-400" aria-label="YouTube"><Youtube size={18} /></a>
+            <li className="flex gap-3 mt-3">
+              <Facebook className="hover:text-fordacGold cursor-pointer" size={18} />
+              <Twitter className="hover:text-fordacGold cursor-pointer" size={18} />
+              <Youtube className="hover:text-fordacGold cursor-pointer" size={18} />
             </li>
           </ul>
         </div>
       </div>
 
-      {/* 🔹 Ligne inférieure */}
-      <div className="border-t border-white/10 mt-10 pt-6 text-center text-sm text-gray-100">
-        <p>
-          © {new Date().getFullYear()} FORDAC Connect — Tous droits réservés.
-        </p>
-        <p className="text-xs mt-2 text-gray-200">
+      <div className="text-center text-xs mt-10 text-gray-300 border-t border-gray-600/40 pt-4">
+        <p>© 2025 FORDAC Connect — Tous droits réservés.</p>
+        <p className="mt-1 text-gray-400">
           Une initiative citoyenne portée par les Forces Démocratiques pour l’Action et le Changement.
         </p>
       </div>
