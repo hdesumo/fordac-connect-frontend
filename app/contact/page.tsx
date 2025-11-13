@@ -1,6 +1,8 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useState } from "react";
+import { Mail, MapPin, Phone } from "lucide-react";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -10,126 +12,160 @@ export default function ContactPage() {
     message: "",
   });
 
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState("");
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/contact`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) throw new Error("Erreur lors de l’envoi du message");
-
-      setSuccess(true);
-      setFormData({ name: "", email: "", subject: "", message: "" });
-    } catch (err) {
-      console.error(err);
-      setError("Impossible d’envoyer votre message. Réessayez plus tard.");
-    } finally {
-      setLoading(false);
-    }
+    console.log("Message envoyé :", formData);
+    // 🚀 Future intégration : POST /contact (API backend)
   };
 
-  if (success) {
-    return (
-      <section className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
-        <div className="bg-green-100 dark:bg-green-900 border border-green-500 rounded-xl p-8 text-center max-w-lg shadow-lg">
-          <h2 className="text-2xl font-bold text-green-800 dark:text-green-200 mb-3">
-            Message envoyé avec succès ✅
-          </h2>
-          <p className="text-gray-700 dark:text-gray-300 mb-4">
-            Merci de nous avoir contactés. Nous reviendrons vers vous dans les plus brefs délais.
-          </p>
-          <button
-            onClick={() => setSuccess(false)}
-            className="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg transition"
-          >
-            Envoyer un autre message
-          </button>
-        </div>
-      </section>
-    );
-  }
-
   return (
-    <section className="min-h-screen bg-gray-50 dark:bg-gray-900 py-20 px-6">
-      <div className="max-w-2xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg">
-        <h1 className="text-3xl font-bold text-center text-green-700 dark:text-green-400 mb-8">
-          Contactez le FORDAC
-        </h1>
+    <div className="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+      {/* ===============================
+           🟩 En-tête
+         =============================== */}
+      <section className="bg-gradient-to-b from-fordacGreen to-fordacDark text-white py-20 text-center px-6">
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-4xl md:text-5xl font-extrabold mb-4"
+        >
+          Nous Contacter
+        </motion.h1>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block text-gray-700 dark:text-gray-300 mb-1">Nom complet</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 focus:ring-2 focus:ring-green-600"
-            />
-          </div>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.8 }}
+          className="max-w-2xl mx-auto text-lg text-gray-100"
+        >
+          Vous souhaitez en savoir plus sur le FORDAC ou rejoindre nos initiatives ?  
+          Contactez-nous par ce formulaire ou via nos coordonnées officielles ci-dessous.
+        </motion.p>
+      </section>
 
-          <div>
-            <label className="block text-gray-700 dark:text-gray-300 mb-1">Adresse e-mail</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 focus:ring-2 focus:ring-green-600"
-            />
-          </div>
+      {/* ===============================
+           📨 Formulaire de contact
+         =============================== */}
+      <main className="flex-grow flex flex-col md:flex-row items-start justify-center gap-10 py-16 px-6 md:px-12">
+        {/* Bloc gauche : formulaire */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 w-full max-w-lg"
+        >
+          <h2 className="text-2xl font-bold text-center text-fordacGreen mb-8">
+            Envoyer un message
+          </h2>
 
-          <div>
-            <label className="block text-gray-700 dark:text-gray-300 mb-1">Objet</label>
-            <input
-              type="text"
-              name="subject"
-              value={formData.subject}
-              onChange={handleChange}
-              placeholder="Ex : Renseignement sur l’adhésion"
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 focus:ring-2 focus:ring-green-600"
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                Nom complet
+              </label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 px-3 py-2 focus:ring-2 focus:ring-fordacGold"
+                placeholder="Entrez votre nom"
+              />
+            </div>
 
-          <div>
-            <label className="block text-gray-700 dark:text-gray-300 mb-1">Message</label>
-            <textarea
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              rows={5}
-              required
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 focus:ring-2 focus:ring-green-600"
-            ></textarea>
-          </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                Adresse e-mail
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 px-3 py-2 focus:ring-2 focus:ring-fordacGold"
+                placeholder="exemple@email.com"
+              />
+            </div>
 
-          {error && <p className="text-red-600 text-sm font-medium">{error}</p>}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                Sujet
+              </label>
+              <input
+                type="text"
+                name="subject"
+                value={formData.subject}
+                onChange={handleChange}
+                required
+                className="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 px-3 py-2 focus:ring-2 focus:ring-fordacGold"
+                placeholder="Sujet de votre message"
+              />
+            </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-green-700 text-white py-3 rounded-lg font-semibold hover:bg-green-800 transition"
-          >
-            {loading ? "Envoi en cours..." : "Envoyer le message"}
-          </button>
-        </form>
-      </div>
-    </section>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                Message
+              </label>
+              <textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                required
+                rows={5}
+                className="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 px-3 py-2 focus:ring-2 focus:ring-fordacGold"
+                placeholder="Écrivez votre message ici..."
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-fordacGold text-fordacDark font-semibold py-3 rounded-md hover:bg-yellow-400 transition-colors"
+            >
+              Envoyer le message
+            </button>
+          </form>
+        </motion.div>
+
+        {/* Bloc droit : coordonnées */}
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3, duration: 0.8 }}
+          className="text-center md:text-left max-w-sm"
+        >
+          <h3 className="text-xl font-semibold text-fordacGold mb-4">
+            Coordonnées du FORDAC
+          </h3>
+
+          <p className="flex items-center justify-center md:justify-start mb-3">
+            <MapPin className="text-fordacGold w-5 h-5 mr-2" />
+            <span>Siège national, Douala - Cameroun</span>
+          </p>
+
+          <p className="flex items-center justify-center md:justify-start mb-3">
+            <Phone className="text-fordacGold w-5 h-5 mr-2" />
+            <span>+237 6 90 00 00 00</span>
+          </p>
+
+          <p className="flex items-center justify-center md:justify-start">
+            <Mail className="text-fordacGold w-5 h-5 mr-2" />
+            <span>contact@fordac-connect.org</span>
+          </p>
+
+          <p className="mt-8 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+            Nos équipes sont disponibles pour répondre à vos préoccupations,
+            recueillir vos suggestions et accompagner chaque citoyen dans sa
+            démarche d’engagement.
+          </p>
+        </motion.div>
+      </main>
+    </div>
   );
 }
