@@ -1,21 +1,28 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
   "framework": "nextjs",
-  "buildCommand": "npm run build",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install --legacy-peer-deps",
-  "outputDirectory": ".next",
   "env": {
-    "NEXT_PUBLIC_API_BASE_URL": "https://api.fordac-connect.org",
-    "NEXT_TELEMETRY_DISABLED": "1"
+    "NODE_ENV": "production"
   },
   "build": {
     "env": {
-      "NEXT_TELEMETRY_DISABLED": "1"
+      "NEXT_DISABLE_CACHE": "true"
     }
   },
-  "routes": [
-    { "src": "/(.*)", "dest": "/$1" }
-  ]
+  "functions": {
+    "api/**/*.js": {
+      "maxDuration": 30
+    }
+  },
+  "cache": false,
+  "github": {
+    "enabled": true,
+    "autoJobCancelation": true
+  }
 }
