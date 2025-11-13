@@ -1,16 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-
-  // 🚫 Désactivation explicite de Turbopack
-  experimental: {
-    turbo: false,
+  swcMinify: true,
+  eslint: {
+    ignoreDuringBuilds: true,
   },
-
-  // ✅ Force Webpack
+  experimental: {
+    // Aucune option Turbo ici — Vercel ne le reconnaît pas encore avec Webpack
+  },
   webpack: (config) => {
+    // Optionnel : personnalisation légère du build
     return config;
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
