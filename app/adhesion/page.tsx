@@ -1,172 +1,165 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { communes, chartes } from "@/moungoData";
+import "@/data/moungoData"; // assure-toi que ton fichier est dans /data/moungoData.ts
 
 export default function AdhesionPage() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
-    phone: "",
     email: "",
+    phone: "",
     arrondissement: "",
-    niveau: "",
+    niveau: "Bronze",
+    charteAgree: false,
   });
+  const [message, setMessage] = useState("");
 
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e: any) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((p) => ({ ...p, [name]: type === "checkbox" ? checked : value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
-    // Simulation de soumission API
-    setTimeout(() => setSubmitted(true), 1200);
+    if (!formData.charteAgree) {
+      setMessage("⚠️ Vous devez accepter la charte avant de valider.");
+      return;
+    }
+    localStorage.setItem("adhesion_form", JSON.stringify(formData));
+    router.push("/adhesion/success");
   };
-
-  if (submitted) {
-    return (
-      <main className="min-h-screen bg-gray-50 dark:bg-gray-900 text-center flex flex-col justify-center items-center text-gray-900 dark:text-gray-100 p-6">
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-3xl md:text-4xl font-bold text-fordacGreen mb-4"
-        >
-          Demande d’adhésion envoyée avec succès 🎉
-        </motion.h1>
-        <p className="max-w-xl text-gray-700 dark:text-gray-300 mb-8">
-          Votre demande a bien été transmise à la coordination du FORDAC dans le Mungo.
-          Vous serez bientôt contacté pour la validation officielle.
-        </p>
-        <Link
-          href="/"
-          className="bg-fordacGreen text-white px-6 py-3 rounded-lg font-semibold hover:bg-fordacDark transition"
-        >
-          Retour à l’accueil
-        </Link>
-      </main>
-    );
-  }
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 pt-24 px-6 pb-16">
-      <motion.h1
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="text-3xl md:text-4xl font-bold text-center mb-6 text-fordacGreen"
-      >
-        Formulaire d’adhésion au FORDAC
-      </motion.h1>
-
-      <p className="max-w-3xl mx-auto text-center text-gray-700 dark:text-gray-300 mb-10 leading-relaxed">
-        Le FORDAC, sous la direction du Président national, œuvre à renforcer la démocratie,
-        la justice sociale et le développement dans le Mungo et au-delà.  
-        Remplissez ce formulaire pour rejoindre le Parti selon votre niveau d’engagement.
-      </p>
-
-      {/* Lien vers la charte */}
-      <div className="text-center mb-10">
-        <Link
-          href="/charte"
-          className="inline-block bg-fordacGreen text-white px-6 py-3 rounded-lg font-semibold hover:bg-fordacDark transition"
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 py-20 px-4 text-gray-900 dark:text-gray-100">
+      <section className="max-w-5xl mx-auto">
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="text-4xl font-bold text-center text-green-700 dark:text-green-400 mb-10"
         >
-          Consulter la charte de la mutuelle
-        </Link>
-      </div>
+          Adhésion au FORDAC – Section du Moungo
+        </motion.h1>
 
-      {/* Formulaire */}
-      <form
-        onSubmit={handleSubmit}
-        className="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 space-y-6 border border-gray-200 dark:border-gray-700"
-      >
-        <div>
-          <label className="block text-sm font-semibold mb-2">Nom complet</label>
-          <input
-            type="text"
-            name="name"
-            required
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-semibold mb-2">Téléphone</label>
-          <input
-            type="tel"
-            name="phone"
-            required
-            value={formData.phone}
-            onChange={handleChange}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-semibold mb-2">Adresse e-mail</label>
-          <input
-            type="email"
-            name="email"
-            required
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900"
-          />
-        </div>
-
-        {/* Sélection dynamique depuis moungoData */}
-        <div>
-          <label className="block text-sm font-semibold mb-2">
-            Arrondissement (département du Mungo)
-          </label>
-          <select
-            name="arrondissement"
-            required
-            value={formData.arrondissement}
-            onChange={handleChange}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900"
+        <div className="grid md:grid-cols-2 gap-12">
+          {/* Formulaire d’adhésion */}
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700"
           >
-            <option value="">-- Sélectionnez un arrondissement --</option>
-            {moungoData.map((arr) => (
-              <option key={arr.id} value={arr.name}>
-                {arr.name}
-              </option>
-            ))}
-          </select>
-        </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold mb-1">Nom complet</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full p-3 rounded-lg border dark:bg-gray-900"
+                />
+              </div>
 
-        {/* Niveau d’adhésion */}
-        <div>
-          <label className="block text-sm font-semibold mb-2">Niveau d’adhésion</label>
-          <select
-            name="niveau"
-            required
-            value={formData.niveau}
-            onChange={handleChange}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900"
-          >
-            <option value="">-- Choisissez votre niveau --</option>
-            <option value="Bronze">Bronze — Actions locales, formation et solidarité</option>
-            <option value="Argent">Argent — Coordination régionale et projets collectifs</option>
-            <option value="Or">Or — Leadership, initiatives nationales et internationales</option>
-          </select>
-        </div>
+              <div>
+                <label className="block text-sm font-semibold mb-1">Adresse e-mail</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full p-3 rounded-lg border dark:bg-gray-900"
+                />
+              </div>
 
-        {/* Bouton de soumission */}
-        <div className="text-center pt-6">
-          <button
-            type="submit"
-            className="bg-fordacGreen text-white px-8 py-3 rounded-lg font-semibold hover:bg-fordacDark transition"
-          >
-            Envoyer ma demande d’adhésion
-          </button>
+              <div>
+                <label className="block text-sm font-semibold mb-1">Téléphone</label>
+                <input
+                  type="text"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                  className="w-full p-3 rounded-lg border dark:bg-gray-900"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-1">Arrondissement</label>
+                <input
+                  type="text"
+                  name="arrondissement"
+                  value={formData.arrondissement}
+                  onChange={handleChange}
+                  required
+                  className="w-full p-3 rounded-lg border dark:bg-gray-900"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-1">Niveau d’adhésion</label>
+                <select
+                  name="niveau"
+                  value={formData.niveau}
+                  onChange={handleChange}
+                  className="w-full p-3 rounded-lg border dark:bg-gray-900"
+                >
+                  <option value="Bronze">Bronze – 1 000 FCFA</option>
+                  <option value="Argent">Argent – 3 000 FCFA</option>
+                  <option value="Or">Or – 5 000 FCFA</option>
+                </select>
+              </div>
+
+              <div className="flex items-start space-x-2 mt-4">
+                <input
+                  type="checkbox"
+                  name="charteAgree"
+                  checked={formData.charteAgree}
+                  onChange={handleChange}
+                  className="mt-1"
+                />
+                <label className="text-sm">
+                  J’ai lu et j’accepte les termes de la{" "}
+                  <Link href="#charte" className="text-green-600 underline">
+                    charte de la Mutuelle du Moungo
+                  </Link>
+                </label>
+              </div>
+
+              <button
+                type="submit"
+                className="mt-6 w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-lg"
+              >
+                Envoyer ma demande d’adhésion
+              </button>
+
+              {message && (
+                <p className="mt-4 text-center text-yellow-500 dark:text-yellow-300">
+                  {message}
+                </p>
+              )}
+            </div>
+          </form>
+
+          {/* Aperçu de la charte */}
+          <div id="charte" className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
+            <h2 className="text-2xl font-bold text-green-700 mb-4">Charte de la Mutuelle</h2>
+            <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">
+              Consultez la charte complète avant d’adhérer. Elle définit les droits et devoirs
+              des membres du FORDAC dans le Moungo.
+            </p>
+            <iframe
+              src="/charte-mutuelle.pdf"
+              title="Charte Mutuelle"
+              className="w-full h-[600px] rounded-lg border border-gray-300"
+            ></iframe>
+          </div>
         </div>
-      </form>
+      </section>
     </main>
   );
 }

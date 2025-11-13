@@ -1,42 +1,43 @@
+// app/forum/page.tsx
 "use client";
 
-import { useRouter } from "next/navigation";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import { motion } from "framer-motion";
+import Link from "next/link";
 
-export default function ForumIntroPage() {
-  const router = useRouter();
-
-  const handleEnterForum = () => {
-    // Redirige vers la vraie section réservée
-    router.push("/forum/espace");
-  };
-
+export default function ForumPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-green-900 to-green-700 text-white flex flex-col items-center justify-center px-6 py-16 text-center">
-      <div className="max-w-3xl">
-        <h1 className="text-4xl md:text-5xl font-bold mb-6 text-amber-400">
-          Forum des Militants du FORDAC
-        </h1>
+    <ProtectedRoute>
+      <main className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 py-20 px-4">
+        <section className="max-w-5xl mx-auto text-center">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-4xl font-bold text-green-700 dark:text-green-400 mb-8"
+          >
+            Forum des militants
+          </motion.h1>
 
-        <p className="text-lg md:text-xl mb-8 leading-relaxed">
-          Le Forum des Militants est un espace d’échange réservé aux membres du FORDAC.  
-          Ici, chaque voix compte : on y partage les idées, les initiatives et les projets qui font vivre le Parti.  
-          C’est le lieu où s’expriment l’unité, la fraternité et l’action collective.
-        </p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="max-w-3xl mx-auto mb-10 text-lg text-gray-700 dark:text-gray-300"
+          >
+            Cet espace est dédié aux échanges entre militants du FORDAC.
+            Partagez vos idées, vos propositions et vos initiatives pour faire
+            avancer le Parti.
+          </motion.p>
 
-        <div className="bg-green-800 rounded-xl p-6 mb-8 shadow-lg">
-          <p className="text-base md:text-lg text-gray-100 leading-relaxed">
-            👉 Rejoignez la discussion, partagez vos réflexions et contribuez à la construction d’un Cameroun plus juste, plus fort et plus solidaire.  
-            Ensemble, faisons vivre la démocratie interne du FORDAC.
-          </p>
-        </div>
-
-        <button
-          onClick={handleEnterForum}
-          className="bg-amber-500 hover:bg-amber-600 text-green-900 font-semibold px-8 py-3 rounded-lg shadow-md transition-all duration-300"
-        >
-          Entrer dans le forum
-        </button>
-      </div>
-    </main>
+          <Link
+            href="/forum/espace"
+            className="inline-block bg-green-700 hover:bg-green-800 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105"
+          >
+            Entrer dans le Forum
+          </Link>
+        </section>
+      </main>
+    </ProtectedRoute>
   );
 }
