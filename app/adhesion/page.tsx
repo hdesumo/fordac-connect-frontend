@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import moungoData from "@/moungoData";
+import { communes, chartes } from "@/moungoData";
 
 export default function AdhesionPage() {
   const [formData, setFormData] = useState({
