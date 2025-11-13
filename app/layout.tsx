@@ -36,13 +36,13 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <body
-        className={`${inter.className} scroll-smooth bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 antialiased`}
+        className={`${inter.className} scroll-smooth bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 antialiased transition-colors duration-300`}
       >
         {/* 🟩 En-tête principale */}
         <Header />
 
         {/* 🧱 Contenu principal */}
-        <main className="pt-24 min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+        <main className="pt-24 px-4 md:px-8 min-h-screen bg-gray-50 dark:bg-gray-900">
           {children}
         </main>
 

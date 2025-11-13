@@ -3,86 +3,117 @@
 @tailwind utilities;
 
 /* ===============================
-   🌿 Thème global FORDAC Connect
+   PALETTE & STYLE GLOBAL FORDAC
    =============================== */
+:root {
+  --fordac-dark: #0f3b2e;
+  --fordac-green: #146b4d;
+  --fordac-light: #27ae60;
+  --fordac-gold: #f5c542;
+  --fordac-bg: #f9fafb;
+  --fordac-text: #1a1a1a;
+  --fordac-muted: #6b7280;
+}
 
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  @apply bg-white text-gray-900 antialiased;
-}
-
-/* Mode sombre automatique */
-@media (prefers-color-scheme: dark) {
-  body {
-    @apply bg-gray-950 text-gray-100;
-  }
+  @apply bg-[var(--fordac-bg)] text-[var(--fordac-text)] antialiased;
+  font-family: "Inter", sans-serif;
 }
 
 /* ===============================
-   Titres de section cohérents
+   TYPOGRAPHIE & STRUCTURE
+   =============================== */
+h1, h2, h3, h4, h5, h6 {
+  @apply font-bold text-fordacDark;
+}
+
+a {
+  @apply transition-colors duration-200;
+}
+
+/* ===============================
+   SECTIONS GÉNÉRALES
    =============================== */
 .section-title {
   @apply text-3xl md:text-4xl font-bold text-fordacGreen mb-6 animate-fadeIn;
 }
 
 .section-subtitle {
-  @apply text-lg text-gray-700 dark:text-gray-300 mb-4;
+  @apply text-lg text-[var(--fordac-muted)] mb-8 leading-relaxed;
 }
 
 /* ===============================
-   Boutons principaux
+   BOUTONS
    =============================== */
 .btn-primary {
-  @apply inline-block bg-fordacGreen text-white font-medium px-5 py-2 rounded-lg hover:bg-green-700 transition-colors duration-300;
+  @apply bg-fordacGreen text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-green-700 transition duration-300;
 }
 
-.btn-secondary {
-  @apply inline-block border border-fordacGreen text-fordacGreen font-medium px-5 py-2 rounded-lg hover:bg-fordacGreen hover:text-white transition-colors duration-300;
+.btn-outline {
+  @apply border border-fordacGreen text-fordacGreen font-semibold px-6 py-3 rounded-lg hover:bg-fordacGreen hover:text-white transition duration-300;
 }
 
-/* ===============================
-   Liens et effets visuels
-   =============================== */
-a {
-  @apply transition-colors duration-200;
-}
-
-a:hover {
-  @apply text-fordacLight;
+.btn-gold {
+  @apply bg-fordacGold text-fordacDark font-semibold px-6 py-3 rounded-lg hover:bg-yellow-400 transition duration-300;
 }
 
 /* ===============================
-   Animations globales
+   ANIMATIONS
    =============================== */
-@layer utilities {
-  .animate-fadeIn {
-    @apply animation-fadeIn;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-  .animation-fadeIn {
-    animation: fadeIn 0.8s ease-in-out;
-  }
+.animate-fadeIn {
+  animation: fadeIn 0.8s ease-in-out;
+}
 
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
+/* ===============================
+   FOOTER
+   =============================== */
+footer {
+  @apply mt-10 bg-fordacDark text-gray-200;
+}
 
-  @keyframes slideUp {
-    0% {
-      transform: translateY(20px);
-      opacity: 0;
-    }
-    100% {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
+footer a {
+  @apply hover:text-fordacGold transition-colors;
+}
+
+/* ===============================
+   COULEURS UTILITAIRES
+   =============================== */
+.text-fordacDark { color: var(--fordac-dark); }
+.text-fordacGreen { color: var(--fordac-green); }
+.text-fordacLight { color: var(--fordac-light); }
+.text-fordacGold { color: var(--fordac-gold); }
+
+.bg-fordacDark { background-color: var(--fordac-dark); }
+.bg-fordacGreen { background-color: var(--fordac-green); }
+.bg-fordacLight { background-color: var(--fordac-light); }
+.bg-fordacGold { background-color: var(--fordac-gold); }
+
+/* ===============================
+   UTILITAIRES VISUELS
+   =============================== */
+.shadow-card {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.rounded-xl {
+  border-radius: 1rem;
+}
+
+.text-balance {
+  text-wrap: balance;
 }

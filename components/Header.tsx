@@ -1,48 +1,48 @@
 "use client";
-import React from "react";
+
+import Image from "next/image";
 import Link from "next/link";
-import { UserPlus, LogIn } from "lucide-react";
 
 export default function Header() {
   return (
-    <header className="fixed top-0 left-0 w-full bg-fordacDark text-white shadow-md z-50">
-      <div className="max-w-7xl mx-auto flex items-center justify-between py-3 px-6 md:px-10">
-        {/* Logo */}
-        <Link href="/" className="text-2xl font-bold tracking-tight">
-          <span className="text-fordacLight">FORDAC</span>
-          <span className="text-fordacGold">Connect</span>
+    <header className="fixed top-0 left-0 w-full z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow">
+      <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+        {/* Logo seul, agrandi */}
+        <Link href="/">
+          <Image
+            src="/images/logo.png"
+            alt=""
+            width={160}
+            height={80}
+            priority
+            className="object-contain hover:opacity-90 transition"
+          />
         </Link>
 
-        {/* Navigation principale */}
-        <nav className="hidden md:flex items-center gap-8">
-          <Link href="/" className="hover:text-fordacGold transition-colors">
+        {/* Navigation */}
+        <nav className="hidden md:flex gap-8 text-sm font-semibold text-gray-800 dark:text-gray-100">
+          <Link href="/" className="hover:text-fordacGreen transition">
             Accueil
           </Link>
-          <Link href="/le-parti" className="hover:text-fordacGold transition-colors">
+          <Link href="/parti" className="hover:text-fordacGreen transition">
             Le Parti
           </Link>
-          <Link href="/forum" className="hover:text-fordacGold transition-colors">
+          <Link href="/activites" className="hover:text-fordacGreen transition">
+            Activités
+          </Link>
+          <Link href="/forum" className="hover:text-fordacGreen transition">
             Forum des Militants
           </Link>
-        </nav>
-
-        {/* Boutons d'action */}
-        <div className="flex items-center gap-3">
-          <Link
-            href="/adhesion"
-            className="flex items-center gap-2 bg-fordacGold text-fordacDark px-4 py-2 rounded-md font-semibold hover:bg-yellow-500 transition-colors"
-          >
-            <UserPlus size={16} />
+          <Link href="/adhesion" className="hover:text-fordacGreen transition">
             Adhésion
           </Link>
           <Link
             href="/login"
-            className="flex items-center gap-2 border border-fordacGold px-4 py-2 rounded-md font-semibold hover:bg-fordacGold hover:text-fordacDark transition-colors"
+            className="bg-fordacGreen text-white px-4 py-2 rounded-lg hover:bg-fordacDark transition"
           >
-            <LogIn size={16} />
             Connexion
           </Link>
-        </div>
+        </nav>
       </div>
     </header>
   );
