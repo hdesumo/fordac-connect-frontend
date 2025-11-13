@@ -1,24 +1,20 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}", // 👈 ajouté pour couvrir tous les cas
+    "./app/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: "class",
   theme: {
     extend: {
       colors: {
-        fordacGreen: "#0E7356",
-        fordacLight: "#1FA37C",
-      },
-      animation: {
-        fadeIn: "fadeIn 1s ease-in-out",
-      },
-      keyframes: {
-        fadeIn: {
-          from: { opacity: 0 },
-          to: { opacity: 1 },
+        fordac: {
+          dark: "#115E3A",
+          primary: "#1FA76F",
+          light: "#40C79E",
+        },
+        text: {
+          dark: "#1A1A1A",
+          light: "#FFFFFF",
         },
       },
     },

@@ -2,26 +2,14 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, X, User, LogOut } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { Menu, X } from "lucide-react";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [authenticated, setAuthenticated] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const pathname = usePathname();
 
-  // Détection du token de session (connexion)
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setAuthenticated(!!token);
-  }, []);
-
-  // Effet au scroll → opacité + ombre
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -29,99 +17,73 @@ export default function Header() {
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setAuthenticated(false);
-    window.location.href = "/login";
-  };
-
   const navLinks = [
-    { href: "/", label: "Accueil", alwaysVisible: true },
-    { href: "/a-propos", label: "À propos", alwaysVisible: true },
-    { href: "/actualites", label: "Actualités", alwaysVisible: true },
-    { href: "/evenements", label: "Événements", alwaysVisible: true },
-    { href: "/mouvement", label: "Le Mouvement", alwaysVisible: true },
-    { href: "/organisation", label: "Organisation", alwaysVisible: true },
-    { href: "/adhesion", label: "Adhésion", alwaysVisible: true },
-    { href: "/forum", label: "Forum des Militants", authOnly: true },
-    { href: "/mes-publications", label: "Mes Publications", authOnly: true },
-    { href: "/profil", label: "Mon Profil", authOnly: true },
+    { href: "/", label: "Accueil" },
+    { href: "/le-parti", label: "Le Parti" },
+    { href: "/forum", label: "Forum des Militants" },
   ];
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 border-b border-white/10 transition-all duration-300 ${
         scrolled
-          ? "bg-white/95 dark:bg-gray-900/95 shadow-lg py-2"
-          : "bg-white/80 dark:bg-gray-900/80 backdrop-blur-md py-4"
+          ? "shadow-lg bg-fordac-dark/95"
+          : "bg-gradient-to-r from-fordac-dark to-fordac-primary"
       }`}
     >
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-6">
+      <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-3">
         {/* Logo */}
         <Link
           href="/"
-          className="text-2xl font-extrabold text-fordacGreen tracking-tight"
+          className="text-xl lg:text-2xl font-extrabold text-white tracking-tight"
         >
-          FORDAC<span className="text-fordacLight">Connect</span>
+          FORDAC<span className="text-fordac-light">Connect</span>
         </Link>
 
         {/* Bouton menu mobile */}
         <button
-          className="lg:hidden text-gray-700 dark:text-gray-100"
+          className="lg:hidden text-white"
           onClick={toggleMenu}
           aria-label="Menu"
         >
           {menuOpen ? <X size={26} /> : <Menu size={26} />}
         </button>
 
-        {/* Navigation principale */}
+        {/* Menu navigation */}
         <nav
           className={`${
             menuOpen
-              ? "block absolute top-16 left-0 right-0 bg-white dark:bg-gray-900 shadow-lg"
+              ? "absolute top-14 left-0 right-0 bg-gradient-to-b from-fordac-dark to-fordac-primary lg:bg-transparent"
               : "hidden"
           } lg:block`}
         >
-          <ul className="flex flex-col lg:flex-row lg:items-center lg:space-x-6">
-            {navLinks
-              .filter(
-                (link) =>
-                  link.alwaysVisible || (authenticated && link.authOnly)
-              )
-              .map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    onClick={closeMenu}
-                    className={`block px-4 py-2 text-gray-700 dark:text-gray-200 hover:text-fordacGreen transition-colors ${
-                      pathname === link.href
-                        ? "font-semibold text-fordacGreen"
-                        : ""
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-
-            {/* Connexion / Déconnexion */}
-            <li className="mt-2 lg:mt-0">
-              {authenticated ? (
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-2 text-red-600 hover:text-red-700 transition-colors"
-                >
-                  <LogOut size={18} /> Déconnexion
-                </button>
-              ) : (
+          <ul className="flex flex-col lg:flex-row lg:items-center lg:space-x-8">
+            {navLinks.map((link) => (
+              <li key={link.href}>
                 <Link
-                  href="/login"
+                  href={link.href}
                   onClick={closeMenu}
-                  className="flex items-center gap-2 text-fordacGreen hover:text-fordacLight transition-colors"
+                  className="block px-4 py-2 text-white hover:text-fordac-light transition-colors"
                 >
-                  <User size={18} /> Connexion
+                  {link.label}
                 </Link>
-              )}
+              </li>
+            ))}
+
+            {/* Boutons à droite */}
+            <li className="flex flex-col lg:flex-row lg:items-center lg:ml-4 mt-2 lg:mt-0 gap-2">
+              <Link
+                href="/adhesion"
+                className="bg-white text-fordac-dark font-semibold px-4 py-2 rounded-lg hover:bg-fordac-light hover:text-white transition-all"
+              >
+                Adhésion
+              </Link>
+              <Link
+                href="/connexion"
+                className="border border-white text-white font-medium px-4 py-2 rounded-lg hover:bg-white hover:text-fordac-dark transition-all"
+              >
+                Connexion
+              </Link>
             </li>
           </ul>
         </nav>
