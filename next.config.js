@@ -5,11 +5,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  experimental: {
-    // Aucune option Turbo ici — Vercel ne le reconnaît pas encore avec Webpack
-  },
   webpack: (config) => {
-    // Optionnel : personnalisation légère du build
     return config;
   },
 };
