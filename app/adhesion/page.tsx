@@ -79,11 +79,10 @@ export default function AdhesionPage() {
   };
 
   const secteurs = Object.keys(moungoData.secteurs);
-  const arrondissements =
-  form.secteur &&
-  Object.prototype.hasOwnProperty.call(moungoData.secteurs, form.secteur)
-    ? moungoData.secteurs[form.secteur as keyof typeof moungoData.secteurs]
-    : [];
+  cconst arrondissements = form.secteur
+  ? (moungoData.secteurs as any)[form.secteur]
+  : [];
+
 
 
 
