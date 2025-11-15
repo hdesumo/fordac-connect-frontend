@@ -1,12 +1,13 @@
 import "./globals.css";
 import Link from "next/link";
+import { ReactNode } from "react";
 
 export const metadata = {
   title: "FORDAC Connect",
   description: "Plateforme officielle du FORDAC",
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fr">
       {/* ⚠️ SUPPRESSION DE bg-white QUI ÉCRASAIT TOUT */}
