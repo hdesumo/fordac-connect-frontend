@@ -17,7 +17,7 @@ interface MediaModalProps {
 export default function MediaModal({ media, onClose }: MediaModalProps) {
   if (!media) return null;
 
-  // Fermer avec ESC
+  // Fermeture via ESC
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -35,7 +35,6 @@ export default function MediaModal({ media, onClose }: MediaModalProps) {
         className="relative max-w-3xl w-full bg-white rounded-lg overflow-hidden shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Bouton de fermeture */}
         <button
           onClick={onClose}
           className="absolute top-3 right-3 text-black bg-white bg-opacity-70 hover:bg-opacity-100 p-2 rounded-full"
@@ -43,7 +42,6 @@ export default function MediaModal({ media, onClose }: MediaModalProps) {
           ✕
         </button>
 
-        {/* Contenu : image ou vidéo */}
         {media.type === "image" ? (
           <img
             src={media.url}
@@ -59,7 +57,6 @@ export default function MediaModal({ media, onClose }: MediaModalProps) {
           ></video>
         )}
 
-        {/* Légende si fournie */}
         {media.legend && (
           <div className="p-4 text-center text-gray-700 text-sm bg-gray-100 border-t">
             {media.legend}
