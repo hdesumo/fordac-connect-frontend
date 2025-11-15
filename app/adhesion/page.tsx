@@ -80,7 +80,15 @@ export default function AdhesionPage() {
 
   const secteurs = Object.keys(moungoData.secteurs);
   const arrondissements =
-    form.secteur ? moungoData.secteurs[form.secteur] : [];
+  form.secteur &&
+  moungoData.secteurs[
+    form.secteur as keyof typeof moungoData.secteurs
+  ]
+    ? moungoData.secteurs[
+        form.secteur as keyof typeof moungoData.secteurs
+      ]
+    : [];
+
 
   return (
     <main className="max-w-3xl mx-auto py-24 px-6 text-fordacDark">
