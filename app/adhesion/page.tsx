@@ -79,12 +79,9 @@ export default function AdhesionPage() {
   };
 
   const secteurs = Object.keys(moungoData.secteurs);
-  const arrondissements = form.secteur
+  const arrondissements: string[] = form.secteur
   ? (moungoData.secteurs as any)[form.secteur]
   : [];
-
-
-
 
   return (
     <main className="max-w-3xl mx-auto py-24 px-6 text-fordacDark">
