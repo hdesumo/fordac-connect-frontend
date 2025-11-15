@@ -1,20 +1,20 @@
 "use client";
-
 import { useEffect } from "react";
 
-// ---- Types ---- //
-interface Media {
+export type Media = {
   type: "image" | "video";
   url: string;
   legend?: string;
-}
+};
 
-interface MediaModalProps {
+export type MediaModalProps = {
   media: Media | null;
   onClose: () => void;
-}
+};
 
-export default function MediaModal({ media, onClose }: MediaModalProps) {
+export default function MediaModal(props: MediaModalProps) {
+  const { media, onClose } = props;
+
   if (!media) return null;
 
   // Fermeture via ESC
@@ -23,6 +23,7 @@ export default function MediaModal({ media, onClose }: MediaModalProps) {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handleKey);
+
     return () => window.removeEventListener("keydown", handleKey);
   }, [onClose]);
 
@@ -42,25 +43,28 @@ export default function MediaModal({ media, onClose }: MediaModalProps) {
           ✕
         </button>
 
-        {media.type === "image" ? (
+        {/* IMAGE */}
+        {media.type === "image" && (
           <img
             src={media.url}
-            alt=""
-            className="w-full max-h-[80vh] object-contain"
+            alt={media.legend ?? ""}
+            className="w-full object-contain max-h-[80vh]"
           />
-        ) : (
+        )}
+
+        {/* VIDEO */}
+        {media.type === "video" && (
           <video
-            src={media.url}
             controls
-            autoPlay
-            className="w-full max-h-[80vh] object-contain"
-          ></video>
+            src={media.url}
+            className="w-full max-h-[80vh]"
+          />
         )}
 
         {media.legend && (
-          <div className="p-4 text-center text-gray-700 text-sm bg-gray-100 border-t">
+          <p className="p-4 bg-gray-100 text-gray-700 text-center text-sm">
             {media.legend}
-          </div>
+          </p>
         )}
       </div>
     </div>
