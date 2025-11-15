@@ -3,22 +3,60 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Tentative de connexion :", { email, password });
-    // 👉 Intégration API de connexion ici (future connexion au backend)
+    setError("");
+
+    try {
+      setLoading(true);
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setLoading(false);
+        setError(data.error || "Identifiants incorrects.");
+        return;
+      }
+
+      // Stockage local
+      localStorage.setItem("fordac_token", data.token);
+      localStorage.setItem("fordac_user", JSON.stringify(data.user));
+
+      // Redirection vers l’espace personnel
+      router.push("/profil");
+
+    } catch (err) {
+      console.error(err);
+      setError("Impossible de contacter le serveur.");
+      setLoading(false);
+    }
   };
 
   return (
     <div className="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
-      {/* ===============================
+
+      {/* ================================
            🟩 En-tête
-         =============================== */}
+         ================================= */}
       <section className="bg-gradient-to-b from-fordacGreen to-fordacDark text-white py-20 text-center">
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
@@ -28,6 +66,7 @@ export default function LoginPage() {
         >
           Connexion à l’Espace Militant
         </motion.h1>
+
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -39,9 +78,9 @@ export default function LoginPage() {
         </motion.p>
       </section>
 
-      {/* ===============================
+      {/* ================================
            🔐 Formulaire de connexion
-         =============================== */}
+         ================================= */}
       <main className="flex-grow flex items-center justify-center py-20 px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -52,16 +91,13 @@ export default function LoginPage() {
           <h2 className="text-2xl font-bold text-center text-fordacGreen mb-8">
             Se connecter
           </h2>
+
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1"
-              >
+              <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-200">
                 Adresse e-mail
               </label>
               <input
-                id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -72,14 +108,10 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1"
-              >
+              <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-200">
                 Mot de passe
               </label>
               <input
-                id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -89,11 +121,18 @@ export default function LoginPage() {
               />
             </div>
 
+            {error && (
+              <p className="text-red-600 dark:text-red-400 text-center font-semibold">
+                {error}
+              </p>
+            )}
+
             <button
               type="submit"
+              disabled={loading}
               className="w-full bg-fordacGold text-fordacDark font-semibold py-3 rounded-md hover:bg-yellow-400 transition-colors"
             >
-              Connexion
+              {loading ? "Connexion…" : "Connexion"}
             </button>
           </form>
 
@@ -103,7 +142,7 @@ export default function LoginPage() {
               href="/adhesion"
               className="text-fordacGold hover:underline font-semibold"
             >
-              Créez votre compte
+              Faites-votre demande d'adhésion
             </Link>
           </p>
         </motion.div>

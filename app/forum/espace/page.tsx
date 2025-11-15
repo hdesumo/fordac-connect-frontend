@@ -1,70 +1,90 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
-export default function ForumEspacePage() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const router = useRouter();
+export default function ForumEspace() {
+  const [posts, setPosts] = useState([
+    {
+      id: 1,
+      author: "Jean-Paul Kalla",
+      content:
+        "Je propose que nous renforcions les activités du FORDAC dans les arrondissements ruraux pour mieux mobiliser la jeunesse.",
+      date: "13 novembre 2025",
+    },
+    {
+      id: 2,
+      author: "Rosine Nguetchoua",
+      content:
+        "Excellente idée ! On pourrait aussi lancer des ateliers de formation sur la citoyenneté et l’économie solidaire.",
+      date: "13 novembre 2025",
+    },
+  ]);
 
-  // 🔐 Simulation d’un contrôle de session
-  useEffect(() => {
-    const token = localStorage.getItem("fordac_token");
-    if (token) {
-      setIsAuthenticated(true);
-    } else {
-      router.push("/login");
-    }
-  }, [router]);
+  const [newPost, setNewPost] = useState("");
 
-  if (!isAuthenticated) {
-    return (
-      <main className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
-        <h2 className="text-2xl font-semibold mb-4">Vérification de l’accès...</h2>
-        <p className="text-gray-500">Veuillez patienter...</p>
-      </main>
-    );
-  }
+  const handlePost = () => {
+    if (!newPost.trim()) return;
+    const newEntry = {
+      id: posts.length + 1,
+      author: "Moi (Militant connecté)",
+      content: newPost,
+      date: new Date().toLocaleDateString("fr-FR"),
+    };
+    setPosts([newEntry, ...posts]);
+    setNewPost("");
+  };
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 px-6 py-16">
-      <div className="max-w-5xl mx-auto text-center">
-        <h1 className="text-4xl md:text-5xl font-bold mb-8 text-green-700 dark:text-amber-400">
-          Espace des Militants
-        </h1>
-        <p className="text-lg text-gray-700 dark:text-gray-300 mb-12 leading-relaxed">
-          Bienvenue dans l’espace de discussion interne du FORDAC.  
-          Ici, les militants échangent librement sur les initiatives du Parti,  
-          les actions locales et les propositions d’avenir.
-        </p>
+    <ProtectedRoute>
+      <main className="bg-[#0c2e25] min-h-screen text-white pt-24 pb-16">
+        <section className="max-w-5xl mx-auto px-6">
+          <h1 className="text-4xl font-bold mb-8 text-center text-[#c8a45d]">
+            Espace des Militants – Forum Restreint
+          </h1>
 
-        <section className="grid md:grid-cols-2 gap-8 text-left">
-          <div className="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 hover:shadow-lg transition">
-            <h3 className="text-2xl font-semibold mb-3 text-green-800 dark:text-amber-400">
-              💬 Débats et échanges
-            </h3>
-            <p className="text-gray-700 dark:text-gray-300">
-              Participez aux débats sur les grands sujets politiques, économiques et sociaux
-              portés par le FORDAC. Donnez votre avis, proposez, discutez, construisez.
-            </p>
+          <p className="text-center text-lg mb-10 max-w-3xl mx-auto">
+            Cet espace est réservé aux membres connectés du FORDAC.  
+            Ici, vous pouvez partager vos réflexions ou vos
+            expériences pour faire avancer notre parti.
+          </p>
+
+          {/* Zone de publication */}
+          <div className="bg-[#154933] p-6 rounded-lg shadow-lg mb-12">
+            <textarea
+              placeholder="Partagez votre idée, proposition ou commentaire..."
+              value={newPost}
+              onChange={(e) => setNewPost(e.target.value)}
+              className="w-full p-4 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#c8a45d]"
+              rows={4}
+            ></textarea>
+            <button
+              onClick={handlePost}
+              className="mt-4 bg-[#c8a45d] text-[#0c2e25] font-semibold px-6 py-3 rounded-md hover:bg-[#d8b36d] transition"
+            >
+              Publier
+            </button>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 hover:shadow-lg transition">
-            <h3 className="text-2xl font-semibold mb-3 text-green-800 dark:text-amber-400">
-              📅 Activités et actions
-            </h3>
-            <p className="text-gray-700 dark:text-gray-300">
-              Découvrez les actions du Parti, les rencontres régionales et nationales,
-              et les campagnes en cours. Engagez-vous à nos côtés sur le terrain.
-            </p>
+          {/* Liste des publications */}
+          <div className="space-y-6">
+            {posts.map((post) => (
+              <div
+                key={post.id}
+                className="bg-[#123f2f] p-6 rounded-lg shadow-md border border-[#1d6047]"
+              >
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="text-lg font-semibold text-[#c8a45d]">
+                    {post.author}
+                  </h3>
+                  <span className="text-sm text-gray-300">{post.date}</span>
+                </div>
+                <p className="text-gray-100 leading-relaxed">{post.content}</p>
+              </div>
+            ))}
           </div>
         </section>
-
-        <p className="mt-12 text-sm text-gray-500 dark:text-gray-400">
-          Cet espace est réservé aux militants connectés.  
-          Si vous rencontrez un problème d’accès, contactez le secrétariat national.
-        </p>
-      </div>
-    </main>
+      </main>
+    </ProtectedRoute>
   );
 }

@@ -1,43 +1,56 @@
-// app/forum/page.tsx
 "use client";
 
-import ProtectedRoute from "@/components/ProtectedRoute";
-import { motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 
-export default function ForumPage() {
+export default function ForumIntroPage() {
   return (
-    <ProtectedRoute>
-      <main className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 py-20 px-4">
-        <section className="max-w-5xl mx-auto text-center">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl font-bold text-green-700 dark:text-green-400 mb-8"
-          >
-            Forum des militants
-          </motion.h1>
+    <div className="w-full bg-gray-50">
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            className="max-w-3xl mx-auto mb-10 text-lg text-gray-700 dark:text-gray-300"
-          >
-            Cet espace est dédié aux échanges entre militants du FORDAC.
-            Partagez vos idées, vos propositions et vos initiatives pour faire
-            avancer le Parti.
-          </motion.p>
+      {/* SECTION TITRE */}
+      <section className="w-full bg-emerald-800 py-16 text-center">
+        <h1 className="text-4xl md:text-5xl font-bold text-white">
+          FORUM DES MILITANTS
+        </h1>
+      </section>
+
+      {/* CONTENU */}
+      <section className="max-w-6xl mx-auto px-6 md:px-0 py-16 grid md:grid-cols-2 gap-12 items-center">
+
+        {/* TEXTE */}
+        <div>
+          <h2 className="text-3xl font-bold text-emerald-700 mb-4">
+            Bienvenue
+          </h2>
+
+          <p className="text-gray-700 leading-relaxed text-lg">
+            Bienvenue sur le forum des militants du FORDAC.
+            Venez échanger vos idées
+           et contribuer à notre mouvement en toute convivialité.
+          </p>
 
           <Link
             href="/forum/espace"
-            className="inline-block bg-green-700 hover:bg-green-800 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105"
+            className="inline-block mt-8 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-3 rounded-md shadow"
           >
-            Entrer dans le Forum
+            Accéder au forum
           </Link>
-        </section>
-      </main>
-    </ProtectedRoute>
+        </div>
+
+        {/* IMAGE ILLUSTRATION */}
+        <div className="w-full flex justify-center">
+          <Image
+            src="/forum/intro.png"
+            alt="Illustration Forum des Militants"
+            width={700}
+            height={500}
+            className="rounded-lg shadow-lg"
+            priority
+          />
+        </div>
+
+      </section>
+
+    </div>
   );
 }

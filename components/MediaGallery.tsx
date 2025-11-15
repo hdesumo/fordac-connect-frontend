@@ -1,14 +1,21 @@
 "use client";
 import { motion } from "framer-motion";
-import { PlayCircle } from "lucide-react";
 import { useState } from "react";
 
 export default function MediaGallery() {
   const gallery = [
+    // Photos
     { id: 1, type: "photo", src: "/hero/hero1.jpeg", caption: "Mobilisation à Loum" },
     { id: 2, type: "photo", src: "/hero/hero2.jpeg", caption: "Rencontre régionale du Littoral" },
     { id: 3, type: "photo", src: "/hero/hero3.jpeg", caption: "Espoir et unité nationale" },
-    { id: 4, type: "video", src: "https://www.youtube.com/embed/2x4PpQmF1hI", caption: "Discours du Président Romaric Yebchue Semenou" }
+
+    // Vidéos locales (REMPLACE ou AJOUTE selon tes besoins)
+    { id: 4, type: "video-local", src: "/galerie/videos/video1.mp4", caption: "Discours du Président – Séquence 1" },
+    { id: 5, type: "video-local", src: "/galerie/videos/video2.mp4", caption: "Séquence régionale – Littoral" },
+    { id: 6, type: "video-local", src: "/galerie/videos/video3.mp4", caption: "Mobilisation des jeunes" },
+
+    // (Optionnel) Vidéo YouTube
+    // { id: 7, type: "video-yt", src: "https://www.youtube.com/embed/XXXX", caption: "Discours public" },
   ];
 
   const [index, setIndex] = useState(0);
@@ -32,25 +39,34 @@ export default function MediaGallery() {
           transition={{ duration: 0.6 }}
           className="rounded-2xl shadow-xl overflow-hidden bg-white dark:bg-[#122012]"
         >
-          {item.type === "photo" ? (
+          {/* 👉 PHOTOS */}
+          {item.type === "photo" && (
             <img
               src={item.src}
               alt={item.caption}
               className="w-full h-[500px] object-cover"
             />
-          ) : (
-            <div className="relative h-[500px]">
-              <iframe
-                className="absolute inset-0 w-full h-full"
-                src={item.src}
-                title={item.caption}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-              <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                <PlayCircle size={80} className="text-white drop-shadow-lg" />
-              </div>
-            </div>
+          )}
+
+          {/* 👉 VIDEOS LOCALES */}
+          {item.type === "video-local" && (
+            <video
+              src={item.src}
+              controls
+              preload="metadata"
+              className="w-full h-[500px] object-cover bg-black"
+            />
+          )}
+
+          {/* 👉 VIDEOS YOUTUBE */}
+          {item.type === "video-yt" && (
+            <iframe
+              className="w-full h-[500px]"
+              src={item.src}
+              title={item.caption}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
           )}
         </motion.div>
 

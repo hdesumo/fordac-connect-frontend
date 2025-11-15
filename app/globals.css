@@ -3,18 +3,20 @@
 @tailwind utilities;
 
 /* ===============================
-   PALETTE & STYLE GLOBAL FORDAC
+   PALETTE GLOBALE FORDAC
    =============================== */
 :root {
-  --fordac-dark: #0f3b2e;
-  --fordac-green: #146b4d;
-  --fordac-light: #27ae60;
-  --fordac-gold: #f5c542;
-  --fordac-bg: #f9fafb;
-  --fordac-text: #1a1a1a;
-  --fordac-muted: #6b7280;
+  --fordac-dark: #0F3B2E;
+  --fordac-green: #1B7F5E;
+  --fordac-light: #D9EFE5;
+  --fordac-gold: #C6A15B;
+  --fordac-bg: #F9FAFB;
+  --fordac-text: #1A1A1A;
 }
 
+/* ===============================
+   STYLE GLOBAL
+   =============================== */
 html {
   scroll-behavior: smooth;
 }
@@ -25,77 +27,41 @@ body {
 }
 
 /* ===============================
-   TYPOGRAPHIE & STRUCTURE
+   TITRES
    =============================== */
 h1, h2, h3, h4, h5, h6 {
   @apply font-bold text-fordacDark;
-}
-
-a {
-  @apply transition-colors duration-200;
-}
-
-/* ===============================
-   SECTIONS GÉNÉRALES
-   =============================== */
-.section-title {
-  @apply text-3xl md:text-4xl font-bold text-fordacGreen mb-6 animate-fadeIn;
-}
-
-.section-subtitle {
-  @apply text-lg text-[var(--fordac-muted)] mb-8 leading-relaxed;
 }
 
 /* ===============================
    BOUTONS
    =============================== */
 .btn-primary {
-  @apply bg-fordacGreen text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-green-700 transition duration-300;
+  @apply bg-fordacGreen text-white font-semibold px-6 py-3 rounded-lg shadow
+         hover:bg-green-700 transition duration-300;
 }
 
 .btn-outline {
-  @apply border border-fordacGreen text-fordacGreen font-semibold px-6 py-3 rounded-lg hover:bg-fordacGreen hover:text-white transition duration-300;
-}
-
-.btn-gold {
-  @apply bg-fordacGold text-fordacDark font-semibold px-6 py-3 rounded-lg hover:bg-yellow-400 transition duration-300;
+  @apply border border-fordacGreen text-fordacGreen font-semibold px-6 py-3 rounded-lg
+         hover:bg-fordacGreen hover:text-white transition duration-300;
 }
 
 /* ===============================
-   ANIMATIONS
+   FORMULAIRES
    =============================== */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+input, select, textarea {
+  @apply text-gray-900;
 }
 
-.animate-fadeIn {
-  animation: fadeIn 0.8s ease-in-out;
+label {
+  @apply text-fordacDark;
 }
 
 /* ===============================
-   FOOTER
-   =============================== */
-footer {
-  @apply mt-10 bg-fordacDark text-gray-200;
-}
-
-footer a {
-  @apply hover:text-fordacGold transition-colors;
-}
-
-/* ===============================
-   COULEURS UTILITAIRES
+   UTILITAIRES
    =============================== */
 .text-fordacDark { color: var(--fordac-dark); }
 .text-fordacGreen { color: var(--fordac-green); }
-.text-fordacLight { color: var(--fordac-light); }
 .text-fordacGold { color: var(--fordac-gold); }
 
 .bg-fordacDark { background-color: var(--fordac-dark); }
@@ -103,17 +69,6 @@ footer a {
 .bg-fordacLight { background-color: var(--fordac-light); }
 .bg-fordacGold { background-color: var(--fordac-gold); }
 
-/* ===============================
-   UTILITAIRES VISUELS
-   =============================== */
 .shadow-card {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-}
-
-.rounded-xl {
-  border-radius: 1rem;
-}
-
-.text-balance {
-  text-wrap: balance;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
 }
