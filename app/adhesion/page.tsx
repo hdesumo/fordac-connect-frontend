@@ -192,7 +192,7 @@ export default function AdhesionPage() {
             onChange={(e) => updateField("arrondissement", e.target.value)}
           >
             <option value="">Sélectionner…</option>
-            {arrondissements.map((a) => (
+            {arrondissements.map((a: string) => (
               <option key={a} value={a}>
                 {a}
               </option>
