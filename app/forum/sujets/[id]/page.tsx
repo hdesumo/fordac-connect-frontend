@@ -4,19 +4,34 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
+interface Topic {
+  id: number;
+  title: string;
+  description: string;
+}
+
+interface Post {
+  id: number;
+  author: string;
+  content: string;
+  created_at: string;
+}
+
 export default function TopicDetails() {
   const { id } = useParams();
-  const [topic, setTopic] = useState(null);
-  const [posts, setPosts] = useState([]);
+  const [topic, setTopic] = useState<Topic | null>(null);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [newPost, setNewPost] = useState("");
   const [loading, setLoading] = useState(true);
 
+  // 🔥 Chargement du sujet + messages
   useEffect(() => {
     async function loadTopic() {
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/forum/topics/${id}`
         );
+
         const data = await res.json();
         setTopic(data.topic);
         setPosts(data.posts);
@@ -26,13 +41,19 @@ export default function TopicDetails() {
         setLoading(false);
       }
     }
+
     loadTopic();
   }, [id]);
 
+  // ✉️ Envoi d’un message
   const handleSubmit = async () => {
     if (!newPost.trim()) return;
 
-    const user = JSON.parse(localStorage.getItem("user"));
+    // ***********************
+    // ✔ Correction TypeScript
+    // ***********************
+    const rawUser = localStorage.getItem("user");
+    const user = rawUser ? JSON.parse(rawUser) : null;
     const author = user?.name || "Militant";
 
     try {
@@ -57,7 +78,6 @@ export default function TopicDetails() {
     <ProtectedRoute>
       <main className="bg-[#0c2e25] min-h-screen text-white pt-24 pb-16">
         <section className="max-w-5xl mx-auto px-6">
-
           {loading && (
             <p className="text-center text-lg text-gray-300">Chargement...</p>
           )}
@@ -70,7 +90,7 @@ export default function TopicDetails() {
 
               <p className="text-gray-200 mb-10">{topic.description}</p>
 
-              {/* Formulaire de post */}
+              {/* Formulaire de message */}
               <div className="bg-[#154933] p-6 rounded-lg shadow-lg mb-12">
                 <textarea
                   placeholder="Votre message..."
@@ -92,7 +112,7 @@ export default function TopicDetails() {
                 </p>
               </div>
 
-              {/* Liste des posts approuvés */}
+              {/* Liste des posts */}
               <h2 className="text-3xl font-bold text-[#c8a45d] mb-6">
                 Messages approuvés
               </h2>
@@ -109,7 +129,11 @@ export default function TopicDetails() {
                       <h3 className="text-lg font-semibold text-[#c8a45d]">
                         {post.author}
                       </h3>
-                      <p className="text-gray-100 leading-relaxed mt-2">{post.content}</p>
+
+                      <p className="text-gray-100 leading-relaxed mt-2">
+                        {post.content}
+                      </p>
+
                       <span className="text-sm text-gray-400">
                         {new Date(post.created_at).toLocaleDateString("fr-FR")}
                       </span>
