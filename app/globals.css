@@ -1,74 +1,179 @@
+/* ====== TAILWIND CORE ====== */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ===============================
-   PALETTE GLOBALE FORDAC
-   =============================== */
-:root {
-  --fordac-dark: #0F3B2E;
-  --fordac-green: #1B7F5E;
-  --fordac-light: #D9EFE5;
-  --fordac-gold: #C6A15B;
-  --fordac-bg: #F9FAFB;
-  --fordac-text: #1A1A1A;
-}
+/* =========================================
+   🌍 GLOBAL STYLES — FORDAC CONNECT
+   Optimisé Mobile + Desktop – Novembre 2025
+   ========================================= */
+
 
 /* ===============================
-   STYLE GLOBAL
+   RESET + TYPOGRAPHIE GLOBALE
    =============================== */
-html {
-  scroll-behavior: smooth;
-}
 
+html,
 body {
-  @apply bg-[var(--fordac-bg)] text-[var(--fordac-text)] antialiased;
-  font-family: "Inter", sans-serif;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  background-color: #083c33; /* Vert foncé du thème */
+  color: #ffffff;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
 }
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
 
 /* ===============================
-   TITRES
+   NAVBAR (Desk + Mobile)
    =============================== */
-h1, h2, h3, h4, h5, h6 {
-  @apply font-bold text-fordacDark;
+
+.navbar-blur {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
+
+.nav-link {
+  @apply text-white hover:text-yellow-300 transition font-medium;
+}
+
+.nav-button {
+  @apply px-4 py-2 rounded-full font-semibold text-sm transition;
+}
+
+.nav-button-adhesion {
+  background-color: #e5a600;
+  color: #ffffff;
+}
+
+.nav-button-adhesion:hover {
+  background-color: #f1b72d;
+}
+
+.nav-button-connexion {
+  background-color: #0b5e4d;
+  color: #ffffff;
+}
+
+.nav-button-connexion:hover {
+  background-color: #0f7a62;
+}
+
 
 /* ===============================
-   BOUTONS
+   HERO / HEADER
    =============================== */
-.btn-primary {
-  @apply bg-fordacGreen text-white font-semibold px-6 py-3 rounded-lg shadow
-         hover:bg-green-700 transition duration-300;
+
+.hero-section {
+  background: linear-gradient(to bottom, #0a5d48, #80e0a5);
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  text-align: center;
+  color: #ffffff;
 }
 
-.btn-outline {
-  @apply border border-fordacGreen text-fordacGreen font-semibold px-6 py-3 rounded-lg
-         hover:bg-fordacGreen hover:text-white transition duration-300;
+.hero-title {
+  font-size: 2.8rem;
+  font-weight: 800;
 }
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  max-width: 800px;
+  margin: 0 auto;
+  opacity: 0.95;
+}
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
 
 /* ===============================
-   FORMULAIRES
+   SECTIONS
    =============================== */
-input, select, textarea {
-  @apply text-gray-900;
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0a8c52;
 }
 
-label {
-  @apply text-fordacDark;
+.section-text {
+  font-size: 1rem;
+  line-height: 1.7rem;
+  opacity: 0.9;
 }
+
 
 /* ===============================
-   UTILITAIRES
+   CARDS / BLOCS
    =============================== */
-.text-fordacDark { color: var(--fordac-dark); }
-.text-fordacGreen { color: var(--fordac-green); }
-.text-fordacGold { color: var(--fordac-gold); }
 
-.bg-fordacDark { background-color: var(--fordac-dark); }
-.bg-fordacGreen { background-color: var(--fordac-green); }
-.bg-fordacLight { background-color: var(--fordac-light); }
-.bg-fordacGold { background-color: var(--fordac-gold); }
+.card {
+  background-color: #ffffff;
+  color: #000000;
+  border-radius: 0.75rem;
+  padding: 2rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
 
-.shadow-card {
-  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+
+/* ===============================
+   FOOTER
+   =============================== */
+
+footer {
+  background-color: #062822;
+  color: #c9c9c9;
+  padding: 40px 20px;
+  margin-top: 3rem;
+}
+
+footer a:hover {
+  color: #ffffff;
+}
+
+
+/* ===============================
+   MOBILE RESPONSIVE FIXES
+   =============================== */
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.1rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    padding: 0 1rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+  }
+
+  .section-title {
+    font-size: 1.6rem;
+    text-align: center;
+  }
+
+  .section-text {
+    font-size: 0.95rem;
+  }
 }

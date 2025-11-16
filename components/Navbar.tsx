@@ -1,117 +1,108 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { useState } from "react";
 
 export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        scrolled ? "bg-white shadow-lg" : "bg-transparent"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Logo */}
-        <Link href="/" className="flex items-center space-x-2">
-          <img src="/fordac-logo.png" alt="FORDAC" className="h-10 w-auto" />
-          <span
-            className={`text-2xl font-bold ${
-              scrolled ? "text-green-800" : "text-white"
-            }`}
-          >
-            FORDAC Connect
-          </span>
+    <nav className="fixed top-0 left-0 w-full z-50 bg-[#0B3D2E] border-b border-[#11503D]">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+        {/* LOGO */}
+        <Link href="/" className="flex items-center space-x-3">
+          <img src="/logo.png" alt="FORDAC" className="h-10 w-auto" />
         </Link>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-8 items-center">
-          <Link
-            href="/"
-            className={`font-medium ${
-              scrolled ? "text-gray-700" : "text-white"
-            } hover:text-green-700 transition`}
-          >
-            Accueil
-          </Link>
-          <Link
-            href="/a-propos"
-            className={`font-medium ${
-              scrolled ? "text-gray-700" : "text-white"
-            } hover:text-green-700 transition`}
-          >
-            À propos
-          </Link>
-          <Link
-            href="/actualites"
-            className={`font-medium ${
-              scrolled ? "text-gray-700" : "text-white"
-            } hover:text-green-700 transition`}
-          >
-            Actualités
-          </Link>
-          <Link
-            href="/contact"
-            className={`font-medium ${
-              scrolled ? "text-gray-700" : "text-white"
-            } hover:text-green-700 transition`}
-          >
-            Contact
+        {/* MENU DESKTOP */}
+        <div className="hidden lg:flex space-x-8 text-[15px] font-medium text-white">
+
+          <Link href="/" className="hover:text-[#c8a45d]">Accueil</Link>
+          <Link href="/le-parti" className="hover:text-[#c8a45d]">Le Parti</Link>
+          <Link href="/president" className="hover:text-[#c8a45d]">Le Président</Link>
+          <Link href="/organes" className="hover:text-[#c8a45d]">Les Organes</Link>
+
+          {/* Galerie */}
+          <div className="group relative cursor-pointer">
+            <span className="hover:text-[#c8a45d]">Galerie</span>
+            <div className="hidden group-hover:block absolute top-full left-0 bg-[#0B3D2E] border border-[#11503D] rounded-lg shadow-lg py-3 w-40">
+              <Link href="/galerie/photos" className="block px-4 py-2 hover:bg-[#11503D]">Photos</Link>
+              <Link href="/galerie/videos" className="block px-4 py-2 hover:bg-[#11503D]">Vidéos</Link>
+            </div>
+          </div>
+
+          <Link href="/forum/sujets" className="hover:text-[#c8a45d]">
+            Forum des Militant(e)s
           </Link>
 
-          {/* CTA */}
+          <Link href="/nous-contacter" className="hover:text-[#c8a45d]">
+            Nous Contacter
+          </Link>
+
           <Link
             href="/adhesion"
-            className="px-5 py-2 rounded-full bg-green-600 text-white font-semibold hover:bg-green-700 transition transform hover:scale-105"
+            className="px-4 py-2 rounded-md bg-[#c8a45d] text-[#0B3D2E] font-semibold hover:bg-[#d9b97a] transition flex items-center space-x-2"
           >
-            Adhérer au FORDAC
+            <span>👤</span>
+            <span>Adhésion</span>
+          </Link>
+
+          <Link
+            href="/login"
+            className="px-4 py-2 rounded-md border border-[#c8a45d] text-[#c8a45d] hover:bg-[#c8a45d] hover:text-[#0B3D2E] transition"
+          >
+            Connexion
           </Link>
         </div>
 
-        {/* Mobile Toggle */}
+        {/* BOUTON MOBILE */}
         <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden text-white"
+          onClick={() => setMobileMenuOpen(true)}
+          className="lg:hidden text-white focus:outline-none"
         >
-          {menuOpen ? <X size={28} /> : <Menu size={28} />}
+          <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
         </button>
+
       </div>
 
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div className="md:hidden bg-green-700 text-white flex flex-col items-center space-y-6 py-6">
-          <Link href="/" onClick={() => setMenuOpen(false)}>
-            Accueil
-          </Link>
-          <Link href="/a-propos" onClick={() => setMenuOpen(false)}>
-            À propos
-          </Link>
-          <Link href="/actualites" onClick={() => setMenuOpen(false)}>
-            Actualités
-          </Link>
-          <Link href="/contact" onClick={() => setMenuOpen(false)}>
-            Contact
-          </Link>
+      {/* MENU MOBILE */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden bg-[#0B3D2E] border-t border-[#11503D] px-6 py-4 space-y-4">
+          <button
+            onClick={() => setMobileMenuOpen(false)}
+            className="text-white text-right w-full"
+          >
+            ✖ Fermer
+          </button>
+
+          <Link href="/" className="block hover:text-[#c8a45d]">Accueil</Link>
+          <Link href="/le-parti" className="block hover:text-[#c8a45d]">Le Parti</Link>
+          <Link href="/president" className="block hover:text-[#c8a45d]">Le Président</Link>
+          <Link href="/organes" className="block hover:text-[#c8a45d]">Les Organes</Link>
+          <Link href="/galerie/photos" className="block hover:text-[#c8a45d]">Photos</Link>
+          <Link href="/galerie/videos" className="block hover:text-[#c8a45d]">Vidéos</Link>
+          <Link href="/forum/sujets" className="block hover:text-[#c8a45d]">Forum des Militants</Link>
+          <Link href="/nous-contacter" className="block hover:text-[#c8a45d]">Nous Contacter</Link>
+
           <Link
             href="/adhesion"
-            className="px-5 py-2 bg-white text-green-700 rounded-full font-semibold"
-            onClick={() => setMenuOpen(false)}
+            className="block px-4 py-2 rounded-md bg-[#c8a45d] text-[#0B3D2E] font-semibold"
           >
-            Adhérer
+            Adhésion
+          </Link>
+
+          <Link
+            href="/login"
+            className="block px-4 py-2 rounded-md border border-[#c8a45d] text-[#c8a45d]"
+          >
+            Connexion
           </Link>
         </div>
       )}
+
     </nav>
   );
 }

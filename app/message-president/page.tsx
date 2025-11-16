@@ -87,7 +87,7 @@ export default function MessagePresidentPage() {
           </p>
 
           <p className="mt-8 font-semibold text-right">
-            Romaric YEBCHUÉ, fils de Njombé-Penja  
+            Romaric YEBCHUÉ SEMENOU, fils de Njombé-Penja  
             <br />
             Président National du FORDAC
           </p>

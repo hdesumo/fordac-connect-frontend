@@ -1,84 +1,73 @@
-"use client";
-
-import { motion } from "framer-motion";
-
 export default function PolitiqueConfidentialitePage() {
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 py-16 px-6">
-      <section className="max-w-4xl mx-auto">
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-4xl font-bold text-fordacGreen mb-8 text-center"
-        >
-          Politique de confidentialité
-        </motion.h1>
+    <main className="px-6 py-12 max-w-4xl mx-auto text-gray-800">
+      <h1 className="text-4xl font-bold mb-6 text-green-800">
+        Politique de Confidentialité
+      </h1>
 
-        <div className="space-y-6 text-justify leading-relaxed">
-          <p>
-            Le FORDAC accorde une grande importance à la protection des données personnelles.
-            Cette politique explique la manière dont vos informations sont collectées,
-            utilisées et protégées lorsque vous interagissez avec nos plateformes numériques.
-          </p>
+      <p className="mb-4">
+        La présente Politique de Confidentialité explique comment FORDAC Connect
+        collecte, utilise, protège et traite les données personnelles de ses
+        membres, adhérents et utilisateurs du site.
+      </p>
 
-          <h2 className="text-2xl font-semibold text-fordacGold mt-8 mb-3">
-            1. Collecte des informations
-          </h2>
-          <p>
-            Nous collectons uniquement les informations nécessaires à nos activités politiques et administratives :
-            nom, prénom, adresse e-mail, numéro de téléphone, région, et autres données liées à votre engagement.
-          </p>
+      <h2 className="text-2xl font-semibold mt-6 mb-2">1. Données collectées</h2>
+      <p className="mb-4">
+        Nous collectons les informations suivantes lors de l’adhésion ou de
+        l’utilisation du site :
+      </p>
+      <ul className="list-disc ml-6 mb-4">
+        <li>Nom et prénom</li>
+        <li>Adresse e-mail</li>
+        <li>Numéro de téléphone</li>
+        <li>Région, département, arrondissement</li>
+        <li>Informations de connexion et adresse IP</li>
+      </ul>
 
-          <h2 className="text-2xl font-semibold text-fordacGold mt-8 mb-3">
-            2. Utilisation des données
-          </h2>
-          <p>
-            Les données collectées servent à :
-          </p>
-          <ul className="list-disc list-inside ml-4">
-            <li>Gérer les adhésions et communications internes du parti.</li>
-            <li>Informer les membres des activités et initiatives du FORDAC.</li>
-            <li>Assurer la sécurité et la fiabilité des échanges sur nos plateformes.</li>
-          </ul>
+      <h2 className="text-2xl font-semibold mt-6 mb-2">2. Utilisation des données</h2>
+      <p className="mb-4">Les données sont utilisées pour :</p>
+      <ul className="list-disc ml-6 mb-4">
+        <li>Gérer les adhésions et cotisations</li>
+        <li>Permettre l’accès aux services du mouvement</li>
+        <li>Communiquer avec les membres</li>
+        <li>Améliorer les fonctionnalités du site</li>
+        <li>Assurer la sécurité des comptes</li>
+      </ul>
 
-          <h2 className="text-2xl font-semibold text-fordacGold mt-8 mb-3">
-            3. Partage et confidentialité
-          </h2>
-          <p>
-            Aucune donnée personnelle n’est transmise à des tiers sans votre consentement.
-            Le FORDAC s’engage à respecter la confidentialité de vos informations
-            et à les protéger contre tout accès non autorisé.
-          </p>
+      <h2 className="text-2xl font-semibold mt-6 mb-2">3. Partage des données</h2>
+      <p className="mb-4">
+        Aucune donnée personnelle n’est vendue ni cédée. Elles peuvent être
+        partagées uniquement avec des prestataires techniques (hébergement,
+        sécurité, envoi d’e-mails) strictement nécessaires au fonctionnement du
+        site.
+      </p>
 
-          <h2 className="text-2xl font-semibold text-fordacGold mt-8 mb-3">
-            4. Vos droits
-          </h2>
-          <p>
-            Conformément aux lois en vigueur, vous disposez d’un droit d’accès,
-            de rectification et de suppression de vos données personnelles.
-            Pour toute demande, contactez-nous à :
-            <a
-              href="mailto:contact@fordac-connect.org"
-              className="text-fordacGold hover:underline ml-1"
-            >
-              contact@fordac-connect.org
-            </a>.
-          </p>
+      <h2 className="text-2xl font-semibold mt-6 mb-2">4. Sécurité</h2>
+      <p className="mb-4">
+        Des mesures techniques et organisationnelles protègent vos données
+        contre les accès non autorisés, pertes, fuites ou modifications.
+      </p>
 
-          <h2 className="text-2xl font-semibold text-fordacGold mt-8 mb-3">
-            5. Sécurité des données
-          </h2>
-          <p>
-            Le FORDAC met en œuvre toutes les mesures techniques et organisationnelles nécessaires
-            pour garantir la sécurité, l’intégrité et la confidentialité de vos données.
-          </p>
+      <h2 className="text-2xl font-semibold mt-6 mb-2">5. Droits des utilisateurs</h2>
+      <p className="mb-4">
+        Vous pouvez à tout moment demander :
+      </p>
+      <ul className="list-disc ml-6 mb-4">
+        <li>L’accès à vos informations personnelles</li>
+        <li>La rectification de vos données</li>
+        <li>La suppression de votre compte</li>
+        <li>L’export de vos données</li>
+      </ul>
 
-          <p className="text-center mt-12 text-sm text-gray-500">
-            © {new Date().getFullYear()} FORDAC — Politique de confidentialité.
-          </p>
-        </div>
-      </section>
+      <h2 className="text-2xl font-semibold mt-6 mb-2">6. Contact</h2>
+      <p className="mb-4">
+        Pour toute demande liée à vos données personnelles :  
+        <strong>contact@fordac-connect.org</strong>
+      </p>
+
+      <p className="mt-8 italic">
+        Dernière mise à jour : {new Date().getFullYear()}
+      </p>
     </main>
   );
 }

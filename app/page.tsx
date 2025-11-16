@@ -87,7 +87,7 @@ export default function HomePage() {
           </p>
 
           <a
-            href="/le-parti"
+            href="/message-president"
             className="inline-block mt-8 px-6 py-3 text-green-700 border border-green-700 rounded-lg hover:bg-green-700 hover:text-white"
           >
             Lire le message complet
@@ -245,7 +245,7 @@ export default function HomePage() {
           SECTION ADHESION
       ============================ */}
       <section className="py-24 bg-green-700 text-white text-center">
-        <h2 className="text-4xl font-bold mb-6">Rejoignez le mouvement FORDAC</h2>
+        <h2 className="text-4xl font-bold mb-6">Rejoignez le FORDAC</h2>
 
         <p className="text-xl max-w-3xl mx-auto mb-10">
           Ensemble, nous pouvons transformer nos idées en actions concrètes.
