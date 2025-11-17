@@ -2,7 +2,22 @@
 
 import StatusBadge from "./StatusBadge";
 
-export default function ContactsTable({ messages, onSelect }) {
+interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  status: string;
+  tags?: string[];
+  notes?: string[];
+}
+
+interface ContactsTableProps {
+  messages: ContactMessage[];
+  onSelect: (message: ContactMessage) => void;
+}
+
+export default function ContactsTable({ messages, onSelect }: ContactsTableProps) {
   return (
     <div className="bg-[#0f3a2d] border border-[#1d6047] rounded-lg p-4 overflow-auto">
       <table className="w-full text-sm">
@@ -24,7 +39,9 @@ export default function ContactsTable({ messages, onSelect }) {
               <td className="py-2">{m.name}</td>
               <td>{m.email}</td>
               <td className="truncate max-w-xs">{m.message}</td>
-              <td><StatusBadge status={m.status} /></td>
+              <td>
+                <StatusBadge status={m.status} />
+              </td>
             </tr>
           ))}
         </tbody>
