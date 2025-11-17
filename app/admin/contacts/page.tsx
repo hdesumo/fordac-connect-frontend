@@ -25,17 +25,13 @@ export default function ContactsDashboard() {
         📬 Gestion des messages (CRM FORDAC)
       </h1>
 
-      {/* Statistiques */}
       <StatsHeader messages={messages} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-
-        {/* Tableau */}
         <div className="col-span-1 lg:col-span-2">
           <ContactsTable messages={messages} onSelect={setSelected} />
         </div>
 
-        {/* Détails */}
         <div className="col-span-1">
           {selected ? (
             <ContactDetail message={selected} reload={loadMessages} />
@@ -45,7 +41,6 @@ export default function ContactsDashboard() {
             </div>
           )}
         </div>
-
       </div>
     </div>
   );
