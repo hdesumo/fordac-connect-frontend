@@ -93,7 +93,7 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="/admin" className="hover:text-amber-400 transition">
+              <Link href="/admin/login" className="hover:text-amber-400 transition">
                 Connexion Admin
               </Link>
             </li>
