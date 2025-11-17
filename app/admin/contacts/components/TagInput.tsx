@@ -2,7 +2,22 @@
 
 import { useState } from "react";
 
-export default function TagInput({ message, reload }) {
+interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  status: string;
+  tags?: string[];
+  notes?: string[];
+}
+
+interface TagInputProps {
+  message: ContactMessage;
+  reload: () => void;
+}
+
+export default function TagInput({ message, reload }: TagInputProps) {
   const [tag, setTag] = useState("");
 
   async function addTag() {
@@ -11,6 +26,7 @@ export default function TagInput({ message, reload }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: message.id, tag }),
     });
+
     setTag("");
     reload();
   }
@@ -19,9 +35,12 @@ export default function TagInput({ message, reload }) {
     <div>
       <label className="font-semibold">Tags</label>
       <div className="flex flex-wrap gap-2 mt-2">
-        {message.tags?.map((tag) => (
-          <span key={tag} className="bg-[#14533f] px-3 py-1 rounded text-xs">
-            {tag}
+        {message.tags?.map((tagItem) => (
+          <span
+            key={tagItem}
+            className="bg-[#14533f] px-3 py-1 rounded text-xs"
+          >
+            {tagItem}
           </span>
         ))}
       </div>
