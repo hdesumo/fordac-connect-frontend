@@ -2,7 +2,22 @@
 
 import { useState } from "react";
 
-export default function NotesPanel({ message, reload }) {
+interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  status: string;
+  tags?: string[];
+  notes?: string[];
+}
+
+interface NotesPanelProps {
+  message: ContactMessage;
+  reload: () => void;
+}
+
+export default function NotesPanel({ message, reload }: NotesPanelProps) {
   const [note, setNote] = useState("");
 
   async function addNote() {
@@ -11,6 +26,7 @@ export default function NotesPanel({ message, reload }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: message.id, note }),
     });
+
     setNote("");
     reload();
   }
@@ -18,6 +34,7 @@ export default function NotesPanel({ message, reload }) {
   return (
     <div>
       <label className="font-semibold">Notes internes</label>
+
       <ul className="text-sm mt-2 space-y-1">
         {message.notes?.map((n, i) => (
           <li key={i} className="opacity-80">– {n}</li>
