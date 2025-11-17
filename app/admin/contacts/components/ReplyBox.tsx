@@ -2,7 +2,22 @@
 
 import { useState } from "react";
 
-export default function ReplyBox({ message, reload }) {
+interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  status: string;
+  tags?: string[];
+  notes?: string[];
+}
+
+interface ReplyBoxProps {
+  message: ContactMessage;
+  reload: () => void;
+}
+
+export default function ReplyBox({ message, reload }: ReplyBoxProps) {
   const [text, setText] = useState("");
   const [sent, setSent] = useState(false);
 
@@ -24,6 +39,7 @@ export default function ReplyBox({ message, reload }) {
   return (
     <div>
       <label className="font-semibold">Répondre au message</label>
+
       <textarea
         className="w-full bg-[#0c2e25] mt-3 rounded p-2"
         rows={5}
