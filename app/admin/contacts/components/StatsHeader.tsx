@@ -1,51 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import ContactsTable from "./components/ContactsTable";
-import StatsHeader from "./components/StatsHeader";
-import ContactDetail from "./components/ContactDetail";
+import StatusBadge from "./StatusBadge";
 
-export default function ContactsDashboard() {
-  const [messages, setMessages] = useState([]);
-  const [selected, setSelected] = useState(null);
-
-  async function loadMessages() {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contact/list`);
-    const data = await res.json();
-    setMessages(data);
-  }
-
-  useEffect(() => {
-    loadMessages();
-  }, []);
+export default function StatsHeader({ messages }) {
+  const total = messages.length;
+  const unread = messages.filter((m) => m.status === "new").length;
+  const replied = messages.filter((m) => m.status === "replied").length;
 
   return (
-    <div className="min-h-screen bg-[#0c2e25] text-white px-6 py-8">
-      <h1 className="text-3xl font-bold text-[#c8a45d] mb-6">
-        📬 Gestion des messages (CRM FORDAC)
-      </h1>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="bg-[#0f3a2d] border border-[#1d6047] rounded-lg p-4">
+        <h3 className="text-lg font-bold text-[#c8a45d]">Total</h3>
+        <p className="text-3xl">{total}</p>
+      </div>
 
-      {/* Statistiques */}
-      <StatsHeader messages={messages} />
+      <div className="bg-[#0f3a2d] border border-[#1d6047] rounded-lg p-4">
+        <h3 className="text-lg font-bold text-[#c8a45d]">Non lus</h3>
+        <p className="text-3xl">{unread}</p>
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-
-        {/* Tableau */}
-        <div className="col-span-1 lg:col-span-2">
-          <ContactsTable messages={messages} onSelect={setSelected} />
-        </div>
-
-        {/* Détails */}
-        <div className="col-span-1">
-          {selected ? (
-            <ContactDetail message={selected} reload={loadMessages} />
-          ) : (
-            <div className="p-6 bg-[#0f3a2d] border border-[#1d6047] rounded-lg text-center opacity-70">
-              Sélectionnez un message dans la liste ➜
-            </div>
-          )}
-        </div>
-
+      <div className="bg-[#0f3a2d] border border-[#1d6047] rounded-lg p-4">
+        <h3 className="text-lg font-bold text-[#c8a45d]">Répondus</h3>
+        <p className="text-3xl">{replied}</p>
       </div>
     </div>
   );
