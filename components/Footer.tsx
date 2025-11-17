@@ -94,7 +94,7 @@ export default function Footer() {
             </li>
             <li>
               <Link href="/admin" className="hover:text-amber-400 transition">
-                Connexion Admins
+                Connexion Admin
               </Link>
             </li>
           </ul>

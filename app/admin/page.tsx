@@ -9,7 +9,8 @@ export default function AdminLoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPwd, setShowPwd] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -20,7 +21,7 @@ export default function AdminLoginPage() {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/admin/login`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admins/login`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -36,13 +37,12 @@ export default function AdminLoginPage() {
         return;
       }
 
-      // Stockage du token + admin
+      // Enregistrement session admin
       localStorage.setItem("token_admin", data.token);
       localStorage.setItem("admin", JSON.stringify(data.admin));
 
       router.push("/admin/dashboard");
     } catch (error) {
-      console.error(error);
       setMessage("Erreur réseau. Réessayez.");
     }
 
@@ -50,22 +50,24 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0A2218] p-6">
-      <div className="bg-white p-8 rounded-xl shadow-xl max-w-md w-full">
-        <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
+      <div className="bg-white p-8 rounded-lg shadow max-w-md w-full">
+
+        <h1 className="text-2xl font-bold text-center mb-6 text-gray-900">
           Connexion Administrateur
         </h1>
 
         <form onSubmit={handleLogin} className="space-y-4">
+
           {/* EMAIL */}
           <div>
-            <label className="block font-semibold mb-1 text-gray-700">
+            <label className="block font-semibold text-gray-800 mb-1">
               Email
             </label>
             <input
               type="email"
               value={email}
-              className="w-full border p-3 rounded text-black focus:outline-green-700"
+              className="w-full border p-2 rounded bg-gray-50 text-gray-900"
               onChange={(e) => setEmail(e.target.value)}
               required
             />
@@ -73,25 +75,26 @@ export default function AdminLoginPage() {
 
           {/* MOT DE PASSE */}
           <div>
-            <label className="block font-semibold mb-1 text-gray-700">
+            <label className="block font-semibold text-gray-800 mb-1">
               Mot de passe
             </label>
 
             <div className="relative">
               <input
-                type={showPwd ? "text" : "password"}
+                type={showPassword ? "text" : "password"}
                 value={password}
-                className="w-full border p-3 pr-10 rounded text-black focus:outline-green-700"
+                className="w-full border p-2 rounded bg-gray-50 text-gray-900 pr-12"
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
 
+              {/* BOUTON OEIL */}
               <button
                 type="button"
-                className="absolute right-3 top-3 text-gray-600"
-                onClick={() => setShowPwd(!showPwd)}
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-2.5 text-gray-600 hover:text-black"
               >
-                {showPwd ? <EyeOff size={20} /> : <Eye size={20} />}
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
           </div>
@@ -105,11 +108,12 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="bg-green-800 text-white w-full py-3 rounded-lg hover:bg-green-900 transition"
+            className="bg-[#0B3214] text-white w-full py-2 rounded hover:bg-[#06210C]"
           >
             {loading ? "Connexion..." : "Se connecter"}
           </button>
         </form>
+
       </div>
     </div>
   );
