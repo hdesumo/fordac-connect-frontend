@@ -2,26 +2,52 @@
 
 import StatusBadge from "./StatusBadge";
 
-export default function StatsHeader({ messages }) {
+interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  status: string;
+  tags?: string[];
+  notes?: string[];
+}
+
+interface StatsHeaderProps {
+  messages: ContactMessage[];
+}
+
+export default function StatsHeader({ messages }: StatsHeaderProps) {
   const total = messages.length;
   const unread = messages.filter((m) => m.status === "new").length;
-  const replied = messages.filter((m) => m.status === "replied").length;
+  const pending = messages.filter((m) => m.status === "pending").length;
+  const done = messages.filter((m) => m.status === "done").length;
+  const archived = messages.filter((m) => m.status === "archived").length;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div className="bg-[#0f3a2d] border border-[#1d6047] rounded-lg p-4">
-        <h3 className="text-lg font-bold text-[#c8a45d]">Total</h3>
-        <p className="text-3xl">{total}</p>
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="bg-[#0f3a2d] p-4 rounded border border-[#1d6047]">
+        <p className="text-gray-300 text-sm">Total</p>
+        <p className="text-2xl font-bold">{total}</p>
       </div>
 
-      <div className="bg-[#0f3a2d] border border-[#1d6047] rounded-lg p-4">
-        <h3 className="text-lg font-bold text-[#c8a45d]">Non lus</h3>
-        <p className="text-3xl">{unread}</p>
+      <div className="bg-[#0f3a2d] p-4 rounded border border-[#1d6047]">
+        <p className="text-gray-300 text-sm">Non lus</p>
+        <p className="text-2xl font-bold">{unread}</p>
       </div>
 
-      <div className="bg-[#0f3a2d] border border-[#1d6047] rounded-lg p-4">
-        <h3 className="text-lg font-bold text-[#c8a45d]">Répondus</h3>
-        <p className="text-3xl">{replied}</p>
+      <div className="bg-[#0f3a2d] p-4 rounded border border-[#1d6047]">
+        <p className="text-gray-300 text-sm">En attente</p>
+        <p className="text-2xl font-bold">{pending}</p>
+      </div>
+
+      <div className="bg-[#0f3a2d] p-4 rounded border border-[#1d6047]">
+        <p className="text-gray-300 text-sm">Trait&eacute;s</p>
+        <p className="text-2xl font-bold">{done}</p>
+      </div>
+
+      <div className="bg-[#0f3a2d] p-4 rounded border border-[#1d6047]">
+        <p className="text-gray-300 text-sm">Archivé</p>
+        <p className="text-2xl font-bold">{archived}</p>
       </div>
     </div>
   );
