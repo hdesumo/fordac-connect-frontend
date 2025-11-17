@@ -5,9 +5,19 @@ import ContactsTable from "./components/ContactsTable";
 import StatsHeader from "./components/StatsHeader";
 import ContactDetail from "./components/ContactDetail";
 
+interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  status: string;
+  tags?: string[];
+  notes?: string[];
+}
+
 export default function ContactsDashboard() {
-  const [messages, setMessages] = useState([]);
-  const [selected, setSelected] = useState(null);
+  const [messages, setMessages] = useState<ContactMessage[]>([]);
+  const [selected, setSelected] = useState<ContactMessage | null>(null);
 
   async function loadMessages() {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contact/list`);
