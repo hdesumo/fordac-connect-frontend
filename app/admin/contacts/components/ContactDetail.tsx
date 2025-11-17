@@ -5,7 +5,22 @@ import NotesPanel from "./NotesPanel";
 import ReplyBox from "./ReplyBox";
 import StatusBadge from "./StatusBadge";
 
-export default function ContactDetail({ message, reload }) {
+interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  status: string;
+  tags?: string[];
+  notes?: string[];
+}
+
+interface ContactDetailProps {
+  message: ContactMessage;
+  reload: () => void;
+}
+
+export default function ContactDetail({ message, reload }: ContactDetailProps) {
   return (
     <div className="bg-[#0f3a2d] border border-[#1d6047] rounded-lg p-6 space-y-4">
       <h2 className="text-xl font-bold">{message.name}</h2>
