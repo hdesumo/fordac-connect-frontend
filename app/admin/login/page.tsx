@@ -36,8 +36,9 @@ export default function AdminLoginPage() {
         return;
       }
 
-      // Stockage du token + admin
-      localStorage.setItem("token_admin", data.token);
+      // 🔥 CORRECTION CRITIQUE :
+      // Ton layout attend adminToken et admin
+      localStorage.setItem("adminToken", data.token);
       localStorage.setItem("admin", JSON.stringify(data.admin));
 
       router.push("/admin/dashboard");
