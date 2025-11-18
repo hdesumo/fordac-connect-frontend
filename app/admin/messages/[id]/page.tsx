@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import adminFetch from "@/utils/adminFetch";
+import { adminFetch } from "../../../utils/adminFetch";
 
 export default function MessageDetailPage() {
   const { id } = useParams();
