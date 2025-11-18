@@ -1,6 +1,6 @@
-// data/moungoData.ts
+// app/data/moungoData.ts
 
-export const moungoData = {
+const moungoData = {
   departement: "Moungo",
 
   secteurs: {
@@ -18,8 +18,9 @@ export const moungoData = {
       "Mombo",
       "Mbanga",
       "Dibombari",
-      "Baré-Bakem",
-      "Ebone"
+      "Bonalea"
     ]
   }
 };
+
+export default moungoData;

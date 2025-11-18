@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import moungoData from "@/data/moungoData";   // ✅ CORRECTION ICI
+import moungoData from "@/data/moungoData";
 import { motion } from "framer-motion";
 
 export default function AdhesionPage() {
@@ -84,7 +84,7 @@ export default function AdhesionPage() {
     : [];
 
   return (
-    <main className="max-w-3xl mx-auto py-24 px-6 text-fordacDark">
+    <main className="max-w-3xl mx-auto py-24 px-6 text-white">
       <motion.h1
         className="text-4xl font-bold text-center text-fordacGreen mb-10"
         initial={{ opacity: 0, y: 20 }}
@@ -93,84 +93,106 @@ export default function AdhesionPage() {
         Formulaire d’adhésion au FORDAC
       </motion.h1>
 
+      {/* FORM GLASSMORPHISM */}
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-10 rounded-2xl shadow-card space-y-6"
+        className="
+          bg-white/10 
+          backdrop-blur-md 
+          border border-white/20 
+          shadow-xl 
+          p-10 rounded-2xl 
+          space-y-6 
+          text-white
+        "
       >
+        {/* Nom */}
         <div>
           <label className="font-semibold">Nom complet</label>
           <input
             type="text"
-            className="w-full p-3 border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-fordacGreen outline-none"
+            className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 focus:ring-2 focus:ring-fordacGreen outline-none"
             value={form.name}
             onChange={(e) => updateField("name", e.target.value)}
+            placeholder="Votre nom complet"
           />
         </div>
 
+        {/* Email */}
         <div>
           <label className="font-semibold">Adresse e-mail</label>
           <input
             type="email"
-            className="w-full p-3 border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-fordacGreen outline-none"
+            className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 focus:ring-2 focus:ring-fordacGreen outline-none"
             value={form.email}
             onChange={(e) => updateField("email", e.target.value)}
+            placeholder="exemple@mail.com"
           />
         </div>
 
+        {/* Téléphone */}
         <div>
           <label className="font-semibold">Téléphone</label>
           <input
             type="tel"
-            className="w-full p-3 border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-fordacGreen outline-none"
+            className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 focus:ring-2 focus:ring-fordacGreen outline-none"
             value={form.phone}
             onChange={(e) => updateField("phone", e.target.value)}
+            placeholder="+237..."
           />
         </div>
 
+        {/* Date de naissance */}
         <div>
           <label className="font-semibold">Date de naissance</label>
           <input
             type="date"
-            className="w-full p-3 border border-gray-300 rounded-lg"
+            className="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 focus:ring-2 focus:ring-fordacGreen outline-none"
             value={form.birthdate}
             onChange={(e) => updateField("birthdate", e.target.value)}
           />
         </div>
 
+        {/* Profession */}
         <div>
           <label className="font-semibold">Profession</label>
           <input
             type="text"
-            className="w-full p-3 border border-gray-300 rounded-lg"
+            className="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 placeholder-white/60 focus:ring-2 focus:ring-fordacGreen outline-none"
             value={form.profession}
             onChange={(e) => updateField("profession", e.target.value)}
+            placeholder="Votre profession"
           />
         </div>
 
+        {/* Quartier */}
         <div>
           <label className="font-semibold">Quartier</label>
           <input
             type="text"
-            className="w-full p-3 border border-gray-300 rounded-lg"
+            className="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 placeholder-white/60 focus:ring-2 focus:ring-fordacGreen outline-none"
             value={form.quartier}
             onChange={(e) => updateField("quartier", e.target.value)}
+            placeholder="Votre quartier"
           />
         </div>
 
+        {/* Département */}
         <div>
           <label className="font-semibold">Département</label>
           <input
             type="text"
             disabled
             value={form.departement}
-            className="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-700"
+            className="w-full p-3 bg-white/10 text-white border border-white/30 rounded-lg"
           />
         </div>
 
+        {/* Secteur */}
         <div>
           <label className="font-semibold">Secteur</label>
           <select
-            className="w-full p-3 border border-gray-300 rounded-lg"
+            className="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 focus:ring-2 focus:ring-fordacGreen outline-none"
             value={form.secteur}
             onChange={(e) => updateField("secteur", e.target.value)}
           >
@@ -183,11 +205,12 @@ export default function AdhesionPage() {
           </select>
         </div>
 
+        {/* Arrondissement */}
         <div>
           <label className="font-semibold">Arrondissement / Commune</label>
           <select
             disabled={!form.secteur}
-            className="w-full p-3 border border-gray-300 rounded-lg"
+            className="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 focus:ring-2 focus:ring-fordacGreen outline-none"
             value={form.arrondissement}
             onChange={(e) => updateField("arrondissement", e.target.value)}
           >
@@ -200,12 +223,15 @@ export default function AdhesionPage() {
           </select>
         </div>
 
+        {/* Niveau */}
         <div>
           <label className="font-semibold">Niveau d’adhésion</label>
           <select
-            className="w-full p-3 border border-gray-300 rounded-lg"
+            className="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 focus:ring-2 focus:ring-fordacGreen outline-none"
             value={form.membership_level}
-            onChange={(e) => updateField("membership_level", e.target.value)}
+            onChange={(e) =>
+              updateField("membership_level", e.target.value)
+            }
           >
             <option value="Bronze">Bronze — 1 000 FCFA</option>
             <option value="Argent">Argent — 3 000 FCFA</option>
@@ -213,11 +239,13 @@ export default function AdhesionPage() {
           </select>
         </div>
 
+        {/* Charte */}
         <div className="flex items-start gap-3">
           <input
             type="checkbox"
             checked={form.terms_accepted}
             onChange={(e) => updateField("terms_accepted", e.target.checked)}
+            className="accent-fordacGreen"
           />
           <span>
             J’ai lu et j’accepte les termes de la{" "}
@@ -231,14 +259,25 @@ export default function AdhesionPage() {
           </span>
         </div>
 
+        {/* Erreur */}
         {error && (
-          <p className="text-red-600 text-center font-semibold">{error}</p>
+          <p className="text-red-400 text-center font-semibold">{error}</p>
         )}
 
+        {/* Bouton */}
         <button
           type="submit"
           disabled={loading}
-          className="btn-primary w-full text-center py-3 rounded-lg text-lg"
+          className="
+            w-full 
+            py-3 
+            rounded-lg 
+            text-lg 
+            bg-fordacGreen 
+            hover:bg-fordacGreen/80 
+            transition
+            font-semibold
+          "
         >
           {loading ? "Envoi en cours…" : "Envoyer ma demande"}
         </button>

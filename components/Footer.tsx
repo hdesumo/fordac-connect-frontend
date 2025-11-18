@@ -7,6 +7,7 @@ export default function Footer() {
   return (
     <footer className="bg-emerald-900 text-white py-10 border-t border-emerald-700 mt-10">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-10">
+        
         {/* ===================== Colonne 1 : Présentation ===================== */}
         <div>
           <h2 className="text-lg font-semibold text-amber-400 mb-3">
@@ -63,40 +64,45 @@ export default function Footer() {
             Liens utiles
           </h2>
           <ul className="space-y-2 text-sm">
+
             <li>
               <Link href="/contact" className="hover:text-amber-400 transition">
                 Nous Contacter
               </Link>
             </li>
+
             <li>
-              <Link
-                href="/politique-de-confidentialite"
-                className="hover:text-amber-400 transition"
-              >
+              <Link href="/politique-de-confidentialite" className="hover:text-amber-400 transition">
                 Politique de Confidentialité
               </Link>
             </li>
+
             <li>
-              <Link
-                href="/mentions-legales"
-                className="hover:text-amber-400 transition"
-              >
+              <Link href="/mentions-legales" className="hover:text-amber-400 transition">
                 Mentions Légales
               </Link>
             </li>
+
+            {/* ======== AJOUT ICI ======== */}
             <li>
-              <Link
-                href="/superadmin"
-                className="hover:text-amber-400 transition"
-              >
-                Connexion Super Admin
+              <Link href="/superadmin/login" className="hover:text-amber-400 transition">
+                Connexion SuperAdmin
               </Link>
             </li>
+
             <li>
               <Link href="/admin/login" className="hover:text-amber-400 transition">
                 Connexion Admin
               </Link>
             </li>
+
+            <li>
+              <Link href="/membre/login" className="hover:text-amber-400 transition">
+                Connexion Militant
+              </Link>
+            </li>
+            {/* =========================== */}
+
           </ul>
         </div>
 
@@ -111,25 +117,13 @@ export default function Footer() {
               <span>contact@fordac-connect.org</span>
             </li>
             <li className="flex items-center space-x-4">
-              <a
-                href="#"
-                className="hover:text-amber-400 transition"
-                aria-label="Facebook"
-              >
+              <a href="#" className="hover:text-amber-400 transition" aria-label="Facebook">
                 <Facebook size={18} />
               </a>
-              <a
-                href="#"
-                className="hover:text-amber-400 transition"
-                aria-label="Twitter"
-              >
+              <a href="#" className="hover:text-amber-400 transition" aria-label="Twitter">
                 <Twitter size={18} />
               </a>
-              <a
-                href="#"
-                className="hover:text-amber-400 transition"
-                aria-label="YouTube"
-              >
+              <a href="#" className="hover:text-amber-400 transition" aria-label="YouTube">
                 <Youtube size={18} />
               </a>
             </li>
@@ -137,7 +131,7 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* ===================== Ligne inférieure ===================== */}
+      {/* ===================== Bas de page ===================== */}
       <div className="border-t border-emerald-700 mt-10 pt-6 text-center text-sm text-gray-300">
         <p>© 2025 FORDAC Connect — Tous droits réservés.</p>
         <p className="text-xs mt-2 text-gray-400">
