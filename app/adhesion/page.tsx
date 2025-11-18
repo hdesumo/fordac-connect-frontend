@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import moungoData from "../data/moungoData";
+import moungoData from "@/data/moungoData";   // ✅ CORRECTION ICI
 import { motion } from "framer-motion";
 
 export default function AdhesionPage() {
@@ -80,8 +80,8 @@ export default function AdhesionPage() {
 
   const secteurs = Object.keys(moungoData.secteurs);
   const arrondissements: string[] = form.secteur
-  ? (moungoData.secteurs as any)[form.secteur]
-  : [];
+    ? (moungoData.secteurs as any)[form.secteur]
+    : [];
 
   return (
     <main className="max-w-3xl mx-auto py-24 px-6 text-fordacDark">
