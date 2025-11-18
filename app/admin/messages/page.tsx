@@ -1,9 +1,8 @@
 "use client";
-
 import { useEffect, useState } from "react";
-import adminFetch from "@/utils/adminFetch";
+import { adminFetch } from "../../utils/adminFetch";
 import Link from "next/link";
-import { AdminMessage } from "@/types/AdminMessage";
+import { AdminMessage } from "../../types/AdminMessage";
 
 export default function MessagesAdminPage() {
   const [title, setTitle] = useState("");
