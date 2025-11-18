@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import ProtectedRoute from "@/components/ProtectedRoute";
+import ProtectedRoute from "../../../components/ProtectedRoute";
 
 // 👉 Définition du type
 interface Topic {

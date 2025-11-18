@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import ProtectedRoute from "@/components/ProtectedRoute";
+import ProtectedRoute from "../../../../components/ProtectedRoute";
 
 interface Topic {
   id: number;

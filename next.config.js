@@ -1,13 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
-  eslint: {
-    ignoreDuringBuilds: true,
+  reactStrictMode: false,
+  compiler: {
+    removeConsole: false,
   },
-  webpack: (config) => {
+  webpack(config) {
+    config.resolve.alias['@'] = require('path').resolve(__dirname, 'app');
     return config;
-  },
+  }
 };
 
 module.exports = nextConfig;

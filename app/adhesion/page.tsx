@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { moungoData } from "@/data/moungoData";
+import moungoData from "../data/moungoData";
 import { motion } from "framer-motion";
 
 export default function AdhesionPage() {
