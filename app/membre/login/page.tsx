@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 export default function MemberLoginPage() {
   const router = useRouter();
 
-  const [emailOrPhone, setEmailOrPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -17,8 +17,7 @@ export default function MemberLoginPage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        email: emailOrPhone.includes("@") ? emailOrPhone : null,
-        phone: !emailOrPhone.includes("@") ? emailOrPhone : null,
+        email,
         password,
       }),
     });
@@ -41,8 +40,9 @@ export default function MemberLoginPage() {
 
         <input
           className="w-full p-3 rounded mb-4 text-black"
-          placeholder="Email ou Téléphone"
-          onChange={(e) => setEmailOrPhone(e.target.value)}
+          placeholder="Email"
+          type="email"
+          onChange={(e) => setEmail(e.target.value)}
         />
 
         <input
