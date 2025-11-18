@@ -20,7 +20,7 @@ export default function AdminLoginPage() {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/admin/login`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/login`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -36,8 +36,7 @@ export default function AdminLoginPage() {
         return;
       }
 
-      // 🔥 CORRECTION CRITIQUE :
-      // Ton layout attend adminToken et admin
+      // Stockage token + infos admin
       localStorage.setItem("adminToken", data.token);
       localStorage.setItem("admin", JSON.stringify(data.admin));
 
@@ -58,11 +57,8 @@ export default function AdminLoginPage() {
         </h1>
 
         <form onSubmit={handleLogin} className="space-y-4">
-          {/* EMAIL */}
           <div>
-            <label className="block font-semibold mb-1 text-gray-700">
-              Email
-            </label>
+            <label className="block font-semibold mb-1 text-gray-700">Email</label>
             <input
               type="email"
               value={email}
@@ -72,7 +68,6 @@ export default function AdminLoginPage() {
             />
           </div>
 
-          {/* MOT DE PASSE */}
           <div>
             <label className="block font-semibold mb-1 text-gray-700">
               Mot de passe
@@ -97,12 +92,10 @@ export default function AdminLoginPage() {
             </div>
           </div>
 
-          {/* MESSAGE ERREUR */}
           {message && (
             <p className="text-red-600 text-sm text-center">{message}</p>
           )}
 
-          {/* BOUTON */}
           <button
             type="submit"
             disabled={loading}

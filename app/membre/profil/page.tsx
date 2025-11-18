@@ -4,52 +4,93 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 export default function ProfilPage() {
-  const [user, setUser] = useState<any>(null);
+  const [profile, setProfile] = useState<any>(null);
   const [loaded, setLoaded] = useState(false);
 
-  useEffect(() => {
-    const userData = localStorage.getItem("user");
+  async function loadProfile() {
+    const token = localStorage.getItem("memberToken");
 
-    if (!userData) return;
+    if (!token) return;
 
-    try {
-      setUser(JSON.parse(userData));
-    } catch {}
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/members/profile`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
 
+    const data = await res.json();
+    setProfile(data);
     setLoaded(true);
+  }
+
+  useEffect(() => {
+    loadProfile();
   }, []);
 
   if (!loaded) {
     return (
-      <div className="flex items-center justify-center min-h-screen text-gray-700">
+      <div className="flex items-center justify-center min-h-screen text-white">
         Chargement...
       </div>
     );
   }
 
+  if (!profile) {
+    return (
+      <div className="p-6 text-white">
+        Impossible de charger votre profil.
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-6 text-white">
 
       {/* TITRE */}
-      <h1 className="text-2xl font-bold text-gray-800">
+      <h1 className="text-3xl font-bold">
         Mon profil
       </h1>
 
-      {/* CARD PROFIL */}
-      <div className="bg-white p-6 rounded-lg shadow space-y-3">
-        <p><strong>Nom :</strong> {user?.name}</p>
-        <p><strong>Email :</strong> {user?.email}</p>
-        <p><strong>Téléphone :</strong> {user?.phone}</p>
-        <p><strong>Statut :</strong> {user?.status || "En attente"}</p>
-        <p><strong>Niveau d’adhésion :</strong> {user?.membership_level || "Non défini"}</p>
-        <p><strong>Date d'inscription :</strong> {user?.created_at?.substring(0, 10)}</p>
+      {/* PROFIL CARD */}
+      <div className="bg-[#145331] p-6 rounded-xl border border-green-800 space-y-3">
+
+        <p><strong>Nom :</strong> {profile.name}</p>
+        <p><strong>Email :</strong> {profile.email}</p>
+        <p><strong>Téléphone :</strong> {profile.phone}</p>
+
+        <p>
+          <strong>Quartier :</strong>{" "}
+          {profile.quartier || "Non renseigné"}
+        </p>
+
+        <p>
+          <strong>Secteur :</strong>{" "}
+          {profile.secteur || "Non renseigné"}
+        </p>
+
+        <p>
+          <strong>Arrondissement :</strong>{" "}
+          {profile.arrondissement || "Non renseigné"}
+        </p>
+
+        <p>
+          <strong>Niveau d’adhésion :</strong>{" "}
+          {profile.membership_level || "Non défini"}
+        </p>
+
+        <p>
+          <strong>Date d'inscription :</strong>{" "}
+          {profile.created_at?.substring(0, 10)}
+        </p>
 
         <Link
           href="/membre/profil/edit"
-          className="mt-4 inline-block bg-[#111827] text-white px-4 py-2 rounded hover:bg-black"
+          className="mt-4 inline-block bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-bold"
         >
           Modifier mon profil
         </Link>
+
       </div>
 
     </div>

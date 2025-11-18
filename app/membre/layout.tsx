@@ -1,91 +1,67 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-export default function MembreLayout({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
-  const [user, setUser] = useState<any>(null);
-  const [loaded, setLoaded] = useState(false);
+export default function MemberLayout({ children }: { children: React.ReactNode }) {
+  const [unreadCount, setUnreadCount] = useState(0);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userData = localStorage.getItem("user");
+  async function loadUnreadNotifications() {
+    const token = localStorage.getItem("memberToken");
+    if (!token) return;
 
-    if (!token || !userData) {
-      router.push("/login");
-      return;
-    }
-
-    try {
-      setUser(JSON.parse(userData));
-    } catch {
-      router.push("/login");
-      return;
-    }
-
-    setLoaded(true);
-  }, []);
-
-  if (!loaded) {
-    return (
-      <div className="flex items-center justify-center min-h-screen text-gray-700">
-        Chargement...
-      </div>
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/members/notifications-count`,
+      { headers: { Authorization: `Bearer ${token}` } }
     );
+
+    const data = await res.json();
+    setUnreadCount(data.count || 0);
   }
 
+  useEffect(() => {
+    loadUnreadNotifications();
+  }, []);
+
   return (
-    <div className="min-h-screen grid grid-cols-[250px_1fr] bg-gray-100">
+    <div className="min-h-screen bg-[#0f3d24] text-white">
 
-      {/* SIDEBAR */}
-      <aside className="bg-[#111827] text-white p-6 flex flex-col justify-between">
-        <div>
-          <h1 className="text-xl font-bold mb-8">FORDAC Connect</h1>
+      {/* TOPBAR */}
+      <nav className="w-full bg-[#145331] border-b border-green-900 p-4 flex justify-between items-center">
+        
+        {/* LOGO */}
+        <Link href="/membre/dashboard" className="text-xl font-bold">
+          Espace Membre
+        </Link>
 
-          <nav className="space-y-4">
-            <Link href="/membre/dashboard" className="block hover:text-[#facc15]">
-              🏠 Tableau de bord
-            </Link>
+        {/* CLOCHE */}
+        <Link href="/membre/notifications" className="relative mr-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-8 w-8 text-white hover:text-gray-200 transition"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M15 17h5l-1.405-1.405C18.21 14.79 18 13.918 18 13V9a6 6 0 10-12 0v4c0 .918-.21 1.79-.595 2.595L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+            />
+          </svg>
 
-            <Link href="/membre/profil" className="block hover:text-[#facc15]">
-              👤 Mon profil
-            </Link>
+          {/* COMPTEUR */}
+          {unreadCount > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-600 text-xs rounded-full px-2 py-0.5 font-bold">
+              {unreadCount}
+            </span>
+          )}
+        </Link>
+      </nav>
 
-            <Link href="/membre/forum" className="block hover:text-[#facc15]">
-              💬 Forum des militants
-            </Link>
-
-            <Link href="/membre/publications" className="block hover:text-[#facc15]">
-              📝 Mes publications
-            </Link>
-          </nav>
-        </div>
-
-        <button
-          onClick={() => {
-            localStorage.clear();
-            router.push("/login");
-          }}
-          className="text-left text-red-400 hover:text-red-300"
-        >
-          🚪 Déconnexion
-        </button>
-      </aside>
-
-      {/* HEADER + CONTENT */}
-      <main className="p-6">
-        <header className="mb-6 bg-white p-4 rounded shadow flex justify-between items-center">
-          <div>
-            <h2 className="text-lg font-semibold">Bienvenue</h2>
-            <p className="text-sm text-gray-600">{user?.name}</p>
-          </div>
-        </header>
-
-        {/* PAGE CONTENT */}
-        <div>{children}</div>
-      </main>
+      {/* CONTENU */}
+      <main>{children}</main>
     </div>
   );
 }

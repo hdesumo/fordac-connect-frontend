@@ -1,227 +1,72 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import Image from "next/image";
 
-export default function AdminActivitesPage() {
-  const [loaded, setLoaded] = useState(false);
-
-  // Filtres
-  const [typeAction, setTypeAction] = useState("");
-  const [secteur, setSecteur] = useState("");
-  const [arrondissement, setArrondissement] = useState("");
-  const [adminSearch, setAdminSearch] = useState("");
-
-  // Territoire FORDAC
-  const secteurs = ["Moungo Nord", "Moungo Sud"];
-
-  const arrondissementsParSecteur: any = {
-    "Moungo Nord": [
-      "Nkongsamba 1er",
-      "Nkongsamba 2e",
-      "Nkongsamba 3e",
-      "Loum",
-      "Manjo",
-      "Baré-Bakem",
-    ],
-    "Moungo Sud": ["Melong", "Njombé-Penja", "Mbanga", "Santchou"],
-  };
-
-  // Activités fake
-  const [activites, setActivites] = useState<any[]>([]);
-
-  useEffect(() => {
-    const fakeActivities = [
-      {
-        id: 1,
-        type: "validation",
-        texte: "Validation de l’adhésion de Pierre M.",
-        admin: "Admin Nkongsamba",
-        secteur: "Moungo Nord",
-        arrondissement: "Nkongsamba 1er",
-        date: "2025-02-06 10:12",
-      },
-      {
-        id: 2,
-        type: "forum_fermeture",
-        texte: "Fermeture du sujet 'Mobilisation régionale'",
-        admin: "Admin Melong",
-        secteur: "Moungo Sud",
-        arrondissement: "Melong",
-        date: "2025-02-06 09:50",
-      },
-      {
-        id: 3,
-        type: "publication",
-        texte: "Publication signalée par un membre",
-        admin: "Admin Penja",
-        secteur: "Moungo Sud",
-        arrondissement: "Njombé-Penja",
-        date: "2025-02-05 18:22",
-      },
-      {
-        id: 4,
-        type: "blocage",
-        texte: "Blocage du membre Rosine N.",
-        admin: "Admin Loum",
-        secteur: "Moungo Nord",
-        arrondissement: "Loum",
-        date: "2025-02-05 14:10",
-      },
-      {
-        id: 5,
-        type: "commentaire_suppression",
-        texte: "Suppression d’un commentaire inapproprié",
-        admin: "Admin Nkongsamba",
-        secteur: "Moungo Nord",
-        arrondissement: "Nkongsamba 3e",
-        date: "2025-02-04 17:44",
-      },
-    ];
-
-    setActivites(fakeActivities);
-    setLoaded(true);
-  }, []);
-
-  if (!loaded) return <div className="p-6">Chargement...</div>;
-
-  // FILTRAGE
-  const filtered = activites.filter((a) => {
-    const matchesType = typeAction === "" || a.type === typeAction;
-
-    const matchesSecteur = secteur === "" || a.secteur === secteur;
-
-    const matchesArr =
-      arrondissement === "" || a.arrondissement === arrondissement;
-
-    const matchesAdmin =
-      adminSearch === "" ||
-      a.admin.toLowerCase().includes(adminSearch.toLowerCase());
-
-    return matchesType && matchesSecteur && matchesArr && matchesAdmin;
-  });
-
-  // Badges couleurs
-  const badgeColor = (type: string) => {
-    switch (type) {
-      case "validation":
-        return "bg-green-100 text-green-700";
-      case "blocage":
-        return "bg-red-100 text-red-700";
-      case "publication":
-        return "bg-blue-100 text-blue-700";
-      case "forum_fermeture":
-        return "bg-orange-100 text-orange-700";
-      case "commentaire_suppression":
-        return "bg-purple-100 text-purple-700";
-      default:
-        return "bg-gray-100 text-gray-700";
-    }
-  };
+export default function ActivitesPage() {
+  const activites = [
+    {
+      titre: "Rencontre citoyenne à Njombé",
+      image: "/images/hero1.jpeg",
+      date: "5 novembre 2025",
+      description:
+        "Une rencontre placée sous le signe du dialogue et de la participation citoyenne, autour des valeurs du FORDAC.",
+    },
+    {
+      titre: "Journée de solidarité dans le Moungo",
+      image: "/images/hero2.jpeg",
+      date: "21 octobre 2025",
+      description:
+        "Distribution d’aides communautaires et sensibilisation sur la cohésion sociale.",
+    },
+    {
+      titre: "Atelier des jeunes militants à Loum",
+      image: "/images/hero3.jpeg",
+      date: "12 septembre 2025",
+      description:
+        "Formation sur le leadership politique et la gestion des projets citoyens.",
+    },
+  ];
 
   return (
-    <div className="space-y-8">
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 py-20 px-4">
+      <section className="max-w-6xl mx-auto">
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-4xl font-bold text-center text-green-700 dark:text-green-400 mb-14"
+        >
+          Activités du Parti
+        </motion.h1>
 
-      {/* TITRE */}
-      <h1 className="text-2xl font-bold text-gray-800">
-        Activités administratives
-      </h1>
-
-      {/* FILTRES */}
-      <div className="bg-white p-5 rounded-lg shadow space-y-4">
-
-        {/* Ligne 1 */}
-        <div className="flex flex-wrap gap-4">
-
-          <select
-            value={typeAction}
-            onChange={(e) => setTypeAction(e.target.value)}
-            className="border p-2 rounded min-w-[220px]"
-          >
-            <option value="">Type d’action</option>
-            <option value="validation">Validation d’adhésion</option>
-            <option value="blocage">Blocage de membre</option>
-            <option value="publication">Publication</option>
-            <option value="forum_fermeture">Fermeture de sujet forum</option>
-            <option value="commentaire_suppression">Suppression de commentaire</option>
-          </select>
-
-          <select
-            value={secteur}
-            onChange={(e) => {
-              setSecteur(e.target.value);
-              setArrondissement("");
-            }}
-            className="border p-2 rounded min-w-[180px]"
-          >
-            <option value="">Secteur</option>
-            {secteurs.map((s) => (
-              <option key={s}>{s}</option>
-            ))}
-          </select>
-
-          <select
-            value={arrondissement}
-            onChange={(e) => setArrondissement(e.target.value)}
-            className="border p-2 rounded min-w-[200px]"
-            disabled={!secteur}
-          >
-            <option value="">Arrondissement</option>
-            {secteur &&
-              arrondissementsParSecteur[secteur].map((a: string) => (
-                <option key={a}>{a}</option>
-              ))}
-          </select>
-        </div>
-
-        {/* Ligne 2 */}
-        <div className="flex flex-wrap gap-4">
-          <input
-            type="text"
-            placeholder="Recherche (nom Admin)"
-            className="border p-2 rounded min-w-[250px] flex-1"
-            value={adminSearch}
-            onChange={(e) => setAdminSearch(e.target.value)}
-          />
-        </div>
-      </div>
-
-      {/* LISTE ACTIVITÉS */}
-      <div className="bg-white rounded-lg shadow divide-y">
-
-        {filtered.map((a) => (
-          <div key={a.id} className="p-4 hover:bg-gray-50 transition">
-
-            <div className="flex justify-between items-start">
-
-              <div>
-                <span
-                  className={`px-2 py-1 rounded text-xs font-semibold ${badgeColor(
-                    a.type
-                  )}`}
-                >
-                  {a.type}
-                </span>
-
-                <p className="mt-2 text-gray-800 font-medium">{a.texte}</p>
-
-                <p className="text-sm text-gray-500 mt-1">
-                  👤 {a.admin} — {a.secteur}, {a.arrondissement}
+        <div className="grid md:grid-cols-3 gap-10">
+          {activites.map((act, i) => (
+            <motion.div
+              key={i}
+              whileHover={{ scale: 1.03 }}
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700"
+            >
+              <Image
+                src={act.image}
+                alt={act.titre}
+                width={400}
+                height={250}
+                className="w-full h-56 object-cover"
+              />
+              <div className="p-6">
+                <h2 className="text-2xl font-semibold text-green-700 mb-2">
+                  {act.titre}
+                </h2>
+                <p className="text-sm text-gray-500 mb-3">{act.date}</p>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  {act.description}
                 </p>
               </div>
-
-              <p className="text-sm text-gray-500">📅 {a.date}</p>
-            </div>
-
-          </div>
-        ))}
-
-        {filtered.length === 0 && (
-          <p className="p-4 text-center text-gray-500">
-            Aucune activité ne correspond aux filtres.
-          </p>
-        )}
-
-      </div>
-    </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+    </main>
   );
 }

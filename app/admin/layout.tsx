@@ -1,67 +1,55 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const [adminLoaded, setAdminLoaded] = useState(false);
+export default function AdminLayout({ children }: any) {
+  const [unread, setUnread] = useState(0);
 
-  useEffect(() => {
-    if (pathname === "/admin/login") {
-      setAdminLoaded(true);
-      return;
+  async function loadUnread() {
+    try {
+      const token = localStorage.getItem("adminToken");
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/notifications/unread-count`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      const data = await res.json();
+      setUnread(data.unread || 0);
+    } catch (err) {
+      console.error("Erreur unread count", err);
     }
-
-    const admin = localStorage.getItem("admin");
-    const token = localStorage.getItem("adminToken");
-
-    if (!admin || !token) {
-      router.replace("/admin/login");
-      return;
-    }
-
-    setAdminLoaded(true);
-  }, [pathname, router]);
-
-  if (!adminLoaded) {
-    return <div className="p-6">Vérification des accès...</div>;
   }
 
+  useEffect(() => {
+    loadUnread();
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900">
-      {/* NAVIGATION ISOLÉE */}
-      {pathname !== "/admin/login" && (
-        <div className="w-full bg-[#0f3a2d] text-white shadow">
-          <nav className="px-6 py-4 flex justify-between items-center max-w-7xl mx-auto">
-            <div className="font-bold text-xl">FORDAC — Administration</div>
+    <div className="min-h-screen flex flex-col bg-[#0a472a] text-white">
 
-            <div className="flex space-x-6">
-              <Link href="/admin/dashboard" className="hover:underline">Dashboard</Link>
-              <Link href="/admin/membres" className="hover:underline">Membres</Link>
-              <Link href="/admin/contacts" className="hover:underline">Contacts</Link>
-            </div>
+      {/* HEADER */}
+      <header className="px-6 py-4 bg-[#0f5735] border-b border-gray-700 flex justify-between items-center">
 
-            <button
-              onClick={() => {
-                localStorage.removeItem("admin");
-                localStorage.removeItem("adminToken");
-                router.push("/admin/login");
-              }}
-              className="bg-red-600 px-4 py-1 rounded hover:bg-red-700"
-            >
-              Déconnexion
-            </button>
-          </nav>
+        <h1 className="text-xl font-bold">FORDAC — Admin</h1>
+
+        <div className="flex items-center gap-6">
+
+          {/* Icône de notification */}
+          <Link href="/admin/notifications" className="relative">
+            🔔
+            {unread > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-700 text-xs px-2 py-1 rounded-full">
+                {unread}
+              </span>
+            )}
+          </Link>
         </div>
-      )}
+      </header>
 
-      {/* CONTENU */}
-      <main className="p-6 max-w-7xl mx-auto text-gray-900">
-        {children}
-      </main>
+      {/* PAGE */}
+      <main className="p-6 flex-1">{children}</main>
     </div>
   );
 }

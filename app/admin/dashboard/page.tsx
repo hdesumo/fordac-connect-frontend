@@ -1,288 +1,231 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 
-// API sécurisée
-async function adminFetch(endpoint: string, options: any = {}) {
-  const token =
-    typeof window !== "undefined"
-      ? localStorage.getItem("adminToken")
-      : null;
+// =============================================
+// COMPOSANT CARD STATISTIQUE
+// =============================================
+function StatCard({ title, value }: any) {
+  return (
+    <div className="bg-[#145331] p-5 rounded-xl border border-gray-700 shadow-sm">
+      <p className="text-gray-300 text-sm">{title}</p>
+      <h2 className="text-3xl font-bold text-white mt-1">{value}</h2>
+    </div>
+  );
+}
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: token ? `Bearer ${token}` : "",
-      ...(options.headers || {}),
-    },
-    cache: "no-store",
-  });
-
-  // Si le token est invalide → retour login
-  if (res.status === 401) {
-    window.location.href = "/admin/login";
-    return;
-  }
-
-  return res.json();
+// =============================================
+// COMPOSANT SECTION (TITRE + CONTENU)
+// =============================================
+function Section({ title, children }: any) {
+  return (
+    <div className="mb-10">
+      <h2 className="text-2xl font-bold mb-4">{title}</h2>
+      {children}
+    </div>
+  );
 }
 
 export default function AdminDashboardPage() {
-  const router = useRouter();
+  const [stats, setStats] = useState<any>(null);
 
-  const [admin, setAdmin] = useState<any>(null);
-  const [loaded, setLoaded] = useState(false);
-
-  // -----------------------------
-  // STATS DYNAMIQUES (remplacent les fake data)
-  // -----------------------------
-  const [stats, setStats] = useState({
-    totalMembres: 0,
-    adherentsEnAttente: 0,
-    sujetsForum: 0,
-    commentaires: 0,
-    publications: 0,
-  });
-
-  const [statsTerritoire, setStatsTerritoire] = useState({
-    moungoNord: 0,
-    moungoSud: 0,
-    arrondissementsActifs: 0,
-  });
-
-  const [alertes, setAlertes] = useState({
-    sujetsSignales: 0,
-    commentairesSignales: 0,
-    publicationsSignalees: 0,
-  });
-
-  const [activities, setActivities] = useState<any[]>([]);
-
-  // Charger les stats depuis le backend
   async function loadStats() {
-    const data = await adminFetch("/admin/dashboard/stats");
+    try {
+      const token = localStorage.getItem("adminToken");
 
-    if (!data) return;
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/dashboard/stats`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-    setStats({
-      totalMembres: data.totalMembres ?? 0,
-      adherentsEnAttente: data.adherentsEnAttente ?? 0,
-      sujetsForum: data.sujetsForum ?? 0,
-      commentaires: data.commentaires ?? 0,
-      publications: data.publications ?? 0,
-    });
-
-    setStatsTerritoire({
-      moungoNord: data.moungoNord ?? 0,
-      moungoSud: data.moungoSud ?? 0,
-      arrondissementsActifs: data.arrondissementsActifs ?? 0,
-    });
-
-    setAlertes({
-      sujetsSignales: data.sujetsSignales ?? 0,
-      commentairesSignales: data.commentairesSignales ?? 0,
-      publicationsSignalees: data.publicationsSignalees ?? 0,
-    });
-
-    setActivities(data.activities ?? []);
+      const data = await res.json();
+      setStats(data);
+    } catch (e) {
+      console.error("Erreur dashboard:", e);
+    }
   }
 
   useEffect(() => {
-    const a = localStorage.getItem("admin");
-    const t = localStorage.getItem("adminToken");
-
-    if (!a || !t) {
-      router.push("/admin/login");
-      return;
-    }
-
-    try {
-      setAdmin(JSON.parse(a));
-    } catch {
-      router.push("/admin/login");
-      return;
-    }
-
     loadStats();
-    setLoaded(true);
   }, []);
 
-  if (!loaded) return <div className="p-6">Chargement...</div>;
+  if (!stats)
+    return (
+      <div className="p-6 text-white">
+        <p>Chargement...</p>
+      </div>
+    );
 
   return (
-    <div className="space-y-10">
+    <div className="p-6 text-white">
+      <h1 className="text-3xl font-bold mb-8">Tableau de Bord — Admin</h1>
 
-      {/* TITRE */}
-      <h1 className="text-2xl font-bold text-gray-800">
-        Tableau de bord — Administration FORDAC
-      </h1>
-
-      {/* STATISTIQUES GÉNÉRALES */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-
-        {/* Total membres */}
-        <Link
-          href="/admin/membres"
-          className="bg-white p-6 rounded-lg shadow text-center hover:shadow-lg transition"
-        >
-          <div className="text-4xl mb-2">👥</div>
-          <h3 className="text-xl font-semibold">{stats.totalMembres}</h3>
-          <p className="text-gray-600">Membres inscrits</p>
-        </Link>
-
-        {/* Adhésions en attente */}
-        <Link
-          href="/admin/membres?statut=pending"
-          className="bg-white p-6 rounded-lg shadow text-center hover:shadow-lg transition"
-        >
-          <div className="text-4xl mb-2">⏳</div>
-          <h3 className="text-xl font-semibold">{stats.adherentsEnAttente}</h3>
-          <p className="text-gray-600">En attente de validation</p>
-        </Link>
-
-        {/* Sujets forum */}
-        <Link
-          href="/admin/forum"
-          className="bg-white p-6 rounded-lg shadow text-center hover:shadow-lg transition"
-        >
-          <div className="text-4xl mb-2">💬</div>
-          <h3 className="text-xl font-semibold">{stats.sujetsForum}</h3>
-          <p className="text-gray-600">Sujets forum</p>
-        </Link>
-
-        {/* Commentaires */}
-        <Link
-          href="/admin/forum"
-          className="bg-white p-6 rounded-lg shadow text-center hover:shadow-lg transition"
-        >
-          <div className="text-4xl mb-2">🗨️</div>
-          <h3 className="text-xl font-semibold">{stats.commentaires}</h3>
-          <p className="text-gray-600">Commentaires</p>
-        </Link>
-      </div>
-
-      {/* TERRITOIRE MOUNGO */}
-      <div>
-        <h2 className="text-xl font-semibold mb-4">
-          Territoire — Département du Moungo
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-          <div className="bg-white p-6 rounded-lg shadow text-center">
-            <div className="text-4xl mb-2">🗺️</div>
-            <h3 className="text-xl font-semibold">{statsTerritoire.moungoNord}</h3>
-            <p className="text-gray-600">Membres Moungo Nord</p>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow text-center">
-            <div className="text-4xl mb-2">🗺️</div>
-            <h3 className="text-xl font-semibold">{statsTerritoire.moungoSud}</h3>
-            <p className="text-gray-600">Membres Moungo Sud</p>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow text-center">
-            <div className="text-4xl mb-2">📍</div>
-            <h3 className="text-xl font-semibold">{statsTerritoire.arrondissementsActifs}</h3>
-            <p className="text-gray-600">Arrondissements actifs</p>
-          </div>
-
+      {/* =============================================================
+          1) STATISTIQUES MEMBRES GLOBALES
+      ============================================================= */}
+      <Section title="Statistiques des membres">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <StatCard title="Total membres" value={stats.totalMembres} />
+          <StatCard title="Actifs" value={stats.actifs} />
+          <StatCard title="En attente" value={stats.pending} />
+          <StatCard title="Suspendus" value={stats.suspended} />
+          <StatCard title="Radiés" value={stats.banned} />
         </div>
-      </div>
+      </Section>
 
-      {/* ALERTES & SIGNALEMENTS */}
-      <div>
-        <h2 className="text-xl font-semibold mb-4">Alertes & Signalements</h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-          <Link
-            href="/admin/forum?statut=signale"
-            className="bg-white p-6 rounded-lg shadow text-center hover:shadow-lg transition"
-          >
-            <div className="text-4xl mb-2">🚩</div>
-            <h3 className="text-xl font-semibold">{alertes.sujetsSignales}</h3>
-            <p className="text-gray-600">Sujets signalés</p>
-          </Link>
-
-          <Link
-            href="/admin/forum?filter=commentaires-signales"
-            className="bg-white p-6 rounded-lg shadow text-center hover:shadow-lg transition"
-          >
-            <div className="text-4xl mb-2">⚠️</div>
-            <h3 className="text-xl font-semibold">{alertes.commentairesSignales}</h3>
-            <p className="text-gray-600">Commentaires signalés</p>
-          </Link>
-
-          <Link
-            href="/admin/publications?statut=signale"
-            className="bg-white p-6 rounded-lg shadow text-center hover:shadow-lg transition"
-          >
-            <div className="text-4xl mb-2">🛑</div>
-            <h3 className="text-xl font-semibold">{alertes.publicationsSignalees}</h3>
-            <p className="text-gray-600">Publications signalées</p>
-          </Link>
+      {/* =============================================================
+          2) TERRITOIRE MOUNGO
+      ============================================================= */}
+      <Section title="Territoire — Département du Moungo">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <StatCard title="Moungo-Nord" value={stats.nord} />
+          <StatCard title="Moungo-Sud" value={stats.sud} />
         </div>
-      </div>
 
-      {/* ACCÈS RAPIDE */}
-      <div>
-        <h2 className="text-xl font-semibold mb-4">Accès rapide</h2>
+        <h3 className="text-xl font-bold mb-3">Répartition par Arrondissement</h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Link
-            href="/admin/membres"
-            className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition"
-          >
-            <h3 className="text-lg font-semibold mb-2">👥 Gérer les membres</h3>
-            <p className="text-gray-600 text-sm">
-              Voir, valider et gérer les adhésions.
-            </p>
-          </Link>
-
-          <Link
-            href="/admin/forum"
-            className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition"
-          >
-            <h3 className="text-lg font-semibold mb-2">💬 Modérer le Forum</h3>
-            <p className="text-gray-600 text-sm">
-              Sujets, commentaires et signalements.
-            </p>
-          </Link>
-
-          <Link
-            href="/admin/publications"
-            className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition"
-          >
-            <h3 className="text-lg font-semibold mb-2">📝 Publications</h3>
-            <p className="text-gray-600 text-sm">
-              Modération des publications des militants.
-            </p>
-          </Link>
+        <div className="bg-[#145331] p-6 rounded-xl border border-gray-700">
+          {stats.arrondissements.length === 0 ? (
+            <p>Aucun arrondissement enregistré.</p>
+          ) : (
+            stats.arrondissements.map((arr: any, idx: number) => (
+              <div
+                key={idx}
+                className="flex justify-between border-b border-gray-700 py-2"
+              >
+                <span>{arr.arrondissement}</span>
+                <span className="font-bold">{arr.total}</span>
+              </div>
+            ))
+          )}
         </div>
-      </div>
+      </Section>
 
-      {/* ACTIVITÉS RÉCENTES */}
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h2 className="text-xl font-semibold mb-4">Activités récentes</h2>
+      {/* =============================================================
+          3) DERNIERS INSCRITS
+      ============================================================= */}
+      <Section title="Derniers membres inscrits">
+        <div className="bg-[#145331] p-6 rounded-xl border border-gray-700">
+          {stats.derniers.length === 0 ? (
+            <p>Aucun membre récent.</p>
+          ) : (
+            stats.derniers.map((m: any, idx: number) => (
+              <div
+                key={idx}
+                className="border-b border-gray-700 py-3 flex flex-col"
+              >
+                <p className="font-bold">{m.name}</p>
+                <p className="text-sm text-gray-300">{m.email}</p>
 
-        {activities.length === 0 ? (
-          <p className="text-gray-600">Aucune activité récente.</p>
-        ) : (
-          <ul className="space-y-3">
-            {activities.map((a: any, i: number) => (
-              <li key={i} className="border-b pb-2">
-                <p className="text-gray-700">{a.text}</p>
-                <p className="text-sm text-gray-500">📅 {a.date}</p>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+                <p className="text-sm mt-1">
+                  {m.secteur || "-"} / {m.arrondissement || "-"}
+                </p>
 
+                <p className="text-xs text-gray-400 mt-1">
+                  Inscrit le {new Date(m.created_at).toLocaleString()}
+                </p>
+              </div>
+            ))
+          )}
+        </div>
+      </Section>
+
+      {/* =============================================================
+          4) FORUM : POSTS + COMMENTAIRES
+      ============================================================= */}
+      <Section title="Activité Forum">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <StatCard title="Posts créés" value={stats.totalPosts} />
+          <StatCard title="Commentaires" value={stats.totalComments} />
+        </div>
+
+        <h3 className="text-xl font-bold mt-6 mb-3">Derniers posts</h3>
+        <div className="bg-[#145331] p-6 rounded-xl border border-gray-700 mb-6">
+          {stats.recentPosts.length === 0 ? (
+            <p>Aucun post récent.</p>
+          ) : (
+            stats.recentPosts.map((p: any, idx: number) => (
+              <div key={idx} className="border-b border-gray-700 py-3">
+                <p className="font-bold">{p.title}</p>
+                <p className="text-sm text-gray-300">Par {p.author || "—"}</p>
+                <p className="text-xs text-gray-400">
+                  {new Date(p.created_at).toLocaleString()}
+                </p>
+              </div>
+            ))
+          )}
+        </div>
+
+        <h3 className="text-xl font-bold mt-6 mb-3">Derniers commentaires</h3>
+        <div className="bg-[#145331] p-6 rounded-xl border border-gray-700">
+          {stats.recentComments.length === 0 ? (
+            <p>Aucun commentaire récent.</p>
+          ) : (
+            stats.recentComments.map((c: any, idx: number) => (
+              <div key={idx} className="border-b border-gray-700 py-3">
+                <p className="text-gray-200">{c.content}</p>
+                <p className="text-sm text-gray-300">
+                  Sur : <span className="font-bold">{c.post}</span>
+                </p>
+                <p className="text-sm">Par {c.author || "—"}</p>
+                <p className="text-xs text-gray-400">
+                  {new Date(c.created_at).toLocaleString()}
+                </p>
+              </div>
+            ))
+          )}
+        </div>
+      </Section>
+
+      {/* =============================================================
+          5) SIGNALEMENTS
+      ============================================================= */}
+      <Section title="Signalements">
+        <StatCard title="Total des signalements" value={stats.totalReports} />
+
+        <div className="bg-[#145331] p-6 rounded-xl border border-gray-700 mt-6">
+          {stats.recentReports.length === 0 ? (
+            <p>Aucun signalement récent.</p>
+          ) : (
+            stats.recentReports.map((r: any, idx: number) => (
+              <div key={idx} className="border-b border-gray-700 py-3">
+                <p className="font-bold">{r.type}</p>
+                <p className="text-sm text-gray-300">{r.reason}</p>
+                <p className="text-xs text-gray-400">
+                  Par : {r.reporter || "—"}
+                </p>
+                <p className="text-xs text-gray-400">
+                  {new Date(r.created_at).toLocaleString()}
+                </p>
+              </div>
+            ))
+          )}
+        </div>
+      </Section>
+
+      {/* =============================================================
+          6) ACTIVITÉS ADMIN
+      ============================================================= */}
+      <Section title="Activités des Administrateurs">
+        <div className="bg-[#145331] p-6 rounded-xl border border-gray-700">
+          {stats.recentActivities.length === 0 ? (
+            <p>Aucune activité enregistrée.</p>
+          ) : (
+            stats.recentActivities.map((a: any, idx: number) => (
+              <div key={idx} className="border-b border-gray-700 py-3">
+                <p className="font-bold">{a.action_type}</p>
+                <p className="text-gray-300 text-sm">{a.description}</p>
+                <p className="text-xs text-gray-400">
+                  Admin : {a.admin_name || "—"} — IP : {a.ip_address || "—"}
+                </p>
+                <p className="text-xs text-gray-400">
+                  {new Date(a.created_at).toLocaleString()}
+                </p>
+              </div>
+            ))
+          )}
+        </div>
+      </Section>
     </div>
   );
 }
