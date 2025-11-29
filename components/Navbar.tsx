@@ -26,7 +26,7 @@ export default function Navbar() {
           {/* Galerie */}
           <div className="group relative cursor-pointer">
             <span className="hover:text-[#c8a45d]">Galerie</span>
-            <div className="hidden group-hover:block absolute top-full left-0 bg-[#0B3D2E] border border-[#11503D] rounded-lg shadow-lg py-3 w-40">
+            <div className="hidden group-hover:block absolute top-full left-0 bg-[#0B3D2E] border border-[#11503D] rounded-lg shadow-lg py-3 w-40 z-50">
               <Link href="/galerie/photos" className="block px-4 py-2 hover:bg-[#11503D]">Photos</Link>
               <Link href="/galerie/videos" className="block px-4 py-2 hover:bg-[#11503D]">Vidéos</Link>
             </div>
@@ -68,38 +68,46 @@ export default function Navbar() {
 
       </div>
 
-      {/* MENU MOBILE */}
+      {/* MENU MOBILE FULLSCREEN FIXED */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#0B3D2E] border-t border-[#11503D] px-6 py-4 space-y-4">
+        <div className="fixed inset-0 bg-[#0B3D2E] z-[999] px-6 py-6 overflow-y-auto">
+          
+          {/* BOUTON FERMER */}
           <button
             onClick={() => setMobileMenuOpen(false)}
-            className="text-white text-right w-full"
+            className="text-white text-right w-full text-xl mb-4"
           >
-            ✖ Fermer
+            ✖
           </button>
 
-          <Link href="/" className="block hover:text-[#c8a45d]">Accueil</Link>
-          <Link href="/le-parti" className="block hover:text-[#c8a45d]">Le Parti</Link>
-          <Link href="/president" className="block hover:text-[#c8a45d]">Le Président</Link>
-          <Link href="/organes" className="block hover:text-[#c8a45d]">Les Organes</Link>
-          <Link href="/galerie/photos" className="block hover:text-[#c8a45d]">Photos</Link>
-          <Link href="/galerie/videos" className="block hover:text-[#c8a45d]">Vidéos</Link>
-          <Link href="/forum/sujets" className="block hover:text-[#c8a45d]">Forum des Militants</Link>
-          <Link href="/nous-contacter" className="block hover:text-[#c8a45d]">Nous Contacter</Link>
+          <div className="space-y-4 text-white text-lg">
 
-          <Link
-            href="/adhesion"
-            className="block px-4 py-2 rounded-md bg-[#c8a45d] text-[#0B3D2E] font-semibold"
-          >
-            Adhésion
-          </Link>
+            <Link onClick={() => setMobileMenuOpen(false)} href="/" className="block">Accueil</Link>
+            <Link onClick={() => setMobileMenuOpen(false)} href="/le-parti" className="block">Le Parti</Link>
+            <Link onClick={() => setMobileMenuOpen(false)} href="/president" className="block">Le Président</Link>
+            <Link onClick={() => setMobileMenuOpen(false)} href="/organes" className="block">Les Organes</Link>
+            <Link onClick={() => setMobileMenuOpen(false)} href="/galerie/photos" className="block">Photos</Link>
+            <Link onClick={() => setMobileMenuOpen(false)} href="/galerie/videos" className="block">Vidéos</Link>
+            <Link onClick={() => setMobileMenuOpen(false)} href="/forum/sujets" className="block">Forum des Militants</Link>
+            <Link onClick={() => setMobileMenuOpen(false)} href="/nous-contacter" className="block">Nous Contacter</Link>
 
-          <Link
-            href="/login"
-            className="block px-4 py-2 rounded-md border border-[#c8a45d] text-[#c8a45d]"
-          >
-            Connexion
-          </Link>
+            <Link
+              href="/adhesion"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-4 py-2 rounded-md bg-[#c8a45d] text-[#0B3D2E] font-semibold"
+            >
+              Adhésion
+            </Link>
+
+            <Link
+              href="/login"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-4 py-2 rounded-md border border-[#c8a45d] text-[#c8a45d]"
+            >
+              Connexion
+            </Link>
+
+          </div>
         </div>
       )}
 
