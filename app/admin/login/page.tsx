@@ -3,113 +3,88 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
+import { API_BASE_URL } from "@/utils/constants";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPwd, setShowPwd] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
-  async function handleLogin(e: React.FormEvent) {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("");
+    setError("");
 
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/login`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const res = await fetch(`${API_BASE_URL}/admin/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
       const data = await res.json();
 
-      // 🟥 GESTION DES ERREURS SERVEUR
       if (!res.ok) {
-        setMessage(data.error || data.message || "Identifiants incorrects.");
+        setError(data.error || "Identifiants incorrects");
         setLoading(false);
         return;
       }
 
-      // 🟩 STOCKAGE TOKEN + ADMIN
       localStorage.setItem("adminToken", data.token);
-      localStorage.setItem("admin", JSON.stringify(data.admin));
-
-      // 🟩 REDIRECTION
       router.push("/admin/dashboard");
-    } catch (error) {
-      console.error(error);
-      setMessage("Erreur réseau. Réessayez plus tard.");
+    } catch {
+      setError("Erreur de connexion.");
     }
 
     setLoading(false);
-  }
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0A2218] p-6">
-      <div className="bg-white p-8 rounded-xl shadow-xl max-w-md w-full">
-        <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">
-          Connexion Administrateur
-        </h1>
+    <main className="min-h-screen bg-[#052d23] flex items-center justify-center p-4">
+      <form
+        onSubmit={submit}
+        className="bg-[#064130] w-full max-w-md p-8 rounded-lg shadow-lg text-white"
+      >
+        <h2 className="text-2xl font-semibold mb-6 text-center">
+          Connexion Admin
+        </h2>
 
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label className="block font-semibold mb-1 text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              value={email}
-              className="w-full border p-3 rounded text-black focus:outline-green-700"
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+        {error && (
+          <p className="bg-red-600 p-2 rounded mb-4 text-center">{error}</p>
+        )}
 
-          <div>
-            <label className="block font-semibold mb-1 text-gray-700">
-              Mot de passe
-            </label>
+        <label className="block mb-1 text-sm">Email</label>
+        <input
+          type="email"
+          className="w-full p-3 rounded mb-4 text-black bg-white shadow-inner"
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-            <div className="relative">
-              <input
-                type={showPwd ? "text" : "password"}
-                value={password}
-                className="w-full border p-3 pr-10 rounded text-black focus:outline-green-700"
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-
-              <button
-                type="button"
-                className="absolute right-3 top-3 text-gray-600"
-                onClick={() => setShowPwd(!showPwd)}
-              >
-                {showPwd ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
-            </div>
-          </div>
-
-          {/* MESSAGE D'ERREUR */}
-          {message && (
-            <p className="text-red-600 text-sm text-center">{message}</p>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-green-800 text-white w-full py-3 rounded-lg hover:bg-green-900 transition"
+        <label className="block mb-1 text-sm">Mot de passe</label>
+        <div className="relative mb-6">
+          <input
+            type={showPassword ? "text" : "password"}
+            className="w-full p-3 rounded text-black bg-white shadow-inner"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <span
+            className="absolute right-3 top-3 text-black cursor-pointer"
+            onClick={() => setShowPassword(!showPassword)}
           >
-            {loading ? "Connexion..." : "Se connecter"}
-          </button>
-        </form>
-      </div>
-    </div>
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </span>
+        </div>
+
+        <button
+          className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-semibold py-3 rounded text-lg"
+          disabled={loading}
+        >
+          {loading ? "Connexion..." : "Se connecter"}
+        </button>
+      </form>
+    </main>
   );
 }

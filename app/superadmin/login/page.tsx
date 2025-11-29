@@ -2,96 +2,88 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
+import { API_BASE_URL } from "@/utils/constants";
 
 export default function SuperAdminLoginPage() {
   const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState("");
 
-  const handleLogin = async (e: any) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorMessage("");
     setLoading(true);
+    setError("");
 
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/superadmin/login`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const res = await fetch(`${API_BASE_URL}/superadmin/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setErrorMessage(data.message || "Erreur de connexion.");
+        setError(data.error || "Identifiants incorrects");
         setLoading(false);
         return;
       }
 
-      // Stocker token
       localStorage.setItem("superadminToken", data.token);
-      localStorage.setItem("superadminInfo", JSON.stringify(data.superadmin));
-
       router.push("/superadmin/dashboard");
-    } catch (err) {
-      setErrorMessage("Erreur serveur. Veuillez réessayer.");
+    } catch {
+      setError("Erreur de connexion.");
     }
-
     setLoading(false);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-200 p-6">
-      <div className="bg-white shadow-xl rounded-xl p-8 w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center mb-4">
+    <main className="min-h-screen bg-[#052d23] flex items-center justify-center p-4">
+      <form
+        onSubmit={submit}
+        className="bg-[#064130] w-full max-w-md p-8 rounded-lg shadow-lg text-white"
+      >
+        <h2 className="text-2xl font-semibold mb-6 text-center">
           Connexion SuperAdmin
-        </h1>
+        </h2>
 
-        {errorMessage && (
-          <p className="bg-red-100 text-red-700 p-3 rounded mb-4 text-sm">
-            {errorMessage}
-          </p>
+        {error && (
+          <p className="bg-red-600 p-2 rounded mb-4 text-center">{error}</p>
         )}
 
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label className="block text-gray-700 mb-1">Email</label>
-            <input
-              type="email"
-              required
-              className="w-full border rounded p-2"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="lepresident@fordac-connect.org"
-            />
-          </div>
+        <label className="block mb-1 text-sm">Email</label>
+        <input
+          type="email"
+          className="w-full p-3 rounded mb-4 text-black bg-white shadow-inner"
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-          <div>
-            <label className="block text-gray-700 mb-1">Mot de passe</label>
-            <input
-              type="password"
-              required
-              className="w-full border rounded p-2"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••••"
-            />
-          </div>
-
-          <button
-            disabled={loading}
-            className="w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800"
+        <label className="block mb-1 text-sm">Mot de passe</label>
+        <div className="relative mb-6">
+          <input
+            type={showPassword ? "text" : "password"}
+            className="w-full p-3 rounded text-black bg-white shadow-inner"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <span
+            className="absolute right-3 top-3 text-black cursor-pointer"
+            onClick={() => setShowPassword(!showPassword)}
           >
-            {loading ? "Connexion..." : "Se connecter"}
-          </button>
-        </form>
-      </div>
-    </div>
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </span>
+        </div>
+
+        <button
+          className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-semibold py-3 rounded text-lg"
+          disabled={loading}
+        >
+          {loading ? "Connexion..." : "Se connecter"}
+        </button>
+      </form>
+    </main>
   );
 }
