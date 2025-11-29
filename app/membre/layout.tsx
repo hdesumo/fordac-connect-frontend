@@ -1,68 +1,39 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { API_BASE_URL } from "@/utils/constants";
 
-export default function MemberLayout({ children }: { children: React.ReactNode }) {
+export default function MembreLayout({ children }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [unread, setUnread] = useState(0);
 
   useEffect(() => {
-    const token = localStorage.getItem("memberToken");
+    const token = localStorage.getItem("fordac_token");
+    const role = localStorage.getItem("fordac_role");
 
     if (!token) {
-      router.push("/membre/login");
+      router.push("/login");
       return;
     }
 
-    async function loadUnread() {
-      try {
-        const res = await fetch(`${API_BASE_URL}/members/notifications/unread`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          setUnread(data.unread || 0);
-        }
-      } catch (e) {
-        console.error("Member unread error:", e);
-      }
+    if (role !== "membre") {
+      router.push("/login");
+      return;
     }
 
-    loadUnread();
     setLoading(false);
-  }, [router]);
+  }, []);
 
-  if (loading) {
-    return (
-      <div className="w-full h-screen flex justify-center items-center text-xl text-white">
-        Chargement...
-      </div>
-    );
-  }
+  if (loading) return <div className="p-10">Chargement...</div>;
 
   return (
-    <div className="min-h-screen bg-[#052d23] text-white">
-
-      {/* Topbar */}
-      <header className="w-full bg-[#064130] p-4 flex justify-between items-center">
-        <h2 className="text-xl font-semibold">Espace Membre</h2>
-
-        <div>
-          <Link href="/membre/notifications" className="hover:text-yellow-400">
-            Notifications {unread > 0 && <span className="text-yellow-500 ml-1">({unread})</span>}
-          </Link>
-        </div>
+    <div className="min-h-screen bg-gray-50 p-6">
+      {/* Header simple pour les membres */}
+      <header className="bg-green-900 text-white p-4 mb-4 rounded">
+        <h2 className="text-xl font-semibold">Espace Militant</h2>
       </header>
 
-      {/* Content */}
-      <main className="p-6">
-        {children}
-      </main>
+      {children}
     </div>
   );
 }

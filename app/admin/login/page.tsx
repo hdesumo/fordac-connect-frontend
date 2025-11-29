@@ -2,24 +2,22 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff } from "lucide-react";
 import { API_BASE_URL } from "@/utils/constants";
 
 export default function AdminLoginPage() {
   const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [showPwd, setShowPwd] = useState(false);
   const [error, setError] = useState("");
 
-  const submit = async (e: React.FormEvent) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
 
     try {
-      const res = await fetch(`${API_BASE_URL}/admin/login`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -28,63 +26,78 @@ export default function AdminLoginPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Identifiants incorrects");
-        setLoading(false);
+        setError(data.message || "Erreur de connexion.");
         return;
       }
 
-      localStorage.setItem("adminToken", data.token);
-      router.push("/admin/dashboard");
-    } catch {
-      setError("Erreur de connexion.");
-    }
+      // 🔥 Unification du système
+      localStorage.setItem("fordac_token", data.token);
+      localStorage.setItem("fordac_role", "admin");
+      localStorage.setItem("fordac_user_id", data.user.id);
 
-    setLoading(false);
+      // Redirection cohérente
+      router.replace("/admin");
+
+    } catch (err) {
+      console.error(err);
+      setError("Erreur serveur.");
+    }
   };
 
   return (
-    <main className="min-h-screen bg-[#052d23] flex items-center justify-center p-4">
+    <div className="flex items-center justify-center min-h-screen bg-[#052E2A] px-4">
       <form
-        onSubmit={submit}
-        className="bg-[#064130] w-full max-w-md p-8 rounded-lg shadow-lg text-white"
+        onSubmit={handleLogin}
+        className="bg-[#063B33] p-8 rounded-xl shadow-xl max-w-md w-full text-white"
       >
-        <h2 className="text-2xl font-semibold mb-6 text-center">
-          Connexion Admin
-        </h2>
+        <h1 className="text-2xl font-bold mb-6 text-center">Connexion Admin</h1>
 
         {error && (
-          <p className="bg-red-600 p-2 rounded mb-4 text-center">{error}</p>
+          <div className="bg-red-600 text-white p-3 rounded mb-4 text-center">
+            {error}
+          </div>
         )}
 
-        <label className="block mb-1 text-sm">Email</label>
-        <input
-          type="email"
-          className="w-full p-3 rounded mb-4 text-black bg-white shadow-inner"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-
-        <label className="block mb-1 text-sm">Mot de passe</label>
-        <div className="relative mb-6">
+        <label className="block mb-3">
+          <span>Email</span>
           <input
-            type={showPassword ? "text" : "password"}
-            className="w-full p-3 rounded text-black bg-white shadow-inner"
-            onChange={(e) => setPassword(e.target.value)}
+            type="email"
+            className="w-full mt-2 p-3 rounded bg-white text-black"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
           />
-          <span
-            className="absolute right-3 top-3 text-black cursor-pointer"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-          </span>
-        </div>
+        </label>
+
+        <label className="block mb-6">
+          <span>Mot de passe</span>
+          
+          <div className="relative mt-2">
+            <input
+              type={showPwd ? "text" : "password"}
+              className="w-full p-3 rounded bg-white text-black"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+
+            <button
+              type="button"
+              onClick={() => setShowPwd(!showPwd)}
+              className="absolute right-3 top-3 text-black"
+            >
+              {showPwd ? "👁️" : "👁️‍🗨️"}
+            </button>
+          </div>
+        </label>
 
         <button
-          className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-semibold py-3 rounded text-lg"
-          disabled={loading}
+          type="submit"
+          className="w-full p-3 bg-yellow-500 text-black font-semibold rounded hover:bg-yellow-600"
         >
-          {loading ? "Connexion..." : "Se connecter"}
+          Se connecter
         </button>
       </form>
-    </main>
+    </div>
   );
 }

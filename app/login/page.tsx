@@ -1,152 +1,111 @@
 "use client";
 
-import { motion } from "framer-motion";
-import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
+    setLoading(true);
+    setErrorMsg("");
 
     try {
-      setLoading(true);
-
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
       const data = await res.json();
 
       if (!res.ok) {
+        setErrorMsg(data.message || "Échec de connexion.");
         setLoading(false);
-        setError(data.error || "Identifiants incorrects.");
         return;
       }
 
-      // Stockage local
+      // Stockage Token + rôle + id utilisateur
       localStorage.setItem("fordac_token", data.token);
-      localStorage.setItem("fordac_user", JSON.stringify(data.user));
+      localStorage.setItem("fordac_role", data.user.role);
+      localStorage.setItem("fordac_user_id", data.user.id);
 
-      // Redirection vers l’espace personnel
-      router.push("/profil");
-
-    } catch (err) {
-      console.error(err);
-      setError("Impossible de contacter le serveur.");
-      setLoading(false);
+      // Redirection selon rôle
+      switch (data.user.role) {
+        case "superadmin":
+          router.push("/superadmin");
+          break;
+        case "admin":
+          router.push("/admin");
+          break;
+        case "membre":
+          router.push("/membre");
+          break;
+        default:
+          router.push("/login");
+      }
+    } catch (error) {
+      setErrorMsg("Erreur de connexion au serveur.");
     }
+
+    setLoading(false);
   };
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4">
+      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
 
-      {/* ================================
-           🟩 En-tête
-         ================================= */}
-      <section className="bg-gradient-to-b from-fordacGreen to-fordacDark text-white py-20 text-center">
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-4xl md:text-5xl font-extrabold mb-4"
-        >
-          Connexion à l’Espace Militant
-        </motion.h1>
+        <h1 className="text-2xl font-semibold text-center text-green-800 mb-6">
+          Connexion
+        </h1>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.8 }}
-          className="max-w-2xl mx-auto text-lg text-gray-100"
-        >
-          Accédez à votre espace personnel pour suivre vos activités,
-          participer aux débats et rester informé des actions du FORDAC.
-        </motion.p>
-      </section>
+        {errorMsg && (
+          <div className="bg-red-100 text-red-700 p-2 rounded mb-4 text-sm">
+            {errorMsg}
+          </div>
+        )}
 
-      {/* ================================
-           🔐 Formulaire de connexion
-         ================================= */}
-      <main className="flex-grow flex items-center justify-center py-20 px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 w-full max-w-md"
-        >
-          <h2 className="text-2xl font-bold text-center text-fordacGreen mb-8">
-            Se connecter
-          </h2>
+        <form onSubmit={handleLogin} className="space-y-5">
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-200">
-                Adresse e-mail
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-fordacGold"
-                placeholder="exemple@email.com"
-              />
-            </div>
+          <div>
+            <label className="block mb-1 font-medium">Email</label>
+            <input
+              type="email"
+              required
+              className="w-full border px-3 py-2 rounded"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Entrez votre email"
+            />
+          </div>
 
-            <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-200">
-                Mot de passe
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-fordacGold"
-                placeholder="********"
-              />
-            </div>
+          <div>
+            <label className="block mb-1 font-medium">Mot de passe</label>
+            <input
+              type="password"
+              required
+              className="w-full border px-3 py-2 rounded"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="********"
+            />
+          </div>
 
-            {error && (
-              <p className="text-red-600 dark:text-red-400 text-center font-semibold">
-                {error}
-              </p>
-            )}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-green-800 text-white py-2 rounded hover:bg-green-700 transition"
+          >
+            {loading ? "Connexion..." : "Se connecter"}
+          </button>
+        </form>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-fordacGold text-fordacDark font-semibold py-3 rounded-md hover:bg-yellow-400 transition-colors"
-            >
-              {loading ? "Connexion…" : "Connexion"}
-            </button>
-          </form>
-
-          <p className="text-center text-sm text-gray-600 dark:text-gray-300 mt-6">
-            Vous n’avez pas encore de compte ?{" "}
-            <Link
-              href="/adhesion"
-              className="text-fordacGold hover:underline font-semibold"
-            >
-              Faites-votre demande d'adhésion
-            </Link>
-          </p>
-        </motion.div>
-      </main>
+      </div>
     </div>
   );
 }
