@@ -17,7 +17,8 @@ export default function AdminLoginPage() {
     setError("");
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/admin/login`, {
+      // 🔥 CORRECTION IMPORTANTE : bon endpoint
+      const res = await fetch(`${API_BASE_URL}/api/admin/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -30,11 +31,12 @@ export default function AdminLoginPage() {
         return;
       }
 
-      // Unification du système
+      // Stockage
       localStorage.setItem("fordac_token", data.token);
       localStorage.setItem("fordac_role", "admin");
-      localStorage.setItem("fordac_user_id", data.user.id);
+      localStorage.setItem("fordac_user_id", data.admin.id);
 
+      // Redirection vers dashboard
       router.replace("/admin");
 
     } catch (err) {
@@ -49,7 +51,9 @@ export default function AdminLoginPage() {
         onSubmit={handleLogin}
         className="bg-[#063B33] p-8 rounded-xl shadow-xl max-w-md w-full text-white"
       >
-        <h1 className="text-2xl font-bold mb-6 text-center">Connexion Admin</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">
+          Connexion Admin
+        </h1>
 
         {error && (
           <div className="bg-red-600 text-white p-3 rounded mb-4 text-center">
@@ -70,7 +74,6 @@ export default function AdminLoginPage() {
 
         <label className="block mb-6">
           <span>Mot de passe</span>
-          
           <div className="relative mt-2">
             <input
               type={showPwd ? "text" : "password"}
@@ -79,7 +82,6 @@ export default function AdminLoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-
             <button
               type="button"
               onClick={() => setShowPwd(!showPwd)}
