@@ -2,41 +2,58 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function AdminLayout({ children }: any) {
+  const router = useRouter();
   const [unread, setUnread] = useState(0);
-
-  async function loadUnread() {
-    try {
-      const token = localStorage.getItem("adminToken");
-
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/notifications/unread-count`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      const data = await res.json();
-      setUnread(data.unread || 0);
-    } catch (err) {
-      console.error("Erreur unread count", err);
-    }
-  }
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const token = localStorage.getItem("adminToken");
+
+    // 🔥 SI PAS DE TOKEN → REDIRECTION VERS LOGIN
+    if (!token) {
+      router.replace("/admin/login");
+      return;
+    }
+
+    // 🔥 CHARGER LE NOMBRE DE NOTIFS
+    async function loadUnread() {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/admin/notifications/unread-count`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        const data = await res.json();
+        setUnread(data.unread || 0);
+      } catch (err) {
+        console.error("Erreur unread count", err);
+      }
+    }
+
     loadUnread();
-  }, []);
+    setLoading(false);
+  }, [router]);
+
+  // ⏳ Temps que l'on vérifie le token
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-white">
+        Chargement...
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-[#0a472a] text-white">
 
       {/* HEADER */}
       <header className="px-6 py-4 bg-[#0f5735] border-b border-gray-700 flex justify-between items-center">
-
         <h1 className="text-xl font-bold">FORDAC — Admin</h1>
 
         <div className="flex items-center gap-6">
-
-          {/* Icône de notification */}
           <Link href="/admin/notifications" className="relative">
             🔔
             {unread > 0 && (
@@ -45,6 +62,17 @@ export default function AdminLayout({ children }: any) {
               </span>
             )}
           </Link>
+
+          <button
+            onClick={() => {
+              localStorage.removeItem("adminToken");
+              localStorage.removeItem("admin");
+              router.push("/admin/login");
+            }}
+            className="text-sm underline"
+          >
+            Déconnexion
+          </button>
         </div>
       </header>
 
