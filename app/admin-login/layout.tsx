@@ -1,6 +1,6 @@
-export default function AdminLoginLayout({ children }) {
+export default function AdminLoginLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#002D2D] p-4">
+    <div className="min-h-screen bg-[#002F2F]">
       {children}
     </div>
   );
