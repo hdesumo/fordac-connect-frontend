@@ -5,30 +5,36 @@ import { useRouter } from "next/navigation";
 
 export default function AdminLayout({ children }) {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
+  const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("fordac_token");
-    const role = localStorage.getItem("fordac_role");
+    // Code 100% client-side : OK
+    const token = typeof window !== "undefined"
+      ? localStorage.getItem("fordac_token")
+      : null;
 
-    if (!token) {
-      router.push("/login");
+    const role = typeof window !== "undefined"
+      ? localStorage.getItem("fordac_role")
+      : null;
+
+    if (!token || role !== "admin") {
+      router.replace("/admin-login");
       return;
     }
 
-    if (role !== "admin") {
-      router.push("/login");
-      return;
-    }
-
-    setLoading(false);
+    setAuthorized(true);
   }, []);
 
-  if (loading) return <div className="p-10">Chargement...</div>;
+  if (!authorized)
+    return (
+      <div className="p-10 text-center text-white">
+        Vérification des accès...
+      </div>
+    );
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* SIDEBAR ADMIN */}
+      {/* MENU ADMIN */}
       <aside className="w-64 bg-green-900 text-white p-5">
         <h2 className="text-xl font-bold mb-6">Admin</h2>
 
@@ -40,7 +46,7 @@ export default function AdminLayout({ children }) {
         </ul>
       </aside>
 
-      {/* CONTENT */}
+      {/* CONTENU */}
       <main className="flex-1 p-6">{children}</main>
     </div>
   );
