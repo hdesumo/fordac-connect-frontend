@@ -10,15 +10,16 @@ export default function AdminLayout({ children }: any) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // 🔥 Forcer un rendu strict client — éviter SSR
+    if (typeof window === "undefined") return;
+
     const token = localStorage.getItem("adminToken");
 
-    // 🔥 SI PAS DE TOKEN → REDIRECTION VERS LOGIN
     if (!token) {
       router.replace("/admin/login");
       return;
     }
 
-    // 🔥 CHARGER LE NOMBRE DE NOTIFS
     async function loadUnread() {
       try {
         const res = await fetch(
@@ -35,9 +36,8 @@ export default function AdminLayout({ children }: any) {
 
     loadUnread();
     setLoading(false);
-  }, [router]);
+  }, []);
 
-  // ⏳ Temps que l'on vérifie le token
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-white">
@@ -48,8 +48,6 @@ export default function AdminLayout({ children }: any) {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#0a472a] text-white">
-
-      {/* HEADER */}
       <header className="px-6 py-4 bg-[#0f5735] border-b border-gray-700 flex justify-between items-center">
         <h1 className="text-xl font-bold">FORDAC — Admin</h1>
 
@@ -76,7 +74,6 @@ export default function AdminLayout({ children }: any) {
         </div>
       </header>
 
-      {/* PAGE */}
       <main className="p-6 flex-1">{children}</main>
     </div>
   );
