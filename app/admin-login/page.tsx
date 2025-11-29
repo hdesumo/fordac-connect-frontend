@@ -1,15 +1,13 @@
+
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { API_BASE_URL } from "@/utils/constants";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPwd, setShowPwd] = useState(false);
   const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
@@ -17,87 +15,74 @@ export default function AdminLoginPage() {
     setError("");
 
     try {
-      // 🔥 CORRECTION IMPORTANTE : bon endpoint
-      const res = await fetch(`${API_BASE_URL}/api/admin/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/auth/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.message || "Erreur de connexion.");
+      if (!response.ok) {
+        setError("Identifiants incorrects ou erreur serveur.");
         return;
       }
 
-      // Stockage
-      localStorage.setItem("fordac_token", data.token);
-      localStorage.setItem("fordac_role", "admin");
-      localStorage.setItem("fordac_user_id", data.admin.id);
+      const data = await response.json();
 
-      // Redirection vers dashboard
-      router.replace("/admin");
+      // 🔐 Stockage du token
+      localStorage.setItem("adminToken", data.token);
+
+      // 🚀 Redirection
+      router.push("/admin");
 
     } catch (err) {
-      console.error(err);
-      setError("Erreur serveur.");
+      setError("Impossible de contacter le serveur.");
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#052E2A] px-4">
-      <form
-        onSubmit={handleLogin}
-        className="bg-[#063B33] p-8 rounded-xl shadow-xl max-w-md w-full text-white"
-      >
-        <h1 className="text-2xl font-bold mb-6 text-center">
-          Connexion Admin
-        </h1>
+    <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+      <h1 className="text-2xl font-bold text-center mb-6">Connexion Admin</h1>
 
-        {error && (
-          <div className="bg-red-600 text-white p-3 rounded mb-4 text-center">
-            {error}
-          </div>
-        )}
+      {error && (
+        <div className="bg-red-100 text-red-700 p-3 rounded mb-4">
+          {error}
+        </div>
+      )}
 
-        <label className="block mb-3">
-          <span>Email</span>
+      <form onSubmit={handleLogin} className="space-y-4">
+
+        <div>
+          <label className="block text-sm mb-1">Email</label>
           <input
             type="email"
-            className="w-full mt-2 p-3 rounded bg-white text-black"
+            className="w-full p-3 border rounded bg-gray-50"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-        </label>
+        </div>
 
-        <label className="block mb-6">
-          <span>Mot de passe</span>
-          <div className="relative mt-2">
-            <input
-              type={showPwd ? "text" : "password"}
-              className="w-full p-3 rounded bg-white text-black"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <button
-              type="button"
-              onClick={() => setShowPwd(!showPwd)}
-              className="absolute right-3 top-3 text-black"
-            >
-              {showPwd ? "👁️" : "👁️‍🗨️"}
-            </button>
-          </div>
-        </label>
+        <div>
+          <label className="block text-sm mb-1">Mot de passe</label>
+          <input
+            type="password"
+            className="w-full p-3 border rounded bg-gray-50"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
 
         <button
           type="submit"
-          className="w-full p-3 bg-yellow-500 text-black font-semibold rounded hover:bg-yellow-600"
+          className="w-full p-3 bg-yellow-500 text-black rounded font-bold hover:bg-yellow-600"
         >
           Se connecter
         </button>
+
       </form>
     </div>
   );
