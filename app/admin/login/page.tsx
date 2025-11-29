@@ -13,7 +13,7 @@ export default function AdminLoginPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  async function handleLogin(e: any) {
+  async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setMessage("");
@@ -30,20 +30,22 @@ export default function AdminLoginPage() {
 
       const data = await res.json();
 
+      // 🟥 GESTION DES ERREURS SERVEUR
       if (!res.ok) {
-        setMessage(data.message || "Identifiants incorrects.");
+        setMessage(data.error || data.message || "Identifiants incorrects.");
         setLoading(false);
         return;
       }
 
-      // Stockage token + infos admin
+      // 🟩 STOCKAGE TOKEN + ADMIN
       localStorage.setItem("adminToken", data.token);
       localStorage.setItem("admin", JSON.stringify(data.admin));
 
+      // 🟩 REDIRECTION
       router.push("/admin/dashboard");
     } catch (error) {
       console.error(error);
-      setMessage("Erreur réseau. Réessayez.");
+      setMessage("Erreur réseau. Réessayez plus tard.");
     }
 
     setLoading(false);
@@ -58,7 +60,9 @@ export default function AdminLoginPage() {
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block font-semibold mb-1 text-gray-700">Email</label>
+            <label className="block font-semibold mb-1 text-gray-700">
+              Email
+            </label>
             <input
               type="email"
               value={email}
@@ -92,6 +96,7 @@ export default function AdminLoginPage() {
             </div>
           </div>
 
+          {/* MESSAGE D'ERREUR */}
           {message && (
             <p className="text-red-600 text-sm text-center">{message}</p>
           )}

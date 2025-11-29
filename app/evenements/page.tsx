@@ -28,8 +28,13 @@ export default function EvenementsPage() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/events`);
-        if (!res.ok) throw new Error("Erreur lors du chargement des événements");
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/events`
+        );
+
+        if (!res.ok)
+          throw new Error("Erreur lors du chargement des événements");
+
         const data = await res.json();
 
         // Conversion des dates au format Date
