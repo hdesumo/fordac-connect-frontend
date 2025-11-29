@@ -1,98 +1,89 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-import { SUPERADMIN_API } from "../../../utils/constants";
-import { API_BASE_URL } from "../../../utils/constants";
+import StatsChart from "./StatsChart";
 
-const ResponsiveContainer = dynamic(
-  () => import("recharts").then((mod) => mod.ResponsiveContainer),
-  { ssr: false }
-);
+interface MemberStats {
+  total: number;
+  active: number;
+  pending: number;
+  suspended: number;
+}
 
-const PieChart = dynamic(
-  () => import("recharts").then((mod) => mod.PieChart),
-  { ssr: false }
-);
-
-const Pie = dynamic(
-  () => import("recharts").then((mod) => mod.Pie),
-  { ssr: false }
-);
-
-const Cell = dynamic(
-  () => import("recharts").then((mod) => mod.Cell),
-  { ssr: false }
-);
-
-export default function SuperAdminStatsPage() {
+export default function SuperAdminMemberStatsPage() {
+  const [stats, setStats] = useState<MemberStats | null>(null);
   const [loading, setLoading] = useState(true);
-  const [sectorStats, setSectorStats] = useState([]);
+  const [error, setError] = useState<string | null>(null);
 
-  const COLORS = ["#166534", "#22C55E"];
+  // 👉 API BASE URL (Backend local ou production)
+  const API_BASE_URL =
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        // 🔥 CORRECTION ICI
-        const res = await fetch(`${SUPERADMIN_API}/stats`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("superadmin_token")}`,
-          },
-        });
+        const res = await fetch(`${API_BASE_URL}/api/superadmin/membres/stats`);
+
+        if (!res.ok) throw new Error("Erreur lors du chargement des statistiques");
 
         const data = await res.json();
-
-        console.log("STATS REÇUES :", data);
-
-        if (res.ok && data.secteurs) {
-          setSectorStats(
-            data.secteurs.map((s) => ({
-              name: s.secteur,
-              value: Number(s.count),
-            }))
-          );
-        }
-      } catch (error) {
-        console.error("Erreur lors du chargement des stats :", error);
+        setStats(data);
+      } catch (err: any) {
+        setError(err.message || "Erreur inconnue");
       } finally {
         setLoading(false);
       }
     };
 
     fetchStats();
-  }, []);
+  }, [API_BASE_URL]);
+
+  if (loading) {
+    return (
+      <div className="p-6">
+        <p className="text-gray-600">Chargement des statistiques...</p>
+      </div>
+    );
+  }
+
+  if (error || !stats) {
+    return (
+      <div className="p-6 text-red-600">
+        <p>Erreur : {error || "Impossible de charger les statistiques."}</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Statistiques des membres</h1>
+    <div className="p-6 space-y-6">
+      <h1 className="text-2xl font-bold">Statistiques des Membres</h1>
 
-      {loading ? (
-        <p>Chargement des statistiques...</p>
-      ) : (
-        <div className="w-full h-96 bg-white rounded-lg shadow p-4">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={sectorStats}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={120}
-                label
-              >
-                {sectorStats.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      )}
+      <StatsChart
+        stats={[
+          { label: "Membres actifs", value: stats.active, color: "#16a34a" },
+          { label: "En attente", value: stats.pending, color: "#eab308" },
+          { label: "Suspendus", value: stats.suspended, color: "#dc2626" },
+        ]}
+      />
+
+      <div className="bg-white rounded-lg shadow p-6 mt-6">
+        <h2 className="text-xl font-semibold mb-4">Résumé</h2>
+
+        <ul className="space-y-2 text-gray-700">
+          <li>
+            <strong>Total membres :</strong> {stats.total}
+          </li>
+          <li>
+            <strong>Membres actifs :</strong> {stats.active}
+          </li>
+          <li>
+            <strong>En attente :</strong> {stats.pending}
+          </li>
+          <li>
+            <strong>Suspendus :</strong> {stats.suspended}
+          </li>
+        </ul>
+      </div>
     </div>
   );
 }

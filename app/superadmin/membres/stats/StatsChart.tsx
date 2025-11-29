@@ -1,81 +1,52 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import React from "react";
 
-const ResponsiveContainer = dynamic(
-  () => import("recharts").then((mod) => mod.ResponsiveContainer),
-  { ssr: false }
-);
+interface StatItem {
+  label: string;
+  value: number;
+  color: string;
+}
 
-const PieChart = dynamic(
-  () => import("recharts").then((mod) => mod.PieChart),
-  { ssr: false }
-);
+interface StatsChartProps {
+  stats: StatItem[];
+}
 
-const Pie = dynamic(
-  () => import("recharts").then((mod) => mod.Pie),
-  { ssr: false }
-);
-
-const Cell = dynamic(
-  () => import("recharts").then((mod) => mod.Cell),
-  { ssr: false }
-);
-
-export default function StatsChart({ SUPERADMIN_API }) {
-  const [sectorStats, setSectorStats] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const COLORS = ["#166534", "#22C55E"];
-
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const res = await fetch(`${SUPERADMIN_API}/stats`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("superadmin_token")}`,
-          },
-        });
-
-        const data = await res.json();
-
-        if (res.ok && data.secteurs) {
-          setSectorStats(
-            data.secteurs.map((s) => ({
-              name: s.secteur,
-              value: Number(s.count),
-            }))
-          );
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchStats();
-  }, []);
-
-  if (loading) return <p>Chargement des statistiques...</p>;
+export default function StatsChart({ stats }: StatsChartProps) {
+  const total = stats.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <div className="w-full h-96 bg-white rounded-lg shadow p-4">
-      <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
-          <Pie
-            data={sectorStats}
-            dataKey="value"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
-            outerRadius={120}
-            label
-          >
-            {sectorStats.map((entry, index) => (
-              <Cell key={index} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <h3 className="text-xl font-semibold mb-4">Répartition des Membres</h3>
+
+      <div className="space-y-4">
+        {stats.map((item, index) => {
+          const percent = total > 0 ? ((item.value / total) * 100).toFixed(1) : 0;
+
+          return (
+            <div key={index}>
+              <div className="flex justify-between mb-1">
+                <span className="font-medium">{item.label}</span>
+                <span className="text-sm text-gray-600">{percent}%</span>
+              </div>
+
+              <div className="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
+                <div
+                  className="h-full transition-all duration-500"
+                  style={{
+                    width: `${percent}%`,
+                    backgroundColor: item.color,
+                  }}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <p className="text-sm text-gray-500 mt-6">
+        Total membres : <span className="font-semibold">{total}</span>
+      </p>
     </div>
   );
 }
