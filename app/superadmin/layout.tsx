@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import "../../globals.css";
 import { API_BASE_URL } from "@/utils/constants";
 
 export default function SuperAdminLayout({ children }: { children: React.ReactNode }) {

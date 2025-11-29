@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import "../../globals.css";
 import { API_BASE_URL } from "@/utils/constants";
 
 export default function MemberLayout({ children }: { children: React.ReactNode }) {

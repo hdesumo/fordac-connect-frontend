@@ -1,13 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+
   compiler: {
     removeConsole: false,
   },
+
   webpack(config) {
-    config.resolve.alias['@'] = require('path').resolve(__dirname, 'app');
+    const path = require("path");
+
+    // Alias global : @ pointe vers la racine du projet
+    config.resolve.alias['@'] = path.resolve(__dirname);
+
     return config;
-  }
+  },
 };
 
 module.exports = nextConfig;
