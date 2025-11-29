@@ -6,47 +6,47 @@ import { useRouter } from "next/navigation";
 export default function AdminLayout({ children }) {
   const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    // Code 100% client-side : OK
-    const token = typeof window !== "undefined"
-      ? localStorage.getItem("fordac_token")
-      : null;
+    // Sécurité : exécuter uniquement côté client
+    if (typeof window === "undefined") return;
 
-    const role = typeof window !== "undefined"
-      ? localStorage.getItem("fordac_role")
-      : null;
+    const token = localStorage.getItem("fordac_token");
+    const role = localStorage.getItem("fordac_role");
 
     if (!token || role !== "admin") {
-      router.replace("/admin-login");
-      return;
+      router.replace("/admin-login"); // 👉 redirection correcte
+    } else {
+      setAuthorized(true);
     }
 
-    setAuthorized(true);
+    setChecked(true);
   }, []);
 
-  if (!authorized)
+  if (!checked) {
     return (
       <div className="p-10 text-center text-white">
-        Vérification des accès...
+        Chargement…
       </div>
     );
+  }
+
+  if (!authorized) return null;
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* MENU ADMIN */}
       <aside className="w-64 bg-green-900 text-white p-5">
         <h2 className="text-xl font-bold mb-6">Admin</h2>
 
         <ul className="space-y-3">
-          <li><a href="/admin" className="hover:underline">Dashboard</a></li>
-          <li><a href="/admin/membres" className="hover:underline">Membres</a></li>
-          <li><a href="/admin/notifications" className="hover:underline">Notifications</a></li>
-          <li><a href="/admin/settings" className="hover:underline">Paramètres</a></li>
+          <li><a href="/admin">Dashboard</a></li>
+          <li><a href="/admin/membres">Membres</a></li>
+          <li><a href="/admin/notifications">Notifications</a></li>
+          <li><a href="/admin/settings">Paramètres</a></li>
         </ul>
       </aside>
 
-      {/* CONTENU */}
       <main className="flex-1 p-6">{children}</main>
     </div>
   );
