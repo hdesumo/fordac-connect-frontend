@@ -1,24 +1,26 @@
-export async function adminFetch(url: string, options: any = {}) {
-  const token =
-    typeof window !== "undefined"
-      ? localStorage.getItem("adminToken")
-      : null;
+// app/utils/adminFetch.ts
+export async function adminFetch(endpoint: string, token: string) {
+  const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 
-  const headers: any = {
-    "Content-Type": "application/json",
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    ...(options.headers || {}),
-  };
+  const url = `${API_BASE}/api/admin${endpoint}`;
 
-  const res = await fetch(url, {
-    ...options,
-    headers,
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    cache: "no-store",
   });
 
-  if (!res.ok) {
-    const error = await res.json().catch(() => ({}));
-    throw new Error(error.message || "Erreur lors de la requête");
+  if (!response.ok) {
+    console.error("❌ adminFetch error:", {
+      url,
+      status: response.status,
+      statusText: response.statusText,
+    });
+    return null;
   }
 
-  return res.json();
+  return response.json();
 }

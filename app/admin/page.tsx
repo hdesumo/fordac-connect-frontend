@@ -1,112 +1,64 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getDashboardStats } from "@/lib/adminApi";
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState(null);
+  const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("fordac_token");
+    const token = localStorage.getItem("adminToken");
 
-    if (!token) {
-      setErrorMsg("Token non trouvé. Veuillez vous reconnecter.");
+    if (!token) return;
+
+    async function load() {
+      const data = await getDashboardStats(token);
+
+      if (!data) {
+        console.error("⚠ Impossible de charger les statistiques");
+      } else {
+        setStats(data);
+      }
+
       setLoading(false);
-      return;
     }
 
-    const fetchStats = async () => {
-      try {
-        const res = await fetch("/api/admin/dashboard/stats", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!res.ok) {
-          const err = await res.json();
-          setErrorMsg(err.message || "Impossible de charger les statistiques.");
-          setLoading(false);
-          return;
-        }
-
-        const data = await res.json();
-        setStats(data);
-      } catch (error) {
-        setErrorMsg("Erreur serveur lors du chargement des statistiques.");
-      }
-      setLoading(false);
-    };
-
-    fetchStats();
+    load();
   }, []);
 
-  if (loading)
-    return <div className="p-5 text-center text-gray-600">Chargement...</div>;
-
-  if (errorMsg)
+  if (loading) {
     return (
-      <div className="p-5 bg-red-100 text-red-700 rounded text-center">
-        {errorMsg}
+      <div className="flex items-center justify-center h-screen text-xl">
+        Chargement du tableau de bord…
       </div>
     );
-
-  if (!stats)
-    return (
-      <div className="p-5 bg-yellow-100 text-yellow-700 rounded text-center">
-        Aucune donnée disponible pour le moment.
-      </div>
-    );
+  }
 
   return (
-    <div className="space-y-6">
+    <div className="p-6">
+      <h1 className="text-3xl font-bold mb-6">Dashboard Admin</h1>
 
-      <h1 className="text-2xl md:text-3xl font-bold text-green-900 text-center md:text-left">
-        Tableau de bord Admin
-      </h1>
+      {!stats ? (
+        <p className="text-red-500">Impossible de charger les statistiques</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="p-4 shadow bg-white rounded">
+            <h2 className="font-bold">Membres</h2>
+            <p>{stats.total_members ?? 0}</p>
+          </div>
 
-      {/* GRID RESPONSIVE : smartphone = 1 colonne, tablette = 2, desktop = 4 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="p-4 shadow bg-white rounded">
+            <h2 className="font-bold">Publications</h2>
+            <p>{stats.total_posts ?? 0}</p>
+          </div>
 
-        <div className="bg-white shadow p-5 rounded-lg hover:shadow-md transition">
-          <h3 className="text-base sm:text-lg font-semibold mb-2 text-gray-700">
-            Membres inscrits
-          </h3>
-          <p className="text-3xl font-bold text-green-700">
-            {stats.totalMembers}
-          </p>
+          <div className="p-4 shadow bg-white rounded">
+            <h2 className="font-bold">Notifications</h2>
+            <p>{stats.total_notifications ?? 0}</p>
+          </div>
         </div>
-
-        <div className="bg-white shadow p-5 rounded-lg hover:shadow-md transition">
-          <h3 className="text-base sm:text-lg font-semibold mb-2 text-gray-700">
-            Notifications non lues
-          </h3>
-          <p className="text-3xl font-bold text-green-700">
-            {stats.unreadNotifications}
-          </p>
-        </div>
-
-        <div className="bg-white shadow p-5 rounded-lg hover:shadow-md transition">
-          <h3 className="text-base sm:text-lg font-semibold mb-2 text-gray-700">
-            Adhésions validées
-          </h3>
-          <p className="text-3xl font-bold text-green-700">
-            {stats.approvedMemberships}
-          </p>
-        </div>
-
-        <div className="bg-white shadow p-5 rounded-lg hover:shadow-md transition">
-          <h3 className="text-base sm:text-lg font-semibold mb-2 text-gray-700">
-            En attente
-          </h3>
-          <p className="text-3xl font-bold text-green-700">
-            {stats.pendingMemberships}
-          </p>
-        </div>
-
-      </div>
+      )}
     </div>
   );
 }

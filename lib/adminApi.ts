@@ -1,18 +1,6 @@
-export async function adminFetch(endpoint: string, options: any = {}) {
-  const token =
-    typeof window !== "undefined"
-      ? localStorage.getItem("token_admin")
-      : null;
+// lib/adminApi.ts
+import { adminFetch } from "@/app/utils/adminFetch";
 
-  const headers = {
-    "Content-Type": "application/json",
-    ...(options.headers || {}),
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-  };
-
-  return fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
-    ...options,
-    headers,
-    cache: "no-store",
-  });
+export async function getDashboardStats(token: string) {
+  return adminFetch("/dashboard/stats", token);
 }
