@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 
-import ProtectedRoute from "../../../../components/ProtectedRoute";
-import Pagination from "../../../../components/Pagination";
+import ProtectedRoute from "@/components/ProtectedRoute"; // ✅ Import corrigé
+import Pagination from "@/components/Pagination"; // ✅ Import corrigé
 
 export default function AdminTopicModerationPage() {
   const { id } = useParams();
@@ -18,15 +18,24 @@ export default function AdminTopicModerationPage() {
   const API = process.env.NEXT_PUBLIC_API_URL;
 
   const loadData = async () => {
-    const res = await fetch(`${API}/topics/${id}`);
-    const data = await res.json();
+    try {
+      const res = await fetch(`${API}/topics/${id}`, {
+        cache: "no-store", // ✅ important pour Vercel/Railway
+      });
 
-    setTopic(data.topic || null);
-    setPosts(data.posts || []);
+      const data = await res.json();
+
+      setTopic(data.topic || null);
+      setPosts(Array.isArray(data.posts) ? data.posts : []);
+    } catch (e) {
+      console.error("Erreur chargement moderation sujet admin:", e);
+      setTopic(null);
+      setPosts([]);
+    }
   };
 
   useEffect(() => {
-    loadData();
+    if (id) loadData();
   }, [id]);
 
   const paginated = posts.slice((page - 1) * perPage, page * perPage);
@@ -35,11 +44,15 @@ export default function AdminTopicModerationPage() {
   const deletePost = async (postId: number) => {
     if (!confirm("Supprimer ce message ?")) return;
 
-    await fetch(`${API}/admin/forum/posts/${postId}`, {
-      method: "DELETE",
-    });
+    try {
+      await fetch(`${API}/admin/forum/posts/${postId}`, {
+        method: "DELETE",
+      });
 
-    loadData(); // refresh page
+      loadData(); // refresh
+    } catch (e) {
+      console.error("Erreur suppression message admin:", e);
+    }
   };
 
   return (
@@ -55,9 +68,13 @@ export default function AdminTopicModerationPage() {
         </Link>
 
         {/* Titre */}
-        {topic && (
+        {topic ? (
           <h1 className="text-4xl font-extrabold text-[#166534] mt-6 mb-4">
             Sujet : {topic.title}
+          </h1>
+        ) : (
+          <h1 className="text-2xl mt-6 mb-4 text-gray-600">
+            Sujet introuvable
           </h1>
         )}
 
@@ -82,11 +99,15 @@ export default function AdminTopicModerationPage() {
                     </h3>
 
                     <span className="text-sm text-gray-500">
-                      {new Date(post.created_at).toLocaleString("fr-FR")}
+                      {post.created_at
+                        ? new Date(post.created_at).toLocaleString("fr-FR")
+                        : "—"}
                     </span>
                   </div>
 
-                  <p className="mt-3 text-gray-800">{post.content}</p>
+                  <p className="mt-3 text-gray-800">
+                    {post.content}
+                  </p>
 
                   {post.edited_by_user && (
                     <p className="text-sm text-gray-500 mt-2 italic">
@@ -109,12 +130,14 @@ export default function AdminTopicModerationPage() {
           )}
 
           {/* Pagination */}
-          <Pagination
-            page={page}
-            total={totalPages}
-            onNext={() => setPage(page + 1)}
-            onPrev={() => setPage(page - 1)}
-          />
+          <div className="mt-10">
+            <Pagination
+              page={page}
+              total={totalPages}
+              onNext={() => page < totalPages && setPage(page + 1)}
+              onPrev={() => page > 1 && setPage(page - 1)}
+            />
+          </div>
         </div>
       </main>
     </ProtectedRoute>
