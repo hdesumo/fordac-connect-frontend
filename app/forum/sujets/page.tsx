@@ -1,99 +1,72 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Pagination from "@/components/Pagination";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Link from "next/link";
-import ProtectedRoute from "../../../components/ProtectedRoute";
-import IntranetHeader from "../../../components/IntranetHeader";
-import ForumNav from "../../../components/ForumNav";
-import Pagination from "../../../components/Pagination";
-import TagBadge from "../../../components/TagBadge";
 
-export default function ForumSujetsPage() {
-  const [topics, setTopics] = useState<any[]>([]);
-  const [search, setSearch] = useState("");
-  const [user, setUser] = useState<any>(null);
-
+export default function AdminTopics() {
+  const [topics, setTopics] = useState([]);
   const [page, setPage] = useState(1);
-  const perPage = 8;
-
-  const API = process.env.NEXT_PUBLIC_API_URL;
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    const u = localStorage.getItem("user");
-    if (u) setUser(JSON.parse(u));
+    fetchTopics();
+  }, [page]);
 
-    fetch(`${API}/topics`)
-      .then((res) => res.json())
-      .then((data) => setTopics(data.topics || []));
-  }, [API]);
+  const fetchTopics = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/forum/topics?page=${page}`,
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("adminToken"),
+          },
+        }
+      );
 
-  const filtered = topics.filter((t) =>
-    t.title.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const paginated = filtered.slice((page - 1) * perPage, page * perPage);
-  const totalPages = Math.ceil(filtered.length / perPage);
+      const data = await res.json();
+      setTopics(data.topics || []);
+      setTotalPages(data.totalPages || 1);
+    } catch (error) {
+      console.error("Erreur fetch topics:", error);
+    }
+  };
 
   return (
     <ProtectedRoute>
-      <IntranetHeader userName={user?.name || "Utilisateur"} />
-      <ForumNav />
+      <div className="max-w-5xl mx-auto py-10 px-4">
+        <h1 className="text-3xl font-bold text-green-700 mb-6">
+          Sujets du Forum
+        </h1>
 
-      <main className="min-h-screen bg-[#F7F7F7] px-6 pt-10 pb-20">
-        <div className="max-w-6xl mx-auto">
+        <div className="space-y-4">
+          {topics.length === 0 && (
+            <p className="text-gray-600">Aucun sujet pour le moment.</p>
+          )}
 
-          <h1 className="text-4xl font-extrabold text-[#166534] mb-6">
-            Tous les Sujets
-          </h1>
-
-          {/* Recherche */}
-          <input
-            type="text"
-            placeholder="Rechercher un sujet..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full p-4 border rounded-xl mb-8"
-          />
-
-          <div className="space-y-6">
-            {paginated.map((topic) => (
-              <Link
-                key={topic.id}
-                href={`/forum/sujets/${topic.id}`}
-                className="block bg-white p-6 rounded-xl shadow border hover:bg-gray-50"
-              >
-                <h2 className="text-2xl font-bold text-[#166534] mb-2">
-                  {topic.title}
-                </h2>
-
-                <div className="flex items-center gap-2">
-                  <span className="text-gray-600 text-sm">
-                    par <strong>{topic.author}</strong> ·{" "}
-                    {new Date(topic.created_at).toLocaleDateString("fr-FR")}
-                  </span>
-
-                  {topic.category_name && (
-                    <TagBadge name={topic.category_name} />
-                  )}
-
-                  {topic.locked && (
-                    <span className="px-2 py-1 bg-red-600 text-white text-xs rounded-lg ml-2">
-                      Verrouillé
-                    </span>
-                  )}
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          <Pagination
-            page={page}
-            total={totalPages}
-            onNext={() => setPage(page + 1)}
-            onPrev={() => setPage(page - 1)}
-          />
+          {topics.map((topic: any) => (
+            <Link
+              key={topic.id}
+              href={`/admin/forum/sujets/${topic.id}`}
+              className="block p-4 bg-white rounded-lg border hover:bg-green-50 transition"
+            >
+              <h3 className="text-lg font-semibold text-green-700">
+                {topic.title}
+              </h3>
+              <p className="text-sm text-gray-600">
+                {topic.total_posts} publications
+              </p>
+            </Link>
+          ))}
         </div>
-      </main>
+
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
+      </div>
     </ProtectedRoute>
   );
 }
