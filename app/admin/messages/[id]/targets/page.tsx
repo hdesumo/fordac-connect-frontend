@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { adminFetch } from "@/lib/adminApi";
 import { useParams } from "next/navigation";
-import Link from "next/link";
-import { adminFetch } from "../../../../utils/adminFetch";
 
 export default function MessageTargetsPage() {
   const { id } = useParams();
@@ -12,68 +11,46 @@ export default function MessageTargetsPage() {
 
   async function loadTargets() {
     setLoading(true);
-
     try {
-      // ✅ Correction : ajout du deuxième argument {} pour TypeScript
-      const res = await adminFetch(`/api/admin/messages/targets/${id}`, {});
+      // ✅ Appel correct : 1 seul argument
+      const res = await adminFetch(`/api/admin/messages/targets/${id}`);
       const data = await res.json();
 
-      if (Array.isArray(data)) setTargets(data);
-
-    } catch (e) {
-      console.error(e);
+      if (Array.isArray(data)) {
+        setTargets(data);
+      } else {
+        console.error("Format inattendu:", data);
+      }
+    } catch (error) {
+      console.error("Erreur targets admin:", error);
     }
-
     setLoading(false);
   }
 
   useEffect(() => {
     loadTargets();
-  }, []);
+  }, [id]);
 
-  if (loading) return <p>Chargement…</p>;
+  if (loading) return <p>Chargement des destinataires…</p>;
 
   return (
-    <div className="space-y-6">
+    <main className="p-10">
+      <h1 className="text-3xl font-bold text-[#166534] mb-6">
+        Destinataires du message #{id}
+      </h1>
 
-      <div className="flex justify-between items-center">
-        <h1 className="text-xl font-bold">Membres ciblés</h1>
-
-        <Link
-          href={`/admin/messages/${id}`}
-          className="bg-green-900 text-white px-4 py-2 rounded hover:bg-green-800"
-        >
-          Retour au message
-        </Link>
-      </div>
-
-      <div className="bg-white rounded shadow p-4 overflow-auto">
-
-        <table className="w-full text-sm">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="p-2">Nom</th>
-              <th className="p-2">Email</th>
-              <th className="p-2">Téléphone</th>
-              <th className="p-2">Département</th>
-              <th className="p-2">Statut</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {targets.map((m) => (
-              <tr key={m.id} className="border-t">
-                <td className="p-2">{m.name}</td>
-                <td className="p-2">{m.email}</td>
-                <td className="p-2">{m.phone}</td>
-                <td className="p-2">{m.departement}</td>
-                <td className="p-2 capitalize">{m.status}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-      </div>
-    </div>
+      {targets.length === 0 ? (
+        <p>Aucun destinataire trouvé.</p>
+      ) : (
+        <ul className="space-y-2">
+          {targets.map((t: any) => (
+            <li key={t.id} className="p-3 bg-white shadow rounded">
+              <p className="font-semibold">{t.name}</p>
+              <p className="text-gray-600">{t.email}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </main>
   );
 }
