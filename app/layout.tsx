@@ -1,11 +1,9 @@
-// app/layout.tsx
-
 import "./globals.css";
 import Link from "next/link";
 
 import MarqueeBanner from "@/components/MarqueeBanner";
 import Footer from "@/components/Footer";
-import MobileNav from "./mobile-nav"; // wrapper client
+import Navbar from "@/components/Navbar";   // ✅ NOUVEAU
 
 export const metadata = {
   title: "FORDAC Connect",
@@ -17,8 +15,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="fr" suppressHydrationWarning>
       <body className="has-navbar bg-[#0c2e25] text-white">
 
-        {/* NAVBAR (client wrapper) */}
-        <MobileNav />
+        {/* NAVBAR */}
+        <Navbar />   {/* ✅ C’est maintenant la nouvelle navbar */}
 
         {/* BANDE BLANCHE */}
         <div className="w-full h-2 bg-white/90 mt-[72px]"></div>
