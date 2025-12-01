@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 
-import { adminFetch } from "@/lib/adminApi"; // 🔥 import corrigé
+import { adminFetch } from "@/lib/adminApi"; // 🔥 import correct
 
 export default function MessageDetailPage() {
   const { id } = useParams();
@@ -15,8 +15,8 @@ export default function MessageDetailPage() {
     setLoading(true);
 
     try {
-      // 🔥 Appel 100% compatible (1 argument)
-      const res = await adminFetch(`/api/admin/messages/history`);
+      // 🔥 Correction : 2 arguments pour satisfaire TypeScript
+      const res = await adminFetch(`/api/admin/messages/history`, {});
       const data = await res.json();
 
       const msg = data.find(
@@ -34,7 +34,7 @@ export default function MessageDetailPage() {
 
   useEffect(() => {
     if (id) loadMessage();
-  }, [id]); // 🔥 dépendance correcte
+  }, [id]);
 
   if (loading) return <p>Chargement...</p>;
 
