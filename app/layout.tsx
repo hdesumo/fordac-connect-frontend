@@ -1,36 +1,37 @@
 import "./globals.css";
-import Link from "next/link";
+import { Inter } from "next/font/google";
 
-import MarqueeBanner from "@/components/MarqueeBanner";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";   // ✅ NOUVEAU
+import TopNavbar from "@/components/TopNavbar";
+import MainNavbar from "@/components/MainNavbar";
+import MobileNav from "@/components/mobile-nav";
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata = {
   title: "FORDAC Connect",
-  description: "Plateforme officielle FORDAC Connect",
+  description: "Plateforme officielle des Forces Démocratiques pour l’Action et le Changement",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" suppressHydrationWarning>
-      <body className="has-navbar bg-[#0c2e25] text-white">
+    <html lang="fr" className={inter.className}>
+      <body className="bg-gray-50">
 
-        {/* NAVBAR */}
-        <Navbar />   {/* ✅ C’est maintenant la nouvelle navbar */}
+        {/* MOBILE NAV BUTTON */}
+        <div className="md:hidden flex justify-end pr-4 pt-4">
+          <MobileNav />
+        </div>
 
-        {/* BANDE BLANCHE */}
-        <div className="w-full h-2 bg-white/90 mt-[72px]"></div>
+        {/* DESKTOP NAV */}
+        <div className="hidden md:block">
+          <TopNavbar />
+          <MainNavbar />
+        </div>
 
-        {/* MARQUEE */}
-        <MarqueeBanner />
-
-        {/* CONTENU */}
-        <main className="pt-4">
-          {children}
-        </main>
-
-        {/* FOOTER */}
-        <Footer />
+        <main>{children}</main>
       </body>
     </html>
   );
