@@ -1,41 +1,80 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, ReactNode } from "react";
 import { useRouter } from "next/navigation";
 
 /**
- * 🔐 ProtectedRoute
- * Ce composant vérifie si l’utilisateur est authentifié via un token (localStorage ou cookie).
- * Si aucun token n’est trouvé, il redirige vers la page /login.
- * Sinon, il rend le contenu protégé.
+ * 🔐 ProtectedRoute étendu
+ * - Vérifie la présence du token
+ * - Vérifie le rôle si adminOnly ou memberOnly est activé
  */
-export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
+
+interface ProtectedRouteProps {
+  children: ReactNode;
+  adminOnly?: boolean;
+  memberOnly?: boolean;
+}
+
+export default function ProtectedRoute({
+  children,
+  adminOnly = false,
+  memberOnly = false,
+}: ProtectedRouteProps) {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
 
   useEffect(() => {
     try {
-      // Vérifie la présence du token (localStorage ou cookie)
       const token =
         typeof window !== "undefined"
           ? localStorage.getItem("token") || sessionStorage.getItem("token")
           : null;
 
       if (!token) {
-        setIsAuthenticated(false);
+        setIsAuthorized(false);
         router.push("/login");
-      } else {
-        setIsAuthenticated(true);
+        return;
       }
+
+      // 🌟 Vérification du rôle
+      const userData =
+        typeof window !== "undefined"
+          ? localStorage.getItem("fordac_user")
+          : null;
+
+      if (!userData) {
+        setIsAuthorized(false);
+        router.push("/login");
+        return;
+      }
+
+      const user = JSON.parse(userData);
+
+      // 🔐 Admin seulement
+      if (adminOnly && user.role !== "admin") {
+        setIsAuthorized(false);
+        router.push("/login");
+        return;
+      }
+
+      // 👤 Membre seulement
+      if (memberOnly && user.role !== "member") {
+        setIsAuthorized(false);
+        router.push("/login");
+        return;
+      }
+
+      // ✔ Si toutes les conditions sont réunies
+      setIsAuthorized(true);
     } catch (error) {
-      console.error("Erreur lors de la vérification de session :", error);
-      setIsAuthenticated(false);
+      console.error("Erreur dans ProtectedRoute :", error);
+      setIsAuthorized(false);
       router.push("/login");
     }
-  }, [router]);
+  }, [adminOnly, memberOnly, router]);
 
-  // Affiche un écran de chargement pendant la vérification
-  if (isAuthenticated === null) {
+  // État de vérification
+  if (isAuthorized === null) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#0c2e25] text-white">
         <div className="animate-pulse text-center">
@@ -48,9 +87,9 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
     );
   }
 
-  // Si non connecté → redirection
-  if (!isAuthenticated) return null;
+  // Si non autorisé → redirection
+  if (!isAuthorized) return null;
 
-  // Si connecté → accès autorisé
+  // Autorisé
   return <>{children}</>;
 }
