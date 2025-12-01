@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import ProtectedRoute from "../../../components/ProtectedRoute";
-import Pagination from "../../../components/Pagination";
+
+import ProtectedRoute from "@/components/ProtectedRoute";      // 🔥 Import corrigé
+import Pagination from "@/components/Pagination";              // 🔥 Import corrigé
 
 export default function AdminTopicsPage() {
   const API = process.env.NEXT_PUBLIC_API_URL;
@@ -14,9 +15,16 @@ export default function AdminTopicsPage() {
   const perPage = 10;
 
   const load = async () => {
-    const res = await fetch(`${API}/admin/forum/topics`);
-    const data = await res.json();
-    setTopics(data.topics || []);
+    try {
+      const res = await fetch(`${API}/admin/forum/topics`, {
+        cache: "no-store", // 🔥 indispensable pour Railway
+      });
+      const data = await res.json();
+      setTopics(Array.isArray(data.topics) ? data.topics : []);
+    } catch (e) {
+      console.error("Erreur chargement sujets admin :", e);
+      setTopics([]);
+    }
   };
 
   useEffect(() => {
@@ -24,7 +32,7 @@ export default function AdminTopicsPage() {
   }, []);
 
   const filtered = topics.filter((t) =>
-    t.title.toLowerCase().includes(search.toLowerCase())
+    t.title?.toLowerCase().includes(search.toLowerCase())
   );
 
   const paginated = filtered.slice((page - 1) * perPage, page * perPage);
@@ -32,18 +40,33 @@ export default function AdminTopicsPage() {
 
   const deleteTopic = async (id: number) => {
     if (!confirm("Supprimer ce sujet définitivement ?")) return;
-    await fetch(`${API}/admin/forum/topics/${id}`, { method: "DELETE" });
-    load();
+
+    try {
+      await fetch(`${API}/admin/forum/topics/${id}`, {
+        method: "DELETE",
+      });
+      load();
+    } catch (e) {
+      console.error("Erreur suppression sujet :", e);
+    }
   };
 
   const lock = async (id: number) => {
-    await fetch(`${API}/admin/forum/topics/${id}/lock`, { method: "PUT" });
-    load();
+    try {
+      await fetch(`${API}/admin/forum/topics/${id}/lock`, { method: "PUT" });
+      load();
+    } catch (e) {
+      console.error("Erreur verrouillage :", e);
+    }
   };
 
   const unlock = async (id: number) => {
-    await fetch(`${API}/admin/forum/topics/${id}/unlock`, { method: "PUT" });
-    load();
+    try {
+      await fetch(`${API}/admin/forum/topics/${id}/unlock`, { method: "PUT" });
+      load();
+    } catch (e) {
+      console.error("Erreur déverrouillage :", e);
+    }
   };
 
   return (
@@ -139,11 +162,12 @@ export default function AdminTopicsPage() {
           )}
         </div>
 
+        {/* Pagination */}
         <Pagination
           page={page}
           total={totalPages}
-          onNext={() => setPage(page + 1)}
-          onPrev={() => setPage(page - 1)}
+          onNext={() => page < totalPages && setPage(page + 1)}
+          onPrev={() => page > 1 && setPage(page - 1)}
         />
       </main>
     </ProtectedRoute>

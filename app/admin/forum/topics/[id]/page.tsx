@@ -3,49 +3,54 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import ProtectedRoute from "../../../../components/ProtectedRoute";
+
+import ProtectedRoute from "@/components/ProtectedRoute"; // 🔥 Import corrigé
 
 export default function AdminTopicDetails() {
   const { id } = useParams();
-
   const API = process.env.NEXT_PUBLIC_API_URL;
 
   const [topic, setTopic] = useState<any>(null);
   const [posts, setPosts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const load = async () => {
-    const res = await fetch(`${API}/topics/${id}`);
-    const data = await res.json();
+    try {
+      const res = await fetch(`${API}/topics/${id}`, {
+        cache: "no-store", // 🔥 indispensable
+      });
 
-    setTopic(data.topic);
-    setPosts(data.posts || []);
+      const data = await res.json();
+
+      setTopic(data.topic || null);
+      setPosts(Array.isArray(data.posts) ? data.posts : []);
+    } catch (e) {
+      console.error("Erreur chargement détails sujet admin:", e);
+      setTopic(null);
+      setPosts([]);
+    }
+
+    setLoading(false);
   };
 
   useEffect(() => {
-    load();
-  }, []);
+    if (id) load();
+  }, [id]);
 
   const lockTopic = async () => {
-    await fetch(`${API}/admin/forum/topics/${id}/lock`, {
-      method: "PUT",
-    });
+    await fetch(`${API}/admin/forum/topics/${id}/lock`, { method: "PUT" });
     load();
   };
 
   const unlockTopic = async () => {
-    await fetch(`${API}/admin/forum/topics/${id}/unlock`, {
-      method: "PUT",
-    });
+    await fetch(`${API}/admin/forum/topics/${id}/unlock`, { method: "PUT" });
     load();
   };
 
   const deleteTopic = async () => {
     if (!confirm("Supprimer définitivement ce sujet ?")) return;
 
-    await fetch(`${API}/admin/forum/topics/${id}`, {
-      method: "DELETE",
-    });
-
+    await fetch(`${API}/admin/forum/topics/${id}`, { method: "DELETE" });
     window.location.href = "/admin/forum/topics";
   };
 
@@ -56,10 +61,19 @@ export default function AdminTopicDetails() {
     load();
   };
 
+  if (loading)
+    return (
+      <ProtectedRoute adminOnly>
+        <main className="p-10 bg-[#F7F7F7] min-h-screen">
+          <p className="text-gray-600 italic">Chargement…</p>
+        </main>
+      </ProtectedRoute>
+    );
+
   return (
     <ProtectedRoute adminOnly>
       <main className="min-h-screen p-10 bg-[#F7F7F7]">
-        
+
         <Link
           href="/admin/forum/topics"
           className="text-[#166534] hover:underline"
