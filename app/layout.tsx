@@ -1,37 +1,25 @@
 import "./globals.css";
-import { Inter } from "next/font/google";
-
 import TopNavbar from "@/components/TopNavbar";
 import MainNavbar from "@/components/MainNavbar";
-import MobileNav from "@/components/mobile-nav";
+import { Inter } from "next/font/google";
 
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "FORDAC Connect",
-  description: "Plateforme officielle des Forces Démocratiques pour l’Action et le Changement",
+  description: "Plateforme officielle du FORDAC",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }) {
   return (
     <html lang="fr" className={inter.className}>
-      <body className="bg-gray-50">
+      <body className="bg-gray-50 text-gray-900">
 
-        {/* MOBILE NAV BUTTON */}
-        <div className="md:hidden flex justify-end pr-4 pt-4">
-          <MobileNav />
-        </div>
+        {/* MENU PRINCIPAL */}
+        <TopNavbar />
+        <MainNavbar />
 
-        {/* DESKTOP NAV */}
-        <div className="hidden md:block">
-          <TopNavbar />
-          <MainNavbar />
-        </div>
-
-        <main>{children}</main>
+        <main className="min-h-screen pt-4">{children}</main>
       </body>
     </html>
   );

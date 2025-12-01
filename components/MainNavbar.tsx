@@ -1,40 +1,26 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import MobileMenu from "./MobileMenu";
 
 export default function MainNavbar() {
   return (
-    <nav className="w-full bg-white sticky top-0 z-40 shadow-sm border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-center">
-        <ul className="flex items-center space-x-8 text-[#166534] font-semibold text-sm py-3">
-          <li>
-            <Link href="/demembrements" className="hover:text-yellow-600 transition">
-              Démembrements Territoriaux
-            </Link>
-          </li>
-          <li>
-            <Link href="/ligues" className="hover:text-yellow-600 transition">
-              Ligues
-            </Link>
-          </li>
-          <li>
-            <Link href="/organes-associes" className="hover:text-yellow-600 transition">
-              Organes Associés
-            </Link>
-          </li>
-          <li>
-            <Link href="/galerie" className="hover:text-yellow-600 transition">
-              Galerie
-            </Link>
-          </li>
-          <li>
-            <Link href="/forum" className="hover:text-yellow-600 transition">
-              Forum des Militants
-            </Link>
-          </li>
-        </ul>
+    <>
+      {/* MOBILE */}
+      <div className="md:hidden flex items-center justify-between px-4 py-3 border-b border-gray-200">
+        <MobileMenu />
       </div>
-    </nav>
+
+      {/* DESKTOP */}
+      <nav className="hidden md:block w-full bg-white border-b border-gray-200 shadow-sm">
+        <ul className="max-w-7xl mx-auto flex items-center space-x-10 px-6 py-3 text-[#166534] font-medium">
+          <li><Link href="/dembrements/federations">Démembrements</Link></li>
+          <li><Link href="/ligues/jeunesse">Ligues</Link></li>
+          <li><Link href="/organes-associes/presse">Organes Associés</Link></li>
+          <li><Link href="/galerie/photos">Galerie</Link></li>
+          <li><Link href="/forum">Forum des Militants</Link></li>
+        </ul>
+      </nav>
+    </>
   );
 }
