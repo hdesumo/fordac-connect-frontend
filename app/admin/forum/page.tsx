@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import ProtectedRoute from "../../components/ProtectedRoute";
+import ProtectedRoute from "@/components/ProtectedRoute"; // ✅ Correction IMPORT
 import { useEffect, useState } from "react";
 
 export default function AdminForumDashboard() {
@@ -15,15 +15,25 @@ export default function AdminForumDashboard() {
   });
 
   useEffect(() => {
-    fetch(`${API}/admin/forum/stats`)
-      .then((r) => r.json())
-      .then((data) => setStats(data));
-  }, []);
+    async function loadStats() {
+      try {
+        const res = await fetch(`${API}/admin/forum/stats`, {
+          cache: "no-store",
+        });
+        const data = await res.json();
+        setStats(data);
+      } catch (e) {
+        console.error("Erreur chargement stats forum admin:", e);
+      }
+    }
+
+    loadStats();
+  }, [API]);
 
   return (
     <ProtectedRoute adminOnly>
       <main className="min-h-screen p-10 bg-[#F7F7F7]">
-        
+
         <h1 className="text-4xl font-extrabold text-[#166534] mb-10">
           Tableau de bord du Forum
         </h1>

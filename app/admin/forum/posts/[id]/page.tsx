@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import ProtectedRoute from "../../../../components/ProtectedRoute";
+import ProtectedRoute from "@/components/ProtectedRoute"; // ✅ Import corrigé
 
 export default function AdminPostDetails() {
   const { id } = useParams();
@@ -11,33 +11,74 @@ export default function AdminPostDetails() {
 
   const [post, setPost] = useState<any>(null);
   const [reports, setReports] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const load = async () => {
-    const res = await fetch(`${API}/admin/forum/posts/${id}`);
-    const data = await res.json();
+    try {
+      const res = await fetch(`${API}/admin/forum/posts/${id}`, {
+        cache: "no-store", // ✅ important pour Vercel/Railway
+      });
 
-    setPost(data.post);
-    setReports(data.reports || []);
+      const data = await res.json();
+
+      setPost(data.post || null);
+      setReports(Array.isArray(data.reports) ? data.reports : []);
+    } catch (e) {
+      console.error("Erreur chargement détails message admin:", e);
+      setPost(null);
+      setReports([]);
+    }
+
+    setLoading(false);
   };
 
   useEffect(() => {
-    load();
-  }, []);
+    if (id) load();
+  }, [id]);
 
   const deletePost = async () => {
     if (!confirm("Supprimer ce message ?")) return;
 
-    await fetch(`${API}/admin/forum/posts/${id}`, { method: "DELETE" });
+    try {
+      await fetch(`${API}/admin/forum/posts/${id}`, {
+        method: "DELETE",
+      });
 
-    window.location.href = "/admin/forum/posts";
+      window.location.href = "/admin/forum/posts";
+    } catch (e) {
+      console.error("Erreur suppression message:", e);
+    }
   };
 
   const deleteReport = async (rid: number) => {
-    await fetch(`${API}/admin/reports/${rid}`, { method: "DELETE" });
-    load();
+    try {
+      await fetch(`${API}/admin/reports/${rid}`, { method: "DELETE" });
+      load(); // reload
+    } catch (e) {
+      console.error("Erreur suppression signalement:", e);
+    }
   };
 
-  if (!post) return <div>Chargement…</div>;
+  if (loading)
+    return (
+      <ProtectedRoute adminOnly>
+        <main className="p-10 bg-[#F7F7F7] min-h-screen">
+          <p className="text-gray-600 italic">Chargement…</p>
+        </main>
+      </ProtectedRoute>
+    );
+
+  if (!post)
+    return (
+      <ProtectedRoute adminOnly>
+        <main className="p-10 bg-[#F7F7F7] min-h-screen">
+          <p className="text-gray-600">Message introuvable.</p>
+          <Link href="/admin/forum/posts" className="text-[#166534] hover:underline">
+            ← Retour à la liste
+          </Link>
+        </main>
+      </ProtectedRoute>
+    );
 
   return (
     <ProtectedRoute adminOnly>
@@ -51,13 +92,17 @@ export default function AdminPostDetails() {
           Détail du message
         </h1>
 
+        {/* Bloc message */}
         <div className="bg-white p-8 rounded-xl shadow border mb-10">
           <p className="text-lg text-[#166534] font-semibold">{post.author}</p>
+
           <p className="text-sm text-gray-600">
-            {new Date(post.created_at).toLocaleString("fr-FR")}
+            {post.created_at
+              ? new Date(post.created_at).toLocaleString("fr-FR")
+              : "—"}
           </p>
 
-          <p className="mt-4">{post.content}</p>
+          <p className="mt-4 whitespace-pre-line">{post.content || "—"}</p>
 
           <button
             onClick={deletePost}
@@ -67,6 +112,7 @@ export default function AdminPostDetails() {
           </button>
         </div>
 
+        {/* Bloc signalements */}
         <h2 className="text-2xl font-bold text-[#166534] mb-4">Signalements</h2>
 
         <div className="bg-white p-8 rounded-xl shadow border">
@@ -77,9 +123,12 @@ export default function AdminPostDetails() {
               {reports.map((r) => (
                 <li key={r.id} className="border p-4 rounded-xl">
                   <p>
-                    <strong>Signalé par :</strong> {r.reporter}
+                    <strong>Signalé par :</strong> {r.reporter || "—"}
                   </p>
-                  <p className="text-sm text-gray-700 mt-2">{r.reason}</p>
+
+                  <p className="text-sm text-gray-700 mt-2">
+                    {r.reason || "—"}
+                  </p>
 
                   <button
                     onClick={() => deleteReport(r.id)}
