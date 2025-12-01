@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { adminFetch } from "../../../utils/adminFetch";
+
+import { adminFetch } from "@/lib/adminApi"; // 🔥 import corrigé
 
 export default function MessageDetailPage() {
   const { id } = useParams();
@@ -14,30 +15,40 @@ export default function MessageDetailPage() {
     setLoading(true);
 
     try {
+      // 🔥 Appel 100% compatible (1 argument)
       const res = await adminFetch(`/api/admin/messages/history`);
       const data = await res.json();
 
-      const msg = data.find((m: any) => m.id.toString() === id.toString());
-      setMessage(msg || null);
+      const msg = data.find(
+        (m: any) => m.id.toString() === id.toString()
+      );
 
+      setMessage(msg || null);
     } catch (err) {
-      console.error(err);
+      console.error("Erreur chargement message:", err);
+      setMessage(null);
     }
 
     setLoading(false);
   }
 
   useEffect(() => {
-    loadMessage();
-  }, []);
+    if (id) loadMessage();
+  }, [id]); // 🔥 dépendance correcte
 
   if (loading) return <p>Chargement...</p>;
 
   if (!message) {
     return (
-      <div>
-        <p className="text-red-600">Message introuvable.</p>
-        <Link href="/admin/messages" className="text-blue-700 underline">
+      <div className="space-y-4">
+        <p className="text-red-600 font-semibold">
+          Message introuvable.
+        </p>
+
+        <Link
+          href="/admin/messages"
+          className="text-blue-700 underline"
+        >
           Retour
         </Link>
       </div>
@@ -46,7 +57,7 @@ export default function MessageDetailPage() {
 
   return (
     <div className="space-y-6">
-      
+
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Détail du message</h1>
 
@@ -70,18 +81,26 @@ export default function MessageDetailPage() {
         {message.target_type === "targeted" && (
           <div className="p-4 bg-gray-100 rounded">
             <p className="font-semibold">Zone ciblée :</p>
-            <pre className="text-sm mt-2">
-              {JSON.stringify(JSON.parse(message.target_value), null, 2)}
+
+            <pre className="text-sm mt-2 whitespace-pre-wrap">
+              {JSON.stringify(
+                JSON.parse(message.target_value || "{}"),
+                null,
+                2
+              )}
             </pre>
           </div>
         )}
 
         <div className="p-4 bg-gray-50 rounded border">
-          <p className="whitespace-pre-line text-gray-800">{message.content}</p>
+          <p className="whitespace-pre-line text-gray-800">
+            {message.content}
+          </p>
         </div>
 
         <p className="text-gray-600 text-sm">
-          Envoyé le : {new Date(message.created_at).toLocaleString()}
+          Envoyé le :{" "}
+          {new Date(message.created_at).toLocaleString("fr-FR")}
         </p>
 
         {message.target_type !== "global" && (
@@ -92,7 +111,6 @@ export default function MessageDetailPage() {
             Voir les membres ciblés
           </Link>
         )}
-
       </div>
     </div>
   );
