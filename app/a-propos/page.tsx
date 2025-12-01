@@ -1,134 +1,184 @@
 "use client";
+
 import { motion } from "framer-motion";
-import Image from "next/image";
 
 export default function AProposPage() {
   return (
-    <main className="min-h-screen bg-gray-50 text-gray-800">
-      {/* Section bannière */}
-      <section className="relative h-64 md:h-80 bg-gradient-to-r from-green-800 to-yellow-400 flex items-center justify-center">
-        <div className="absolute inset-0 opacity-10">
-          <Image
-            src="/logo-fordac.png"
-            alt="Logo FORDAC"
-            fill
-            className="object-contain object-center"
-          />
-        </div>
-        <h1 className="relative text-4xl md:text-5xl font-bold text-white text-center drop-shadow-lg">
-          À propos du FORDAC
-        </h1>
-      </section>
-
-      {/* Contenu principal */}
-      <section className="max-w-5xl mx-auto px-6 py-16 space-y-12">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
+    <div className="bg-gray-50 text-gray-900">
+      {/* ===============================
+          HERO SECTION
+      =============================== */}
+      <section className="bg-gradient-to-br from-fordacGreen to-fordacDark text-white py-20 px-6 text-center">
+        <motion.h1
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
+          className="text-4xl md:text-6xl font-extrabold mb-4"
         >
-          <h2 className="text-3xl font-bold text-green-800 mb-4">
-            Forces Démocratiques pour l’Action et le Changement (FORDAC)
-          </h2>
-          <p className="text-lg leading-relaxed text-justify">
-            Le FORDAC est un mouvement politique engagé pour un développement
-            équilibré, fondé sur la justice, la solidarité et la responsabilité
-            citoyenne. Implanté dans le département du Moungo, il œuvre à
-            renforcer la participation des populations aux décisions locales,
-            tout en promouvant une gouvernance transparente et équitable.
-          </p>
-        </motion.div>
+          À propos du{" "}
+          <span className="text-fordacGold">
+            FORDAC
+          </span>
+        </motion.h1>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="grid md:grid-cols-2 gap-10 items-center"
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.8 }}
+          className="max-w-3xl mx-auto text-lg md:text-xl text-gray-100"
         >
-          <div>
-            <h3 className="text-2xl font-semibold text-green-800 mb-3">
-              Notre vision
-            </h3>
-            <p className="text-gray-700 leading-relaxed text-justify">
-              Le FORDAC place l’humain au cœur de l’action politique. Notre
-              vision repose sur la création d’une société où chaque citoyen
-              trouve sa place, participe activement à la construction du bien
-              commun et bénéficie des fruits du développement. Nous croyons en
-              une politique de proximité, d’écoute et d’engagement.
-            </p>
-          </div>
-          <div className="flex justify-center">
-            <Image
-              src="/images/vision-fordac.png"
-              alt="Vision du FORDAC"
-              width={500}
-              height={400}
-              className="rounded-2xl shadow-lg"
-            />
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="grid md:grid-cols-2 gap-10 items-center"
-        >
-          <div className="flex justify-center order-2 md:order-1">
-            <Image
-              src="/images/engagement-fordac.png"
-              alt="Engagement du FORDAC"
-              width={500}
-              height={400}
-              className="rounded-2xl shadow-lg"
-            />
-          </div>
-          <div className="order-1 md:order-2">
-            <h3 className="text-2xl font-semibold text-green-800 mb-3">
-              Nos valeurs fondamentales
-            </h3>
-            <ul className="list-disc list-inside text-gray-700 leading-relaxed space-y-2">
-              <li>
-                <strong>Justice sociale :</strong> chaque citoyen doit pouvoir
-                vivre dignement grâce à un accès équitable aux ressources.
-              </li>
-              <li>
-                <strong>Solidarité :</strong> le progrès collectif repose sur
-                l’unité et l’entraide.
-              </li>
-              <li>
-                <strong>Transparence :</strong> la gestion publique doit être
-                exemplaire et responsable.
-              </li>
-              <li>
-                <strong>Engagement :</strong> l’action politique doit servir
-                l’intérêt général et non des ambitions personnelles.
-              </li>
-            </ul>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-center mt-12"
-        >
-          <p className="text-lg font-medium text-gray-700 italic">
-            “Le changement durable commence par une action collective éclairée.”
-          </p>
-          <p className="text-green-800 font-bold mt-2">
-            — FORDAC, Forces Démocratiques pour l’Action et le Changement
-          </p>
-        </motion.div>
+          Les Forces Démocratiques pour l’Action et le Changement sont un
+          mouvement politique citoyen engagé pour une gouvernance juste,
+          moderne et profondément ancrée dans le progrès social.
+        </motion.p>
       </section>
 
-      {/* Bande de fermeture */}
-      <footer className="bg-green-800 text-white text-center py-8 mt-16">
-        <p className="text-sm">
-          © {new Date().getFullYear()} FORDAC — Tous droits réservés.
+      {/* ===============================
+          HISTOIRE / IDENTITÉ
+      =============================== */}
+      <section className="py-20 px-6 max-w-6xl mx-auto">
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="text-3xl md:text-4xl font-bold text-fordacGreen text-center mb-12"
+        >
+          Identité & Fondements
+        </motion.h2>
+
+        <div className="bg-white rounded-xl shadow-md p-8 leading-relaxed text-lg">
+          <p className="mb-6">
+            Le FORDAC est un parti politique camerounais dont l’ambition est de
+            reconstruire une nation fondée sur la participation citoyenne, 
+            la démocratie interne, la justice sociale et l’équité territoriale.
+          </p>
+
+          <p className="mb-6">
+            Inspiré par une vision moderne de la gouvernance, le FORDAC place
+            l’action concrète au cœur de son projet. Il s’inscrit dans un
+            mouvement national réformateur, proche des réalités des citoyens,
+            engagé pour la transparence, le développement local et un État
+            efficace.
+          </p>
+        </div>
+      </section>
+
+      {/* ===============================
+          VISION & MISSION
+      =============================== */}
+      <section className="py-20 bg-gray-100">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+
+            {/* Vision */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7 }}
+              className="bg-white rounded-xl shadow-md p-8"
+            >
+              <h3 className="text-2xl font-semibold text-fordacGold mb-4">
+                🌍 Vision
+              </h3>
+              <p className="leading-relaxed text-gray-700">
+                Construire un Cameroun nouveau, démocratique et équitable, où
+                chaque citoyen peut rêver, entreprendre et réussir dans un cadre
+                juste, sécurisé et transparent.
+              </p>
+            </motion.div>
+
+            {/* Mission */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.7 }}
+              className="bg-white rounded-xl shadow-md p-8"
+            >
+              <h3 className="text-2xl font-semibold text-fordacGold mb-4">
+                🎯 Mission
+              </h3>
+              <p className="leading-relaxed text-gray-700">
+                Promouvoir la participation citoyenne, renforcer la démocratie
+                interne, proposer des alternatives politiques ambitieuses et 
+                réalistes pour un développement durable et inclusif.
+              </p>
+            </motion.div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ===============================
+          VALEURS
+      =============================== */}
+      <section className="py-20 px-6 max-w-6xl mx-auto">
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="text-3xl md:text-4xl font-bold text-center text-fordacGreen mb-12"
+        >
+          Nos Valeurs Fondamentales
+        </motion.h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+          {[
+            {
+              title: "Démocratie",
+              text: "Une gouvernance transparente, participative, centrée sur le bien commun.",
+            },
+            {
+              title: "Éthique",
+              text: "L’intégrité et la responsabilité guident l’action quotidienne.",
+            },
+            {
+              title: "Développement",
+              text: "Une volonté d’investir dans l’humain, l’économie et les territoires.",
+            },
+          ].map((v, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.2, duration: 0.6 }}
+              className="bg-white rounded-xl shadow-md p-8 text-center"
+            >
+              <h3 className="text-xl font-semibold text-fordacGold mb-3">
+                {v.title}
+              </h3>
+              <p className="text-gray-700 leading-relaxed">{v.text}</p>
+            </motion.div>
+          ))}
+
+        </div>
+      </section>
+
+      {/* ===============================
+          SECTION FINALE — ADHÉSION
+      =============================== */}
+      <section className="py-16 bg-fordacGreen text-white text-center">
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="text-3xl md:text-4xl font-extrabold mb-6"
+        >
+          Rejoignez un mouvement qui place l’action au cœur du changement
+        </motion.h2>
+
+        <p className="max-w-2xl mx-auto text-lg mb-8 text-gray-100">
+          Ensemble, construisons un Cameroun fort, juste et tourné vers
+          l’avenir.
         </p>
-      </footer>
-    </main>
+
+        <a
+          href="/adhesion"
+          className="bg-fordacGold text-fordacDark font-semibold px-8 py-3 rounded-md hover:bg-yellow-400 transition"
+        >
+          Devenir Membre
+        </a>
+      </section>
+    </div>
   );
 }

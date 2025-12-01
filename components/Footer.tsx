@@ -1,142 +1,98 @@
 "use client";
 
 import Link from "next/link";
-import { Facebook, Twitter, Youtube, Mail } from "lucide-react";
+import { Mail, Facebook, Twitter, Youtube } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-emerald-900 text-white py-10 border-t border-emerald-700 mt-10">
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-10">
-        
-        {/* ===================== Colonne 1 : Présentation ===================== */}
+    <footer className="bg-[#166534] text-white pt-16 pb-10 mt-20 border-t border-green-900">
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12">
+
+        {/* Colonne 1 – Identité du Parti */}
         <div>
-          <h2 className="text-lg font-semibold text-amber-400 mb-3">
-            FORDAC Connect
-          </h2>
-          <p className="text-sm text-gray-200 leading-relaxed">
-            <span className="font-semibold">
-              Les Forces Démocratiques pour l’Action et le Changement
-            </span>{" "}
-            œuvrent pour une société plus juste, plus solidaire et tournée vers
-            l’avenir. <br />
-            Rejoignez le mouvement et participez à la construction d’un
-            Cameroun meilleur.
+          <h3 className="text-xl font-extrabold mb-4">FORDAC Connect</h3>
+          <p className="text-sm leading-relaxed text-white/80">
+            Les Forces Démocratiques pour l’Action et le Changement œuvrent pour
+            une société juste, solidaire et centrée sur le progrès humain.
+          </p>
+          <p className="text-sm leading-relaxed text-white/80 mt-3">
+            Rejoignez le mouvement et contribuez à la transformation du Cameroun.
           </p>
         </div>
 
-        {/* ===================== Colonne 2 : Navigation ===================== */}
+        {/* Colonne 2 – Liens essentiels */}
         <div>
-          <h2 className="text-lg font-semibold text-amber-400 mb-3">
-            Navigation
-          </h2>
+          <h3 className="text-xl font-bold mb-4">Liens utiles</h3>
           <ul className="space-y-2 text-sm">
             <li>
-              <Link href="/" className="hover:text-amber-400 transition">
-                Accueil
+              <Link href="/a-propos" className="hover:text-yellow-400">
+                À propos du Parti
               </Link>
             </li>
             <li>
-              <Link href="/le-parti" className="hover:text-amber-400 transition">
-                Le Parti
-              </Link>
-            </li>
-            <li>
-              <Link href="/president" className="hover:text-amber-400 transition">
+              <Link href="/president" className="hover:text-yellow-400">
                 Le Président
               </Link>
             </li>
             <li>
-              <Link href="/organes" className="hover:text-amber-400 transition">
-                Les Organes
+              <Link href="/adhesion" className="hover:text-yellow-400">
+                Adhésion
               </Link>
             </li>
             <li>
-              <Link href="/forum" className="hover:text-amber-400 transition">
+              <Link href="/forum" className="hover:text-yellow-400">
                 Forum des Militants
               </Link>
             </li>
+
+            {/* Mentions officielles */}
+            <li className="mt-4">
+              <Link href="/mentions-legales" className="hover:text-yellow-400">
+                Mentions légales
+              </Link>
+            </li>
+            <li>
+              <Link href="/confidentialite" className="hover:text-yellow-400">
+                Politique de confidentialité
+              </Link>
+            </li>
           </ul>
         </div>
 
-        {/* ===================== Colonne 3 : Liens utiles ===================== */}
+        {/* Colonne 3 – Contact & Réseaux */}
         <div>
-          <h2 className="text-lg font-semibold text-amber-400 mb-3">
-            Liens utiles
-          </h2>
-          <ul className="space-y-2 text-sm">
+          <h3 className="text-xl font-bold mb-4">Contact</h3>
 
-            <li>
-              <Link href="/contact" className="hover:text-amber-400 transition">
-                Nous Contacter
-              </Link>
-            </li>
+          <div className="flex items-center space-x-2 text-sm">
+            <Mail size={18} />
+            <a
+              href="mailto:contact@fordac-connect.org"
+              className="hover:text-yellow-400"
+            >
+              contact@fordac-connect.org
+            </a>
+          </div>
 
-            <li>
-              <Link href="/politique-de-confidentialite" className="hover:text-amber-400 transition">
-                Politique de Confidentialité
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/mentions-legales" className="hover:text-amber-400 transition">
-                Mentions Légales
-              </Link>
-            </li>
-
-            {/* ======== AJOUT ICI ======== */}
-            <li>
-              <Link href="/superadmin/login" className="hover:text-amber-400 transition">
-                Connexion SuperAdmin
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/admin/login" className="hover:text-amber-400 transition">
-                Connexion Admin
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/membre/login" className="hover:text-amber-400 transition">
-                Connexion Militant
-              </Link>
-            </li>
-            {/* =========================== */}
-
-          </ul>
-        </div>
-
-        {/* ===================== Colonne 4 : Contact ===================== */}
-        <div>
-          <h2 className="text-lg font-semibold text-amber-400 mb-3">
-            Contact
-          </h2>
-          <ul className="text-sm text-gray-200 space-y-3">
-            <li className="flex items-center space-x-2">
-              <Mail size={16} />
-              <span>contact@fordac-connect.org</span>
-            </li>
-            <li className="flex items-center space-x-4">
-              <a href="#" className="hover:text-amber-400 transition" aria-label="Facebook">
-                <Facebook size={18} />
-              </a>
-              <a href="#" className="hover:text-amber-400 transition" aria-label="Twitter">
-                <Twitter size={18} />
-              </a>
-              <a href="#" className="hover:text-amber-400 transition" aria-label="YouTube">
-                <Youtube size={18} />
-              </a>
-            </li>
-          </ul>
+          {/* Social icons */}
+          <div className="flex space-x-4 mt-4">
+            <a href="#" className="hover:text-yellow-400">
+              <Facebook size={22} />
+            </a>
+            <a href="#" className="hover:text-yellow-400">
+              <Twitter size={22} />
+            </a>
+            <a href="#" className="hover:text-yellow-400">
+              <Youtube size={22} />
+            </a>
+          </div>
         </div>
       </div>
 
-      {/* ===================== Bas de page ===================== */}
-      <div className="border-t border-emerald-700 mt-10 pt-6 text-center text-sm text-gray-300">
-        <p>© 2025 FORDAC Connect — Tous droits réservés.</p>
-        <p className="text-xs mt-2 text-gray-400">
-          Une initiative citoyenne portée par les Forces Démocratiques pour
-          l’Action et le Changement.
+      {/* Bas de page */}
+      <div className="mt-12 pt-6 border-t border-green-900 text-center text-sm text-white/70">
+        <p>© {new Date().getFullYear()} FORDAC Connect — Tous droits réservés.</p>
+        <p className="mt-2">
+          Une initiative citoyenne portée par les Forces Démocratiques pour l’Action et le Changement.
         </p>
       </div>
     </footer>

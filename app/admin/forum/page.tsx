@@ -1,252 +1,100 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import ProtectedRoute from "../../components/ProtectedRoute";
+import { useEffect, useState } from "react";
 
-export default function AdminForumPage() {
-  const [loaded, setLoaded] = useState(false);
+export default function AdminForumDashboard() {
+  const API = process.env.NEXT_PUBLIC_API_URL;
 
-  // Filtres
-  const [search, setSearch] = useState("");
-  const [statut, setStatut] = useState("");
-  const [secteur, setSecteur] = useState("");
-  const [arrondissement, setArrondissement] = useState("");
-
-  // Territoire FORDAC
-  const secteurs = ["Moungo Nord", "Moungo Sud"];
-
-  const arrondissementsParSecteur: any = {
-    "Moungo Nord": [
-      "Nkongsamba 1er",
-      "Nkongsamba 2e",
-      "Nkongsamba 3e",
-      "Loum",
-      "Manjo",
-      "Baré-Bakem",
-    ],
-    "Moungo Sud": ["Melong", "Njombé-Penja", "Mbanga", "Santchou"],
-  };
-
-  const [sujets, setSujets] = useState<any[]>([]);
-
-  useEffect(() => {
-    const fakeSujets = [
-      {
-        id: 1,
-        titre: "Réunion du Moungo Nord le 28 février",
-        auteur: "Marie Nguema",
-        secteur: "Moungo Nord",
-        arrondissement: "Nkongsamba 1er",
-        date: "2025-02-05",
-        statut: "actif",
-      },
-      {
-        id: 2,
-        titre: "Proposition d’activité pour Njombé-Penja",
-        auteur: "Pierre Mebongo",
-        secteur: "Moungo Sud",
-        arrondissement: "Njombé-Penja",
-        date: "2025-02-02",
-        statut: "signalé",
-      },
-      {
-        id: 3,
-        titre: "Questions sur les cartes de membre",
-        auteur: "Jean Dupont",
-        secteur: "Moungo Sud",
-        arrondissement: "Melong",
-        date: "2025-01-28",
-        statut: "fermé",
-      },
-    ];
-
-    setSujets(fakeSujets);
-    setLoaded(true);
-  }, []);
-
-  if (!loaded) return <div className="p-6">Chargement...</div>;
-
-  // FILTRAGE
-  const filtered = sujets.filter((s) => {
-    const matchesSearch =
-      search === "" ||
-      s.titre.toLowerCase().includes(search.toLowerCase()) ||
-      s.auteur.toLowerCase().includes(search.toLowerCase());
-
-    const matchesStatut =
-      statut === "" || s.statut === statut;
-
-    const matchesSecteur =
-      secteur === "" || s.secteur === secteur;
-
-    const matchesArr =
-      arrondissement === "" || s.arrondissement === arrondissement;
-
-    return (
-      matchesSearch && matchesStatut && matchesSecteur && matchesArr
-    );
+  const [stats, setStats] = useState({
+    topics: 0,
+    posts: 0,
+    reports: 0,
+    categories: 0,
   });
 
-  // Placeholders actions
-  function fermer(id: number) {
-    alert("Sujet fermé ID " + id);
-  }
-  function ouvrir(id: number) {
-    alert("Sujet réouvert ID " + id);
-  }
-  function supprimer(id: number) {
-    if (confirm("Supprimer ce sujet ?")) {
-      alert("Sujet supprimé ID " + id);
-    }
-  }
+  useEffect(() => {
+    fetch(`${API}/admin/forum/stats`)
+      .then((r) => r.json())
+      .then((data) => setStats(data));
+  }, []);
 
   return (
-    <div className="space-y-8">
+    <ProtectedRoute adminOnly>
+      <main className="min-h-screen p-10 bg-[#F7F7F7]">
+        
+        <h1 className="text-4xl font-extrabold text-[#166534] mb-10">
+          Tableau de bord du Forum
+        </h1>
 
-      {/* TITRE */}
-      <h1 className="text-2xl font-bold text-gray-800">
-        Modération du forum
-      </h1>
+        {/* Statistiques */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
 
-      {/* FILTRES */}
-      <div className="bg-white p-5 rounded-lg shadow space-y-4">
+          <div className="bg-white p-6 rounded-xl shadow border text-center">
+            <p className="text-5xl font-bold text-[#166534]">{stats.topics}</p>
+            <p className="text-gray-600 mt-2">Sujets</p>
+          </div>
 
-        {/* Ligne 1 */}
-        <div className="flex flex-wrap gap-4">
+          <div className="bg-white p-6 rounded-xl shadow border text-center">
+            <p className="text-5xl font-bold text-[#166534]">{stats.posts}</p>
+            <p className="text-gray-600 mt-2">Messages</p>
+          </div>
 
-          <input
-            type="text"
-            placeholder="Recherche (titre ou auteur)"
-            className="border p-2 rounded flex-1 min-w-[250px]"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+          <div className="bg-white p-6 rounded-xl shadow border text-center">
+            <p className="text-5xl font-bold text-[#166534]">
+              {stats.reports}
+            </p>
+            <p className="text-gray-600 mt-2">Signalements</p>
+          </div>
 
-          <select
-            value={statut}
-            onChange={(e) => setStatut(e.target.value)}
-            className="border p-2 rounded min-w-[200px]"
-          >
-            <option value="">Statut</option>
-            <option value="actif">Actif</option>
-            <option value="fermé">Fermé</option>
-            <option value="signalé">Signalé</option>
-          </select>
+          <div className="bg-white p-6 rounded-xl shadow border text-center">
+            <p className="text-5xl font-bold text-[#166534]">
+              {stats.categories}
+            </p>
+            <p className="text-gray-600 mt-2">Catégories</p>
+          </div>
 
         </div>
 
-        {/* Ligne 2 */}
-        <div className="flex flex-wrap gap-4">
+        {/* Liens rapides */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-          <select
-            value={secteur}
-            onChange={(e) => {
-              setSecteur(e.target.value);
-              setArrondissement("");
-            }}
-            className="border p-2 rounded min-w-[200px]"
+          <Link
+            href="/admin/forum/topics"
+            className="bg-white p-8 rounded-xl shadow border hover:bg-gray-50"
           >
-            <option value="">Secteur</option>
-            {secteurs.map((s) => (
-              <option key={s}>{s}</option>
-            ))}
-          </select>
+            <h3 className="text-2xl font-bold text-[#166534]">Gérer les Sujets</h3>
+            <p className="text-gray-600 mt-2">Voir, modérer, verrouiller…</p>
+          </Link>
 
-          <select
-            value={arrondissement}
-            onChange={(e) => setArrondissement(e.target.value)}
-            className="border p-2 rounded min-w-[200px]"
-            disabled={!secteur}
+          <Link
+            href="/admin/forum/posts"
+            className="bg-white p-8 rounded-xl shadow border hover:bg-gray-50"
           >
-            <option value="">Arrondissement</option>
-            {secteur &&
-              arrondissementsParSecteur[secteur].map((a: string) => (
-                <option key={a}>{a}</option>
-              ))}
-          </select>
+            <h3 className="text-2xl font-bold text-[#166534]">Tous les Messages</h3>
+            <p className="text-gray-600 mt-2">Liste globale des messages.</p>
+          </Link>
+
+          <Link
+            href="/admin/forum/signalements"
+            className="bg-white p-8 rounded-xl shadow border hover:bg-gray-50"
+          >
+            <h3 className="text-2xl font-bold text-[#166534]">Signalements</h3>
+            <p className="text-gray-600 mt-2">Messages signalés par les membres.</p>
+          </Link>
+
+          <Link
+            href="/admin/forum/categories"
+            className="bg-white p-8 rounded-xl shadow border hover:bg-gray-50"
+          >
+            <h3 className="text-2xl font-bold text-[#166534]">Catégories</h3>
+            <p className="text-gray-600 mt-2">Créer et gérer les catégories.</p>
+          </Link>
+
         </div>
-      </div>
 
-      {/* TABLEAU SUJETS */}
-      <div className="bg-white rounded-lg shadow overflow-auto">
-        <table className="w-full">
-          <thead className="bg-gray-200 text-gray-700">
-            <tr>
-              <th className="p-3 text-left">Titre</th>
-              <th className="p-3 text-center">Auteur</th>
-              <th className="p-3 text-center">Secteur</th>
-              <th className="p-3 text-center">Arrondissement</th>
-              <th className="p-3 text-center">Date</th>
-              <th className="p-3 text-center">Statut</th>
-              <th className="p-3 text-center">Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {filtered.map((s) => (
-              <tr key={s.id} className="border-b hover:bg-gray-50">
-
-                <td className="p-3">{s.titre}</td>
-                <td className="p-3 text-center">{s.auteur}</td>
-                <td className="p-3 text-center">{s.secteur}</td>
-                <td className="p-3 text-center">{s.arrondissement}</td>
-                <td className="p-3 text-center">{s.date}</td>
-
-                <td className="p-3 text-center">
-                  {s.statut === "actif" && (
-                    <span className="text-green-600 font-semibold">Actif</span>
-                  )}
-                  {s.statut === "fermé" && (
-                    <span className="text-red-600 font-semibold">Fermé</span>
-                  )}
-                  {s.statut === "signalé" && (
-                    <span className="text-yellow-600 font-semibold">Signalé</span>
-                  )}
-                </td>
-
-                {/* ACTIONS */}
-                <td className="p-3 flex gap-2 justify-center">
-
-                  {/* Voir détails */}
-                  <Link
-                    href={`/admin/forum/${s.id}`}
-                    className="px-2 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
-                  >
-                    Voir
-                  </Link>
-
-                  {s.statut === "actif" && (
-                    <button
-                      onClick={() => fermer(s.id)}
-                      className="px-2 py-1 bg-yellow-600 text-white rounded text-sm hover:bg-yellow-700"
-                    >
-                      ⚠ Fermer
-                    </button>
-                  )}
-
-                  {s.statut === "fermé" && (
-                    <button
-                      onClick={() => ouvrir(s.id)}
-                      className="px-2 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700"
-                    >
-                      ✓ Ouvrir
-                    </button>
-                  )}
-
-                  <button
-                    onClick={() => supprimer(s.id)}
-                    className="px-2 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700"
-                  >
-                    🗑 Suppr.
-                  </button>
-                </td>
-
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-    </div>
+      </main>
+    </ProtectedRoute>
   );
 }
