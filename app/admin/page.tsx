@@ -3,62 +3,62 @@
 import { useEffect, useState } from "react";
 import { getDashboardStats } from "@/lib/adminApi";
 
-export default function AdminDashboard() {
+export default function AdminDashboardPage() {
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const token = localStorage.getItem("adminToken");
+  async function loadStats() {
+    setLoading(true);
 
-    if (!token) return;
+    try {
+      const token =
+        typeof window !== "undefined"
+          ? localStorage.getItem("token")
+          : null;
 
-    async function load() {
-      const data = await getDashboardStats(token);
-
-      if (!data) {
-        console.error("⚠ Impossible de charger les statistiques");
-      } else {
-        setStats(data);
-      }
-
-      setLoading(false);
+      const data = await getDashboardStats(token || "");
+      setStats(data || {});
+    } catch (e) {
+      console.error("Erreur chargement stats:", e);
     }
 
-    load();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen text-xl">
-        Chargement du tableau de bord…
-      </div>
-    );
+    setLoading(false);
   }
 
+  useEffect(() => {
+    loadStats();
+  }, []);
+
+  if (loading) return <p>Chargement du tableau de bord…</p>;
+
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">Dashboard Admin</h1>
+    <main className="p-10 space-y-8">
+      <h1 className="text-3xl font-bold text-[#166534]">
+        Tableau de bord Administrateur
+      </h1>
 
-      {!stats ? (
-        <p className="text-red-500">Impossible de charger les statistiques</p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-4 shadow bg-white rounded">
-            <h2 className="font-bold">Membres</h2>
-            <p>{stats.total_members ?? 0}</p>
-          </div>
-
-          <div className="p-4 shadow bg-white rounded">
-            <h2 className="font-bold">Publications</h2>
-            <p>{stats.total_posts ?? 0}</p>
-          </div>
-
-          <div className="p-4 shadow bg-white rounded">
-            <h2 className="font-bold">Notifications</h2>
-            <p>{stats.total_notifications ?? 0}</p>
-          </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white shadow rounded-lg p-6">
+          <h2 className="text-xl font-semibold">Total Membres</h2>
+          <p className="text-3xl font-bold mt-2">
+            {stats?.total_members ?? 0}
+          </p>
         </div>
-      )}
-    </div>
+
+        <div className="bg-white shadow rounded-lg p-6">
+          <h2 className="text-xl font-semibold">Messages envoyés</h2>
+          <p className="text-3xl font-bold mt-2">
+            {stats?.messages_sent ?? 0}
+          </p>
+        </div>
+
+        <div className="bg-white shadow rounded-lg p-6">
+          <h2 className="text-xl font-semibold">Signalements</h2>
+          <p className="text-3xl font-bold mt-2">
+            {stats?.reports ?? 0}
+          </p>
+        </div>
+      </div>
+    </main>
   );
 }
