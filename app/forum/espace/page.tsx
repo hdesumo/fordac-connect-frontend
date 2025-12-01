@@ -1,75 +1,100 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ProtectedRoute from "../../../components/ProtectedRoute";
-import IntranetHeader from "../../../components/IntranetHeader";
-import ForumNav from "../../../components/ForumNav";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import Link from "next/link";
 
 export default function ForumEspacePage() {
-  const [user, setUser] = useState<any>(null);
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
-
-  const API = process.env.NEXT_PUBLIC_API_URL;
+  const [topics, setTopics] = useState([]);
 
   useEffect(() => {
-    const stored = localStorage.getItem("user");
-    if (stored) setUser(JSON.parse(stored));
+    fetchTopics();
   }, []);
 
-  const submitTopic = async () => {
-    if (!title.trim()) return alert("Veuillez renseigner un titre");
+  const fetchTopics = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/forum/topics`,
+        {
+          headers: {
+            Authorization:
+              "Bearer " + (typeof window !== "undefined"
+                ? localStorage.getItem("memberToken")
+                : ""),
+          },
+        }
+      );
 
-    await fetch(`${API}/topics/create`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, category_id: category }),
-    });
-
-    window.location.href = "/forum/sujets";
+      const data = await res.json();
+      setTopics(data || []);
+    } catch (error) {
+      console.error("Erreur lors du chargement des topics:", error);
+    }
   };
 
   return (
     <ProtectedRoute>
-      <IntranetHeader userName={user?.name || "Utilisateur"} />
-      <ForumNav />
+      <div className="bg-white w-full">
 
-      <main className="min-h-screen bg-[#F7F7F7] py-16 px-6">
-        <div className="max-w-3xl mx-auto bg-white p-10 shadow rounded-xl border">
-
-          <h1 className="text-3xl font-bold text-[#166534] mb-8">
-            Créer un Nouveau Sujet
+        {/* HERO TOP */}
+        <section className="bg-[#166534] py-16 text-center">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white">
+            Espace Forum
           </h1>
+          <p className="text-white/80 text-lg mt-3">
+            Choisissez un thème et entrez dans les échanges internes du FORDAC.
+          </p>
+        </section>
 
-          <select
-            className="w-full border p-4 rounded-xl mb-6"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            <option value="">Choisir une catégorie</option>
-            <option value="1">Actualités</option>
-            <option value="2">Organisation interne</option>
-            <option value="3">Débats politiques</option>
-            <option value="4">Développement communautaire</option>
-          </select>
+        {/* CONTENU */}
+        <section className="max-w-6xl mx-auto px-6 py-14">
+          <h2 className="text-2xl font-bold text-[#166534] mb-6">
+            Thématiques du Forum
+          </h2>
 
-          <input
-            type="text"
-            placeholder="Titre du sujet"
-            className="w-full p-4 border rounded-xl mb-6"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+          {topics.length === 0 ? (
+            <p className="text-gray-600">Aucune thématique disponible pour le moment.</p>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-6">
+              {topics.map((topic: any) => (
+                <Link
+                  key={topic.id}
+                  href={`/forum/sujets/${topic.id}`}
+                  className="p-6 bg-white border rounded-xl shadow-sm hover:shadow-md transition hover:bg-green-50"
+                >
+                  <h3 className="text-xl font-semibold text-[#166534]">
+                    {topic.title}
+                  </h3>
+                  <p className="text-gray-600 mt-2">
+                    {topic.description ?? "Section de discussion interne"}
+                  </p>
+                  <div className="mt-4 text-sm text-gray-500">
+                    {topic.total_posts ?? 0} publications
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
 
-          <button
-            onClick={submitTopic}
-            className="w-full bg-[#166534] text-white py-4 rounded-xl"
-          >
-            Publier le sujet
-          </button>
+        {/* RÈGLES DU FORUM */}
+        <section className="bg-[#E8F3EC] py-14">
+          <div className="max-w-4xl mx-auto px-6">
+            <h3 className="text-2xl font-bold text-[#166534] mb-4">
+              Règles du Forum
+            </h3>
+            <ul className="list-disc ml-6 space-y-2 text-gray-700 leading-relaxed">
+              <li>Respect strict entre militants — aucun propos déplacé.</li>
+              <li>Contributions constructives en lien avec les objectifs du Parti.</li>
+              <li>Interdiction des insultes, dénigrements ou incitations à la division.</li>
+              <li>Pas de diffusion d’informations internes sensibles hors du cadre autorisé.</li>
+              <li>Les administrateurs peuvent approuver, masquer ou supprimer les messages.</li>
+              <li>Les membres peuvent éditer un message pendant 30 minutes après publication.</li>
+            </ul>
+          </div>
+        </section>
 
-        </div>
-      </main>
+      </div>
     </ProtectedRoute>
   );
 }
