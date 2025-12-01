@@ -1,167 +1,111 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import ProtectedRoute from "@/components/ProtectedRoute";
+import { useParams } from "next/navigation";
 import Pagination from "@/components/Pagination";
-import EditorBox from "@/components/EditorBox";
-import Link from "next/link";
+import { adminFetch } from "@/lib/adminApi";
 
 export default function ForumPostPage() {
   const { id } = useParams();
-  const router = useRouter();
 
   const [post, setPost] = useState<any>(null);
   const [replies, setReplies] = useState<any[]>([]);
   const [page, setPage] = useState(1);
-  const [replyText, setReplyText] = useState("");
   const [totalPages, setTotalPages] = useState(1);
-  const [canEdit, setCanEdit] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("memberToken") : null;
+  // Charger le post + les réponses paginées
+  async function loadData() {
+    setLoading(true);
+    try {
+      // 👉 Charger le post
+      const postRes = await adminFetch(`/api/forum/posts/${id}`);
+      const postData = await postRes.json();
+      setPost(postData);
+
+      // 👉 Charger les réponses paginées
+      const repliesRes = await adminFetch(
+        `/api/forum/posts/${id}/replies?page=${page}`
+      );
+      const repliesData = await repliesRes.json();
+
+      setReplies(repliesData.items || []);
+      setTotalPages(repliesData.totalPages || 1);
+    } catch (error) {
+      console.error("Erreur chargement post forum:", error);
+    }
+    setLoading(false);
+  }
 
   useEffect(() => {
-    fetchPost();
-  }, [page]);
+    loadData();
+  }, [id, page]);
 
-  const fetchPost = async () => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/forum/posts/${id}?page=${page}`,
-      { headers: { Authorization: "Bearer " + token } }
+  if (loading) {
+    return (
+      <main className="p-10">
+        <p>Chargement du sujet…</p>
+      </main>
     );
+  }
 
-    const data = await res.json();
-
-    setPost(data.post || null);
-    setReplies(data.replies || []);
-    setTotalPages(data.totalPages || 1);
-
-    // gestion édition 30 min
-    if (data.post) {
-      const created = new Date(data.post.created_at).getTime();
-      const now = Date.now();
-      const diff = (now - created) / 60000; // minutes
-      setCanEdit(diff < 30);
-    }
-  };
-
-  const submitReply = async () => {
-    if (replyText.trim().length < 5) return alert("Message trop court.");
-
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/forum/replies/create`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify({ post_id: id, content: replyText }),
-      }
+  if (!post) {
+    return (
+      <main className="p-10">
+        <p className="text-red-600 font-semibold">Sujet introuvable.</p>
+      </main>
     );
-
-    setReplyText("");
-    fetchPost();
-  };
+  }
 
   return (
-    <ProtectedRoute>
-      <div className="bg-white w-full">
+    <main className="p-10 max-w-4xl mx-auto space-y-10">
+      {/* Titre du sujet */}
+      <header>
+        <h1 className="text-3xl font-bold text-[#166534]">{post.title}</h1>
+        <p className="text-gray-600 text-sm mt-1">
+          Publié par {post.author_name} — {post.created_at}
+        </p>
+      </header>
 
-        {/* HERO */}
-        <section className="bg-[#166534] py-16 text-center px-4">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white">
-            Publication
-          </h1>
-        </section>
+      {/* Contenu du post */}
+      <article className="bg-white shadow rounded-lg p-6 leading-relaxed whitespace-pre-wrap">
+        {post.content}
+      </article>
 
-        {/* CONTENU */}
-        <div className="max-w-4xl mx-auto px-6 py-12">
+      {/* Réponses */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-bold text-[#166534]">
+          Réponses ({replies.length})
+        </h2>
 
-          {!post ? (
-            <p className="text-gray-600">Chargement...</p>
-          ) : (
-            <>
-              {/* POST */}
-              <div className="bg-white border rounded-xl p-6 shadow-sm mb-8">
-                <h2 className="text-3xl font-bold text-[#166534]">
-                  {post.title}
-                </h2>
+        {replies.length === 0 ? (
+          <p>Aucune réponse pour l’instant.</p>
+        ) : (
+          replies.map((reply) => (
+            <div key={reply.id} className="bg-white shadow rounded-lg p-4">
+              <p className="font-semibold">{reply.author_name}</p>
+              <p className="text-gray-600 text-sm">{reply.created_at}</p>
+              <p className="mt-2 whitespace-pre-wrap leading-relaxed">
+                {reply.content}
+              </p>
+            </div>
+          ))
+        )}
+      </section>
 
-                <p className="text-gray-700 leading-relaxed mt-4 whitespace-pre-wrap">
-                  {post.content}
-                </p>
-
-                <div className="text-sm text-gray-500 mt-4">
-                  Posté le {new Date(post.created_at).toLocaleString()}
-                </div>
-
-                {canEdit && (
-                  <Link
-                    href={`/forum/post/${id}/edit`}
-                    className="inline-block text-sm mt-4 text-blue-700 hover:underline"
-                  >
-                    Modifier votre message (encore {Math.ceil(30 - ((Date.now() - new Date(post.created_at).getTime()) / 60000))} minutes)
-                  </Link>
-                )}
-              </div>
-
-              {/* REPLIES */}
-              <h3 className="text-2xl font-bold text-[#166534] mb-4">
-                Réponses
-              </h3>
-
-              <div className="space-y-5 mb-6">
-                {replies.length === 0 && (
-                  <p className="text-gray-600">Aucune réponse pour le moment.</p>
-                )}
-
-                {replies.map((rep: any) => (
-                  <div
-                    key={rep.id}
-                    className="bg-white border rounded-lg p-5 shadow-sm"
-                  >
-                    <p className="text-gray-800 whitespace-pre-wrap">
-                      {rep.content}
-                    </p>
-                    <div className="text-sm text-gray-500 mt-3">
-                      Posté le {new Date(rep.created_at).toLocaleString()}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <Pagination
-                page={page}
-                totalPages={totalPages}
-                onPageChange={setPage}
-              />
-
-              {/* REPLY BOX */}
-              <div className="mt-10">
-                <h4 className="text-xl font-semibold text-[#166534] mb-2">
-                  Répondre à cette publication
-                </h4>
-
-                <EditorBox
-                  value={replyText}
-                  onChange={setReplyText}
-                  placeholder="Votre réponse..."
-                />
-
-                <button
-                  onClick={submitReply}
-                  className="mt-4 bg-[#166534] hover:bg-[#0f4a2c] text-white 
-                             font-semibold px-6 py-2 rounded-md transition"
-                >
-                  Publier la réponse
-                </button>
-              </div>
-            </>
-          )}
-        </div>
+      {/* Pagination */}
+      <div className="pt-6">
+        <Pagination
+          page={page}
+          total={totalPages}
+          onNext={() => {
+            if (page < totalPages) setPage(page + 1);
+          }}
+          onPrev={() => {
+            if (page > 1) setPage(page - 1);
+          }}
+        />
       </div>
-    </ProtectedRoute>
+    </main>
   );
 }
