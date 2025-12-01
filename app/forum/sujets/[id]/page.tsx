@@ -2,121 +2,108 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
-import ProtectedRoute from "@/components/ProtectedRoute";
 import Pagination from "@/components/Pagination";
+import { adminFetch } from "@/lib/adminApi"; // si c'est membreFetch dis-moi, je change
 
 export default function ForumTopicPage() {
   const { id } = useParams();
+
   const [topic, setTopic] = useState<any>(null);
-  const [posts, setPosts] = useState<any[]>([]);
+  const [replies, setReplies] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
 
-  const token =
-    typeof window !== "undefined"
-      ? localStorage.getItem("memberToken")
-      : null;
+  async function loadData() {
+    setLoading(true);
+    try {
+      // Charger le sujet
+      const topicRes = await adminFetch(`/api/forum/topics/${id}`);
+      const topicData = await topicRes.json();
+      setTopic(topicData);
+
+      // Charger les réponses paginées
+      const repliesRes = await adminFetch(
+        `/api/forum/topics/${id}/replies?page=${page}`
+      );
+
+      const repliesData = await repliesRes.json();
+
+      setReplies(repliesData.items || []);
+      setTotalPages(repliesData.totalPages || 1);
+    } catch (error) {
+      console.error("Erreur chargement topic:", error);
+    }
+    setLoading(false);
+  }
 
   useEffect(() => {
-    fetchTopic();
-    fetchPosts();
+    loadData();
   }, [id, page]);
 
-  const fetchTopic = async () => {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/forum/topics/${id}`,
-        {
-          headers: { Authorization: "Bearer " + token },
-        }
-      );
-      const data = await res.json();
-      setTopic(data.topic || null);
-    } catch (err) {
-      console.error("Erreur topic:", err);
-    }
-  };
+  if (loading)
+    return (
+      <main className="p-10">
+        <p>Chargement du sujet…</p>
+      </main>
+    );
 
-  const fetchPosts = async () => {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/forum/topics/${id}/posts?page=${page}`,
-        {
-          headers: { Authorization: "Bearer " + token },
-        }
-      );
-
-      const data = await res.json();
-      setPosts(data.posts || []);
-      setTotalPages(data.totalPages || 1);
-    } catch (err) {
-      console.error("Erreur posts:", err);
-    }
-  };
+  if (!topic)
+    return (
+      <main className="p-10">
+        <p className="text-red-600 font-semibold">Sujet introuvable.</p>
+      </main>
+    );
 
   return (
-    <ProtectedRoute>
-      <div className="w-full bg-white">
+    <main className="p-10 max-w-4xl mx-auto space-y-10">
+      {/* Titre */}
+      <header>
+        <h1 className="text-3xl font-bold text-[#166534]">{topic.title}</h1>
+        <p className="text-gray-600 text-sm mt-1">
+          Publié par {topic.author_name} — {topic.created_at}
+        </p>
+      </header>
 
-        {/* HERO */}
-        <section className="bg-[#166534] py-16 text-center px-4">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white">
-            {topic ? topic.title : "Chargement..."}
-          </h1>
-          <p className="text-white/80 mt-3 max-w-2xl mx-auto text-lg">
-            {topic?.description ||
-              "Sélectionnez une publication pour rejoindre les échanges."}
-          </p>
-        </section>
+      {/* Contenu principal */}
+      <article className="bg-white shadow rounded-lg p-6 whitespace-pre-wrap leading-relaxed">
+        {topic.content}
+      </article>
 
-        {/* POSTS LIST */}
-        <section className="max-w-5xl mx-auto px-6 py-14">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-[#166534]">
-              Publications
-            </h2>
+      {/* Réponses */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-bold text-[#166534]">
+          Réponses ({replies.length})
+        </h2>
 
-            <Link
-              href={`/forum/sujets/${id}/nouveau`}
-              className="bg-[#166534] text-white px-5 py-2 rounded-md font-semibold hover:bg-[#0f4a2c] transition"
-            >
-              Nouveau post
-            </Link>
-          </div>
-
-          {posts.length === 0 ? (
-            <p className="text-gray-600">Aucune publication dans cette thématique.</p>
-          ) : (
-            <div className="space-y-6">
-              {posts.map((post: any) => (
-                <Link
-                  key={post.id}
-                  href={`/forum/post/${post.id}`}
-                  className="block bg-white border rounded-xl p-5 shadow-sm hover:shadow-md hover:bg-green-50 transition"
-                >
-                  <h3 className="text-xl font-semibold text-[#166534]">
-                    {post.title}
-                  </h3>
-                  <p className="text-gray-700 mt-2 line-clamp-2">
-                    {post.content}
-                  </p>
-                  <div className="mt-4 text-sm text-gray-500">
-                    Posté le {new Date(post.created_at).toLocaleDateString()}
-                  </div>
-                </Link>
-              ))}
+        {replies.length === 0 ? (
+          <p>Aucune réponse pour l’instant.</p>
+        ) : (
+          replies.map((reply) => (
+            <div key={reply.id} className="bg-white shadow rounded-lg p-4">
+              <p className="font-semibold">{reply.author_name}</p>
+              <p className="text-gray-600 text-sm">{reply.created_at}</p>
+              <p className="mt-2 whitespace-pre-wrap leading-relaxed">
+                {reply.content}
+              </p>
             </div>
-          )}
+          ))
+        )}
+      </section>
 
-          {/* Pagination */}
-          <Pagination
-            page={page}
-            totalPages={totalPages}
-            onPageChange={setPage}
-          />
-        </section>
+      {/* Pagination */}
+      <div className="pt-6">
+        <Pagination
+          page={page}
+          total={totalPages}
+          onNext={() => {
+            if (page < totalPages) setPage(page + 1);
+          }}
+          onPrev={() => {
+            if (page > 1) setPage(page - 1);
+          }}
+        />
       </div>
-    </ProtectedRoute>
+    </main>
   );
 }
