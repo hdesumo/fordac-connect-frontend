@@ -14,7 +14,8 @@ export default function MessageTargetsPage() {
     setLoading(true);
 
     try {
-      const res = await adminFetch(`/api/admin/messages/targets/${id}`);
+      // ✅ Correction : ajout du deuxième argument {} pour TypeScript
+      const res = await adminFetch(`/api/admin/messages/targets/${id}`, {});
       const data = await res.json();
 
       if (Array.isArray(data)) setTargets(data);
