@@ -1,100 +1,107 @@
 "use client";
 
 import Link from "next/link";
-import { Mail, Facebook, Twitter, Youtube } from "lucide-react";
+import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#166534] text-white pt-16 pb-10 mt-20 border-t border-green-900">
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12">
+    <footer className="bg-[#0f3e20] text-white pt-10 pb-6 mt-12 border-t border-[#0c331a]">
+      <div className="mx-auto max-w-7xl px-4 grid grid-cols-1 md:grid-cols-3 gap-10">
 
-        {/* Colonne 1 – Identité du Parti */}
+        {/* ================================
+            1. IDENTITÉ DU PARTI
+        ================================= */}
         <div>
-          <h3 className="text-xl font-extrabold mb-4">FORDAC Connect</h3>
-          <p className="text-sm leading-relaxed text-white/80">
-            Les Forces Démocratiques pour l’Action et le Changement œuvrent pour
-            une société juste, solidaire et centrée sur le progrès humain.
-          </p>
-          <p className="text-sm leading-relaxed text-white/80 mt-3">
-            Rejoignez le mouvement et contribuez à la transformation du Cameroun.
+          <div className="flex items-center gap-3 mb-4">
+            <Image
+              src="/images/logo.png"
+              width={45}
+              height={45}
+              alt="FORDAC Logo"
+              className="object-contain"
+            />
+            <div className="leading-tight">
+              <h3 className="text-lg font-semibold">FORDAC</h3>
+              <p className="text-xs tracking-wide">
+                Forces Démocratiques pour l’Action et le Changement
+              </p>
+            </div>
+          </div>
+
+          <p className="text-sm text-gray-200">
+            Un mouvement engagé pour le développement communautaire,
+            la justice sociale et l’action publique.
           </p>
         </div>
 
-        {/* Colonne 2 – Liens essentiels */}
+        {/* ================================
+            2. LIENS UTILES
+        ================================= */}
         <div>
-          <h3 className="text-xl font-bold mb-4">Liens utiles</h3>
+          <h4 className="text-lg font-semibold mb-3 text-[#4ade80]">
+            Liens utiles
+          </h4>
+
           <ul className="space-y-2 text-sm">
             <li>
-              <Link href="/a-propos" className="hover:text-yellow-400">
-                À propos du Parti
-              </Link>
-            </li>
-            <li>
-              <Link href="/president" className="hover:text-yellow-400">
-                Le Président
-              </Link>
-            </li>
-            <li>
-              <Link href="/adhesion" className="hover:text-yellow-400">
+              <Link href="/adhesion" className="hover:text-[#4ade80]">
                 Adhésion
               </Link>
             </li>
+
             <li>
-              <Link href="/forum" className="hover:text-yellow-400">
-                Forum des Militants
+              <Link href="/login" className="hover:text-[#4ade80]">
+                Connexion (Membres)
               </Link>
             </li>
 
-            {/* Mentions officielles */}
-            <li className="mt-4">
-              <Link href="/mentions-legales" className="hover:text-yellow-400">
-                Mentions légales
+            <li>
+              <Link href="/contact" className="hover:text-[#4ade80]">
+                Contact
               </Link>
             </li>
+
             <li>
-              <Link href="/confidentialite" className="hover:text-yellow-400">
-                Politique de confidentialité
+              <Link href="/mentions-legales" className="hover:text-[#4ade80]">
+                Mentions légales
               </Link>
             </li>
           </ul>
         </div>
 
-        {/* Colonne 3 – Contact & Réseaux */}
+        {/* ================================
+            3. ESPACE ADMINISTRATIF
+        ================================= */}
         <div>
-          <h3 className="text-xl font-bold mb-4">Contact</h3>
+          <h4 className="text-lg font-semibold mb-3 text-[#4ade80]">
+            Administration
+          </h4>
 
-          <div className="flex items-center space-x-2 text-sm">
-            <Mail size={18} />
-            <a
-              href="mailto:contact@fordac-connect.org"
-              className="hover:text-yellow-400"
-            >
-              contact@fordac-connect.org
-            </a>
-          </div>
+          <ul className="space-y-2 text-sm">
 
-          {/* Social icons */}
-          <div className="flex space-x-4 mt-4">
-            <a href="#" className="hover:text-yellow-400">
-              <Facebook size={22} />
-            </a>
-            <a href="#" className="hover:text-yellow-400">
-              <Twitter size={22} />
-            </a>
-            <a href="#" className="hover:text-yellow-400">
-              <Youtube size={22} />
-            </a>
-          </div>
+            <li>
+              <Link
+                href="/superadmin-login"
+                className="hover:text-[#4ade80]"
+              >
+                Connexion SuperAdmin
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                href="/admin-login"
+                className="hover:text-[#4ade80]"
+              >
+                Connexion Admin
+              </Link>
+            </li>
+
+            <li className="mt-4 text-gray-200 text-sm">
+              Email : contact@fordac.org
+            </li>
+          </ul>
         </div>
       </div>
 
-      {/* Bas de page */}
-      <div className="mt-12 pt-6 border-t border-green-900 text-center text-sm text-white/70">
-        <p>© {new Date().getFullYear()} FORDAC Connect — Tous droits réservés.</p>
-        <p className="mt-2">
-          Une initiative citoyenne portée par les Forces Démocratiques pour l’Action et le Changement.
-        </p>
-      </div>
-    </footer>
-  );
-}
+      {/* =================
