@@ -26,7 +26,7 @@ export default function AdhesionPage() {
   const [loading, setLoading] = useState(false);
 
   const updateField = (field: string, value: any) => {
-    setForm((prev: any) => ({
+    setForm((prev) => ({
       ...prev,
       [field]: value,
     }));
@@ -79,105 +79,105 @@ export default function AdhesionPage() {
   };
 
   const secteurs = Object.keys(moungoData.secteurs);
-  const arrondissements: string[] = form.secteur
+  const arrondissements = form.secteur
     ? (moungoData.secteurs as any)[form.secteur]
     : [];
 
   return (
-    <main className="max-w-3xl mx-auto py-24 px-6 text-white">
+    <main className="max-w-3xl mx-auto py-20 px-6 min-h-screen bg-[#0f3e20] text-white">
       <motion.h1
-        className="text-4xl font-bold text-center text-fordacGreen mb-10"
+        className="text-3xl md:text-4xl font-bold text-center mb-10"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
         Formulaire d’adhésion au FORDAC
       </motion.h1>
 
-      {/* FORM GLASSMORPHISM */}
       <form
         onSubmit={handleSubmit}
         className="
           bg-white/10 
-          backdrop-blur-md 
+          backdrop-blur-xl 
           border border-white/20 
           shadow-xl 
-          p-10 rounded-2xl 
+          p-8 md:p-10 
+          rounded-2xl 
           space-y-6 
           text-white
         "
       >
-        {/* Nom */}
+        {/* NOM COMPLET */}
         <div>
           <label className="font-semibold">Nom complet</label>
           <input
             type="text"
-            className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 focus:ring-2 focus:ring-fordacGreen outline-none"
+            className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 focus:ring-2 focus:ring-[#4ade80] outline-none"
             value={form.name}
             onChange={(e) => updateField("name", e.target.value)}
             placeholder="Votre nom complet"
           />
         </div>
 
-        {/* Email */}
+        {/* EMAIL */}
         <div>
           <label className="font-semibold">Adresse e-mail</label>
           <input
             type="email"
-            className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 focus:ring-2 focus:ring-fordacGreen outline-none"
+            className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 focus:ring-2 focus:ring-[#4ade80] outline-none"
             value={form.email}
             onChange={(e) => updateField("email", e.target.value)}
             placeholder="exemple@mail.com"
           />
         </div>
 
-        {/* Téléphone */}
+        {/* TÉLÉPHONE */}
         <div>
           <label className="font-semibold">Téléphone</label>
           <input
             type="tel"
-            className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 focus:ring-2 focus:ring-fordacGreen outline-none"
+            className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 focus:ring-2 focus:ring-[#4ade80] outline-none"
             value={form.phone}
             onChange={(e) => updateField("phone", e.target.value)}
             placeholder="+237..."
           />
         </div>
 
-        {/* Date de naissance */}
+        {/* DATE DE NAISSANCE */}
         <div>
           <label className="font-semibold">Date de naissance</label>
           <input
             type="date"
-            className="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 focus:ring-2 focus:ring-fordacGreen outline-none"
+            className="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 focus:ring-2 focus:ring-[#4ade80] outline-none"
             value={form.birthdate}
             onChange={(e) => updateField("birthdate", e.target.value)}
           />
         </div>
 
-        {/* Profession */}
+        {/* PROFESSION */}
         <div>
           <label className="font-semibold">Profession</label>
           <input
             type="text"
-            className="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 placeholder-white/60 focus:ring-2 focus:ring-fordacGreen outline-none"
+            className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 focus:ring-2 focus:ring-[#4ade80] outline-none"
             value={form.profession}
             onChange={(e) => updateField("profession", e.target.value)}
             placeholder="Votre profession"
           />
         </div>
 
-        {/* Quartier */}
+        {/* QUARTIER */}
         <div>
           <label className="font-semibold">Quartier</label>
           <input
             type="text"
-            className="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 placeholder-white/60 focus:ring-2 focus:ring-fordacGreen outline-none"
+            className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 focus:ring-2 focus:ring-[#4ade80] outline-none"
             value={form.quartier}
             onChange={(e) => updateField("quartier", e.target.value)}
             placeholder="Votre quartier"
           />
         </div>
 
-        {/* Département */}
+        {/* DEPARTEMENT */}
         <div>
           <label className="font-semibold">Département</label>
           <input
@@ -188,11 +188,11 @@ export default function AdhesionPage() {
           />
         </div>
 
-        {/* Secteur */}
+        {/* SECTEUR */}
         <div>
           <label className="font-semibold">Secteur</label>
           <select
-            className="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 focus:ring-2 focus:ring-fordacGreen outline-none"
+            className="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 focus:ring-2 focus:ring-[#4ade80] outline-none"
             value={form.secteur}
             onChange={(e) => updateField("secteur", e.target.value)}
           >
@@ -205,12 +205,12 @@ export default function AdhesionPage() {
           </select>
         </div>
 
-        {/* Arrondissement */}
+        {/* ARRONDISSEMENT */}
         <div>
           <label className="font-semibold">Arrondissement / Commune</label>
           <select
             disabled={!form.secteur}
-            className="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 focus:ring-2 focus:ring-fordacGreen outline-none"
+            className="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 focus:ring-2 focus:ring-[#4ade80] outline-none"
             value={form.arrondissement}
             onChange={(e) => updateField("arrondissement", e.target.value)}
           >
@@ -223,11 +223,11 @@ export default function AdhesionPage() {
           </select>
         </div>
 
-        {/* Niveau */}
+        {/* NIVEAU */}
         <div>
           <label className="font-semibold">Niveau d’adhésion</label>
           <select
-            className="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 focus:ring-2 focus:ring-fordacGreen outline-none"
+            className="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 focus:ring-2 focus:ring-[#4ade80] outline-none"
             value={form.membership_level}
             onChange={(e) =>
               updateField("membership_level", e.target.value)
@@ -239,32 +239,32 @@ export default function AdhesionPage() {
           </select>
         </div>
 
-        {/* Charte */}
+        {/* CHARTE */}
         <div className="flex items-start gap-3">
           <input
             type="checkbox"
             checked={form.terms_accepted}
             onChange={(e) => updateField("terms_accepted", e.target.checked)}
-            className="accent-fordacGreen"
+            className="accent-[#4ade80]"
           />
           <span>
             J’ai lu et j’accepte les termes de la{" "}
             <a
               href="/charte-mutuelle.pdf"
               target="_blank"
-              className="text-fordacGreen underline"
+              className="text-[#4ade80] underline"
             >
               charte de la Mutuelle du Moungo
             </a>.
           </span>
         </div>
 
-        {/* Erreur */}
+        {/* ERREUR */}
         {error && (
           <p className="text-red-400 text-center font-semibold">{error}</p>
         )}
 
-        {/* Bouton */}
+        {/* BOUTON */}
         <button
           type="submit"
           disabled={loading}
@@ -273,8 +273,9 @@ export default function AdhesionPage() {
             py-3 
             rounded-lg 
             text-lg 
-            bg-fordacGreen 
-            hover:bg-fordacGreen/80 
+            bg-[#4ade80] 
+            text-[#0f3e20]
+            hover:bg-[#4ade80]/80 
             transition
             font-semibold
           "

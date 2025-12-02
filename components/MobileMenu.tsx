@@ -15,7 +15,7 @@ export default function MobileMenu() {
 
   return (
     <>
-      {/* BUTTON */}
+      {/* BUTTON TO OPEN MENU */}
       <button
         onClick={() => setOpen(true)}
         className="md:hidden text-[#166534] text-2xl px-3 py-2"
@@ -46,9 +46,19 @@ export default function MobileMenu() {
             exit={{ x: -300 }}
             transition={{ type: "tween", duration: 0.3 }}
           >
-            {/* HEADER */}
+            {/* HEADER WITH LOGO */}
             <div className="flex items-center justify-between p-4 border-b">
-              <span className="text-lg font-semibold text-[#166534]">FORDAC</span>
+              <div className="flex items-center gap-3">
+                <img
+                  src="/images/logo.png"
+                  alt="FORDAC"
+                  className="w-10 h-10 object-contain"
+                />
+                <span className="text-lg font-semibold text-[#166534]">
+                  FORDAC
+                </span>
+              </div>
+
               <button
                 onClick={() => setOpen(false)}
                 className="text-[#166534]"
@@ -66,12 +76,12 @@ export default function MobileMenu() {
                   Accueil
                 </Link>
 
-                {/* A PROPOS */}
+                {/* À PROPOS */}
                 <Link href="/a-propos" onClick={() => setOpen(false)} className="block py-2">
                   À Propos
                 </Link>
 
-                {/* PRESIDENT */}
+                {/* PRÉSIDENT */}
                 <Link href="/president" onClick={() => setOpen(false)} className="block py-2">
                   Le Président
                 </Link>
@@ -108,7 +118,7 @@ export default function MobileMenu() {
                   </AnimatePresence>
                 </div>
 
-                {/* DEMEMBREMENTS */}
+                {/* DÉMEMBREMENTS */}
                 <div>
                   <button
                     className="w-full flex justify-between items-center py-2"

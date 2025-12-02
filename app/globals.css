@@ -49,7 +49,7 @@ img {
 
 /* Classe utilisée pour le texte défilant */
 .animate-marquee {
-  animation: marquee 20s linear infinite;
+  animation: marquee 60s linear infinite;
 }
 
 /* ===============================
