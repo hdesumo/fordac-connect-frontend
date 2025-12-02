@@ -2,7 +2,8 @@ import "./globals.css";
 import TopNavbar from "@/components/TopNavbar";
 import MainNavbar from "@/components/MainNavbar";
 import MobileMenu from "@/components/MobileMenu";
-import MarqueeBanner from "@/components/MarqueeBanner"; // ← Correction ici
+import MarqueeBanner from "@/components/MarqueeBanner";
+import Footer from "@/components/Footer";
 import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -12,12 +13,16 @@ export const metadata = {
   description: "Portail officiel du FORDAC",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="fr">
       <body className={inter.className}>
-        
-        {/* ===== MOBILE MENU (visible only on smartphones) ===== */}
+
+        {/* ===== MOBILE MENU (visible only on smartphone) ===== */}
         <div className="md:hidden fixed top-3 left-3 z-50">
           <MobileMenu />
         </div>
@@ -36,7 +41,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <MarqueeBanner />
 
         {/* ===== PAGE CONTENT ===== */}
-        <main className="min-h-screen pt-4">{children}</main>
+        <main className="min-h-screen pt-4">
+          {children}
+        </main>
+
+        {/* ===== FOOTER ===== */}
+        <Footer />
 
       </body>
     </html>
