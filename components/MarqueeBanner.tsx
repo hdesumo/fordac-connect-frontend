@@ -1,34 +1,13 @@
 "use client";
-import { motion } from "framer-motion";
 
 export default function MarqueeBanner() {
-  const slogans = [
-    "Démocratie",
-    "Transparence",
-    "Progrès",
-    "Action citoyenne",
-    "Engagement collectif",
-    "Innovation politique",
-    "Solidarité nationale"
-  ];
-
   return (
-    <div className="bg-primary text-light overflow-hidden py-4 shadow-inner border-t-2 border-secondary">
-      <motion.div
-        className="flex space-x-12 text-lg font-semibold uppercase tracking-wide whitespace-nowrap"
-        animate={{ x: ["0%", "-100%"] }}
-        transition={{
-          repeat: Infinity,
-          duration: 20,
-          ease: "linear"
-        }}
-      >
-        {slogans.concat(slogans).map((text, i) => (
-          <span key={i} className="text-secondary">
-            {text}
-          </span>
-        ))}
-      </motion.div>
+    <div className="bg-gradient-to-r from-[#166534] to-[#0f3e20] text-white py-2 overflow-hidden whitespace-nowrap border-y border-[#0c331a]">
+      <div className="animate-marquee inline-block text-sm md:text-base tracking-wide px-4">
+        🔔 FORDAC — Forces Démocratiques pour l’Action et le Changement • 
+        Pour un Cameroun uni, fort et solidaire • 
+        Engagement • Démocratie • Action • Rejoignez le mouvement aujourd’hui !
+      </div>
     </div>
   );
 }

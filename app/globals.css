@@ -4,10 +4,9 @@
 @tailwind utilities;
 
 /* =========================================
-   🌍 GLOBAL STYLES — FORDAC CONNECT
-   Optimisé Mobile + Desktop – Novembre 2025
+   🌍 GLOBAL STYLES — FORDAC CONNECT (2025)
+   Institutionnel, propre, harmonisé
    ========================================= */
-
 
 /* ===============================
    RESET + TYPOGRAPHIE GLOBALE
@@ -18,8 +17,8 @@ body {
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
-  background-color: #083c33; /* Vert foncé du thème */
-  color: #ffffff;
+  background-color: #ffffff; /* ✔ Fond neutre */
+  color: #000000;            /* ✔ Texte neutre (évite le blanc sur blanc) */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, Helvetica, Arial, sans-serif;
 }
@@ -35,11 +34,29 @@ img {
   display: block;
 }
 
-
 /* ===============================
-   NAVBAR (Desk + Mobile)
+   MARQUEE ANIMATION (MANQUAIT)
    =============================== */
 
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Classe utilisée pour le texte défilant */
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+
+/* ===============================
+   NAVBAR (Desktop + Mobile)
+   =============================== */
+
+/* Utilisé pour flouter la navbar sur scroll */
 .navbar-blur {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -70,7 +87,6 @@ img {
 .nav-button-connexion:hover {
   background-color: #0f7a62;
 }
-
 
 /* ===============================
    HERO / HEADER
@@ -103,7 +119,6 @@ img {
   margin-top: 2rem;
 }
 
-
 /* ===============================
    SECTIONS
    =============================== */
@@ -120,7 +135,6 @@ img {
   opacity: 0.9;
 }
 
-
 /* ===============================
    CARDS / BLOCS
    =============================== */
@@ -132,7 +146,6 @@ img {
   padding: 2rem;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
 }
-
 
 /* ===============================
    FOOTER
@@ -149,9 +162,8 @@ footer a:hover {
   color: #ffffff;
 }
 
-
 /* ===============================
-   MOBILE RESPONSIVE FIXES
+   RESPONSIVE FIXES
    =============================== */
 
 @media (max-width: 768px) {
