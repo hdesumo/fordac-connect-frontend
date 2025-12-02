@@ -104,4 +104,12 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* =================
+      {/* ======================
+          COPYRIGHT
+      ======================= */}
+      <div className="text-center text-xs text-gray-300 mt-10 pt-4 border-t border-[#14502f]">
+        © {new Date().getFullYear()} FORDAC — Tous droits réservés.
+      </div>
+    </footer>
+  );
+}
