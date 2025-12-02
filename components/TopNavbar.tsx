@@ -31,7 +31,6 @@ export default function TopNavbar() {
           <Link href="/" className="hover:text-black transition">Accueil</Link>
           <Link href="/a-propos" className="hover:text-black transition">À Propos</Link>
           <Link href="/president" className="hover:text-black transition">Le Président</Link>
-          <Link href="/organes-dirigeants" className="hover:text-black transition">Organes Dirigeants</Link>
 
           {/* CTA */}
           <Link
