@@ -37,8 +37,7 @@ export default function AdhesionSuccessPage() {
         </h1>
 
         {/* MESSAGE PRINCIPAL */}
-        <p className="text-white/90 text-lg leading-relaxed mb-6">
-          Merci d’avoir rejoint le mouvement FORDAC.  
+        <p className="text-white/90 text-lg leading-relaxed mb-6">  
           Votre demande d’adhésion a bien été enregistrée et sera examinée par les instances compétentes.
         </p>
 
