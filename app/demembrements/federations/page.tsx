@@ -12,8 +12,9 @@ export default function FederationsPage() {
 
         <p className="text-white/80 text-lg md:text-xl mt-6 max-w-3xl mx-auto leading-relaxed">
           Dans le département du Moungo, l’organisation du FORDAC repose 
-          sur deux grands secteurs territoriaux : le <strong>Moungo Nord</strong> 
-          et le <strong>Moungo Sud</strong>.  
+          sur deux grands secteurs territoriaux : le <strong>Moungo Nord</strong>{" "}
+          et le <strong>Moungo Sud</strong>.
+
         </p>
 
         <p className="text-white/70 text-lg max-w-3xl mx-auto mt-4 leading-relaxed">
