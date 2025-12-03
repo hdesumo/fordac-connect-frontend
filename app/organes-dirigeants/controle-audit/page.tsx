@@ -23,7 +23,8 @@ export default function ControleAuditPage() {
         <p className="text-lg">
           Le Comité de Contrôle & Audit est l’organe chargé de vérifier la
           gestion financière et patrimoniale du FORDAC.  
-          
+          Il garantit la transparence, la conformité et la bonne gouvernance
+          dans toutes les activités du parti.
         </p>
 
         {/* Mission générale */}
@@ -80,7 +81,7 @@ export default function ControleAuditPage() {
             Le Comité de Contrôle & Audit est composé de membres ayant une forte
             expérience dans les domaines de la gestion, des finances, du droit,
             de l’administration ou de l’audit.  
-            Leur sélection repose sur le professionnalisme et
+            Leur sélection repose sur le professionnalisme, la rigueur et
             l’indépendance.
           </p>
         </section>
