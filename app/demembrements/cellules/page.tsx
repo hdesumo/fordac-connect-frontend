@@ -1,85 +1,47 @@
-import React from "react";
+"use client";
 
 export default function CellulesPage() {
   return (
-    <div className="max-w-5xl mx-auto px-4 py-12">
-      {/* Titre principal */}
-      <h1 className="text-4xl font-bold text-gray-900 mb-6">
-        Les Cellules du FORDAC
-      </h1>
+    <main className="min-h-screen bg-fordacDark text-white py-28 px-6">
 
-      {/* Introduction */}
-      <p className="text-lg text-gray-700 leading-relaxed mb-10">
-        Les Cellules représentent l’unité de base du FORDAC.  
-        Elles forment la structure la plus proche des populations, 
-        animent la vie militante au quotidien et permettent de traduire 
-        concrètement les orientations du parti sur le terrain.
-      </p>
+      {/* HERO */}
+      <section className="max-w-5xl mx-auto text-center mb-20">
+        <h1 className="text-4xl md:text-5xl font-extrabold">
+          Les Cellules du FORDAC
+        </h1>
 
-      {/* Rôle et missions */}
-      <section className="mb-10">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-          Rôle et Missions
-        </h2>
-        <ul className="list-disc pl-6 space-y-3 text-gray-700">
-          <li>
-            Mobiliser les militants au niveau local et favoriser 
-            l’adhésion de nouveaux membres.
-          </li>
-          <li>
-            Organiser les activités de sensibilisation, d'écoute et 
-            d’engagement communautaire.
-          </li>
-          <li>
-            Identifier les préoccupations des populations et les transmettre 
-            aux Sous-sections et Sections.
-          </li>
-          <li>
-            Former les membres à la vision, aux valeurs et aux principes 
-            du parti.
-          </li>
-          <li>
-            Participer aux campagnes électorales et aux initiatives citoyennes.
-          </li>
-        </ul>
-      </section>
+        <p className="text-white/80 text-lg md:text-xl mt-6 max-w-3xl mx-auto leading-relaxed">
+          Les Cellules constituent l’échelon le plus proche des populations, 
+          au cœur des villages, quartiers, blocs et zones de vie du Moungo.
+        </p>
 
-      {/* Fonctionnement */}
-      <section className="mb-10">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-          Fonctionnement
-        </h2>
-        <p className="text-gray-700 leading-relaxed">
-          Une Cellule est dirigée par un Bureau composé au minimum d’un Chef de Cellule, 
-          d’un Secrétaire et d’un Trésorier.  
-          Selon les besoins locaux, d’autres responsabilités peuvent être ajoutées 
-          (organisation, communication, mobilisation, etc.).
+        <p className="text-white/70 text-lg max-w-3xl mx-auto mt-4 leading-relaxed">
+          Elles assurent la mobilisation directe, le relais des informations, 
+          et la continuité de l’action militante sur le terrain.
         </p>
       </section>
 
-      {/* Implantation */}
-      <section className="mb-10">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-          Implantation Territoriale
-        </h2>
-        <p className="text-gray-700 leading-relaxed">
-          Les Cellules couvrent les zones 
-          d’habitation.  
-          Elles constituent le premier niveau d’expression de la démocratie interne 
-          et assurent le lien direct entre le parti et la base militante.
-        </p>
+      {/* CARTES */}
+      <section className="max-w-4xl mx-auto grid md:grid-cols-2 gap-10">
+        {[
+          "Cellules Urbaines",
+          "Cellules Rurales",
+          "Cellules Communautaires",
+          "Cellules Professionnelles"
+        ].map((item, i) => (
+          <div
+            key={i}
+            className="bg-white/10 backdrop-blur-md p-8 rounded-xl border border-white/20 
+                       hover:bg-white/20 transition shadow-xl"
+          >
+            <h3 className="text-xl font-bold mb-2">{item}</h3>
+            <p className="text-white/80 leading-relaxed">
+              Espace de proximité, d’organisation et de mobilisation active.
+            </p>
+          </div>
+        ))}
       </section>
 
-      {/* Footer interne */}
-      <div className="mt-16 p-6 bg-green-700 text-white rounded-lg">
-        <h3 className="text-xl font-semibold mb-2">
-          FORDAC — Forces Démocratiques pour l’Action et le Changement
-        </h3>
-        <p className="text-sm opacity-90">
-          Les Cellules sont le cœur battant du mouvement, là où l’action concrète 
-          commence et où les citoyens deviennent acteurs du changement.
-        </p>
-      </div>
-    </div>
+    </main>
   );
 }

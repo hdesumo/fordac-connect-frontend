@@ -11,22 +11,24 @@ export default function HomePage() {
     <main className="w-full overflow-x-hidden">
 
       {/* ===========================
-          HERO PRINCIPAL — Style OFFICIEL FORDAC
+          HERO PRINCIPAL — Vert Foncé FORDAC
       ============================ */}
-      <section className="w-full bg-[#166534] text-white pt-24 pb-32 text-center">
-        <h1 className="text-5xl font-extrabold tracking-tight">
+      <section className="w-full bg-fordacDark text-white pt-28 pb-32 text-center px-4">
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
           FORDAC Connect
         </h1>
 
-        <p className="mt-6 text-xl max-w-3xl mx-auto leading-relaxed opacity-90">
-          Forces Démocratiques pour l’Action et le Changement —  
-          un parti citoyen engagé pour l’émergence d’une gouvernance fondée sur l’action et le changement.
+        <p className="mt-6 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed opacity-90">
+          Forces Démocratiques pour l’Action et le Changement —
+          un parti citoyen engagé pour une gouvernance centrée sur l’action,
+          la justice sociale, l'intégrité et le respect de notre bien commun qui est notre cher pays le Cameroun.
         </p>
 
         <div className="mt-10 flex justify-center">
           <a
             href="/adhesion"
-            className="px-8 py-4 bg-white text-[#166534] rounded-lg text-lg font-semibold hover:bg-gray-100 transition"
+            className="px-8 py-4 bg-white text-fordacDark rounded-lg text-lg font-semibold 
+                       hover:bg-fordacLight transition border border-white/20 shadow-lg"
           >
             Adhérez maintenant
           </a>
@@ -34,9 +36,9 @@ export default function HomePage() {
       </section>
 
       {/* ===========================
-          SECTION PRÉSIDENT — Fond Vert Clair
+          SECTION PRÉSIDENT — Vert Clair
       ============================ */}
-      <section className="py-24 bg-[#E8F3EC]">
+      <section className="py-24 bg-[#E8F3EC] px-4">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 
           <Image
@@ -44,11 +46,11 @@ export default function HomePage() {
             alt="Président du FORDAC"
             width={520}
             height={520}
-            className="rounded-xl shadow-xl object-cover"
+            className="rounded-xl shadow-xl object-cover w-full"
           />
 
           <div>
-            <h2 className="text-4xl font-extrabold text-[#166534]">
+            <h2 className="text-4xl font-extrabold text-fordacGreen">
               Le Président du FORDAC
             </h2>
 
@@ -58,40 +60,30 @@ export default function HomePage() {
 
             <p className="mt-6 text-gray-700 leading-relaxed text-lg">
               Sous l’impulsion du président Romaric Yebchue Semenou,
-              le FORDAC incarne une vision profondément tournée vers
-              le progrès, la responsabilité collective, l’intégrité dans l’action,
-              et la construction d’un Cameroun nouveau.
-              Son leadership rassembleur, fondé sur l’écoute et la proximité
-              avec les populations, redonne sens au service public
-              et à la dignité citoyenne.
+              le FORDAC incarne une vision tournée vers le progrès, la solidarité,
+              la responsabilité collective, le respect mutuel, le bien-être pour tous et la dignité citoyenne...
             </p>
           </div>
         </div>
       </section>
 
       {/* ===========================
-          MESSAGE DU PRÉSIDENT — Fond Gris Clair
+          MESSAGE DU PRÉSIDENT — Gris Clair
       ============================ */}
-      <section className="py-24 bg-[#F7F7F7] border-t border-gray-200">
+      <section className="py-24 bg-[#F7F7F7] border-t border-gray-200 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-extrabold text-[#166534]">
+          <h2 className="text-3xl font-extrabold text-fordacGreen">
             Message du Président
           </h2>
 
           <p className="text-lg text-gray-700 leading-relaxed mt-8">
-            Chers frères et sœurs, habitants du Moungo et de tout le Cameroun,  
-            notre engagement politique n’est pas une quête de pouvoir comme une fin en soi, mais une
-            mission collective : restaurer
-            la confiance, défendre la justice sociale et offrir à nos enfants  
-            un horizon qui inspire espoir et ambition.  
-            <br /><br />
-            Le FORDAC est un parti de vérité et d’action.  
-            Il est votre maison. Il est votre voix.
+            Chers frères et sœurs du Moungo et du Cameroun...
           </p>
 
           <a
             href="/message-president"
-            className="inline-block mt-10 px-6 py-3 text-[#166534] border border-[#166534] rounded-lg font-medium hover:bg-[#166534] hover:text-white transition"
+            className="inline-block mt-10 px-6 py-3 text-fordacGreen border border-fordacGreen 
+                       rounded-lg font-medium hover:bg-fordacGreen hover:text-white transition"
           >
             Lire le message complet
           </a>
@@ -99,9 +91,9 @@ export default function HomePage() {
       </section>
 
       {/* ===========================
-          PAROLES DE SAGESSE — SECTION 1 (Vert Clair)
+          PAROLES DE SAGESSE — SECTION 1
       ============================ */}
-      <section className="py-24 bg-[#E8F3EC]">
+      <section className="py-24 bg-[#E8F3EC] px-4">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 
           <Image
@@ -109,43 +101,34 @@ export default function HomePage() {
             width={500}
             height={600}
             alt="Leçon du Sage KD2"
-            className="rounded-xl shadow-xl object-cover"
+            className="rounded-xl shadow-xl object-cover w-full"
           />
 
           <div>
-            <h3 className="text-3xl font-extrabold text-[#166534]">
+            <h3 className="text-3xl font-extrabold text-fordacGreen">
               Leçon du Sage KD2
             </h3>
 
             <p className="mt-6 text-gray-700 leading-relaxed text-lg">
-              Le Sage KD2 n’enseignait pas par de longs discours,
-              mais par l’exemple.  
-              Un jour, voyant une femme exténuée et ignorée de tous,
-              il posa son panier, s’approcha et lui donna à manger.
-              Pour lui, servir Dieu, c’était servir l’humanité.  
-              Chaque acte de bonté est une prière silencieuse.
+              Le Sage KD2 n’enseignait pas par les mots mais par l’exemple...
             </p>
           </div>
         </div>
       </section>
 
       {/* ===========================
-          PAROLES DE SAGESSE — SECTION 2 (Gris Clair)
+          PAROLES DE SAGESSE — SECTION 2
       ============================ */}
-      <section className="py-24 bg-[#F7F7F7]">
+      <section className="py-24 bg-[#F7F7F7] px-4">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 
           <div>
-            <h3 className="text-3xl font-extrabold text-[#166534]">
+            <h3 className="text-3xl font-extrabold text-fordacGreen">
               Célébrez vos victoires
             </h3>
 
             <p className="mt-6 text-gray-700 leading-relaxed text-lg">
-              La vie est faite de batailles intérieures et de petites conquêtes.  
-              Le FORDAC encourage chacun à reconnaître ses avancées,
-              aussi modestes soient-elles.  
-              Chaque progrès est une victoire sur soi-même.  
-              Ensemble, nous marchons vers l’excellence.
+              La vie est faite de petites conquêtes...
             </p>
           </div>
 
@@ -154,15 +137,15 @@ export default function HomePage() {
             width={500}
             height={600}
             alt="Célébration"
-            className="rounded-xl shadow-xl object-cover"
+            className="rounded-xl shadow-xl object-cover w-full"
           />
         </div>
       </section>
 
       {/* ===========================
-          PAROLES DE SAGESSE — SECTION 3 (Vert Clair)
+          PAROLES DE SAGESSE — SECTION 3
       ============================ */}
-      <section className="py-24 bg-[#E8F3EC]">
+      <section className="py-24 bg-[#E8F3EC] px-4">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 
           <Image
@@ -170,29 +153,26 @@ export default function HomePage() {
             width={500}
             height={600}
             alt="Osez penser, osez agir"
-            className="rounded-xl shadow-xl object-cover"
+            className="rounded-xl shadow-xl object-cover w-full"
           />
 
           <div>
-            <h3 className="text-3xl font-extrabold text-[#166534]">
+            <h3 className="text-3xl font-extrabold text-fordacGreen">
               Osez penser. Osez agir.
             </h3>
 
             <p className="mt-6 text-gray-700 leading-relaxed text-lg">
-              La pensée sans action n’est qu’un rêve.  
-              Le FORDAC croit en une jeunesse disciplinée, créative et courageuse.  
-              À travers l’effort et la rigueur,
-              chacun peut transformer ses idées en réalités tangibles.
+              La pensée sans action n’est qu’un rêve...
             </p>
           </div>
         </div>
       </section>
 
       {/* ===========================
-          GALERIE PHOTOS — Gris Clair
+          GALERIE PHOTOS
       ============================ */}
-      <section className="py-24 bg-[#F7F7F7]">
-        <h2 className="text-4xl font-extrabold text-center text-[#166534] mb-16">
+      <section className="py-24 bg-[#F7F7F7] px-4">
+        <h2 className="text-4xl font-extrabold text-center text-fordacGreen mb-16">
           Galerie d’images
         </h2>
 
@@ -218,10 +198,10 @@ export default function HomePage() {
       </section>
 
       {/* ===========================
-          GALERIE VIDEOS — Vert Clair
+          GALERIE VIDEOS
       ============================ */}
-      <section className="py-24 bg-[#E8F3EC]">
-        <h2 className="text-4xl font-extrabold text-center text-[#166534] mb-16">
+      <section className="py-24 bg-[#E8F3EC] px-4">
+        <h2 className="text-4xl font-extrabold text-center text-fordacGreen mb-16">
           Galerie vidéos
         </h2>
 
@@ -250,29 +230,26 @@ export default function HomePage() {
       </section>
 
       {/* ===========================
-          SECTION ADHESION — Fond Vert Foncé
+          SECTION ADHESION — Vert Foncé FORDAC
       ============================ */}
-      <section className="py-28 bg-[#166534] text-white text-center">
+      <section className="py-28 bg-fordacDark text-white text-center px-4">
         <h2 className="text-4xl font-extrabold mb-6">
           Rejoignez le FORDAC
         </h2>
 
         <p className="text-xl max-w-3xl mx-auto mb-12 leading-relaxed opacity-90">
-          Votre engagement compte. Ensemble, bâtissons un mouvement  
-          responsable et tourné vers la justice sociale.  
-          Le FORDAC est une famille politique où chaque voix compte  
-          et où chaque citoyen peut poser sa pierre à l’édifice national.
+          Votre engagement compte. Ensemble, bâtissons une organisation responsable...
         </p>
 
         <a
           href="/adhesion"
-          className="px-10 py-4 bg-white text-[#166534] rounded-lg text-lg font-semibold hover:bg-gray-100 transition"
+          className="px-10 py-4 bg-white text-fordacDark rounded-lg text-lg font-semibold 
+                     hover:bg-fordacLight transition border border-white/20 shadow-lg"
         >
           Formulaire d’adhésion
         </a>
       </section>
 
-      {/* MODAL */}
       {selectedMedia && (
         <MediaModal media={selectedMedia} onClose={() => setSelectedMedia(null)} />
       )}

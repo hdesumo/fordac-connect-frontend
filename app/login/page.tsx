@@ -57,54 +57,69 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+    <div className="min-h-screen bg-fordacDark flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-md bg-white/10 backdrop-blur-md border border-white/20 shadow-xl 
+                      rounded-2xl p-8 animate-fadeIn">
 
-        <h1 className="text-2xl font-semibold text-center text-green-800 mb-6">
-          Connexion
+        <h1 className="text-center text-3xl font-bold text-white mb-6">
+          Connexion au FORDAC
         </h1>
 
+        <p className="text-center text-white/80 mb-8 text-sm">
+          Accédez à votre espace membre en toute sécurité.
+        </p>
+
         {errorMsg && (
-          <div className="bg-red-100 text-red-700 p-2 rounded mb-4 text-sm">
+          <div className="bg-red-100 text-red-700 p-3 rounded mb-4 text-sm">
             {errorMsg}
           </div>
         )}
 
         <form onSubmit={handleLogin} className="space-y-5">
 
+          {/* Email */}
           <div>
-            <label className="block mb-1 font-medium">Email</label>
+            <label className="block text-white/90 mb-1 font-medium">
+              Adresse e-mail
+            </label>
             <input
               type="email"
               required
-              className="w-full border px-3 py-2 rounded"
+              className="w-full px-4 py-3 rounded-lg bg-white/20 text-white placeholder-white/60 
+                         border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/40"
+              placeholder="exemple@mail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Entrez votre email"
             />
           </div>
 
+          {/* Mot de passe */}
           <div>
-            <label className="block mb-1 font-medium">Mot de passe</label>
+            <label className="block text-white/90 mb-1 font-medium">
+              Mot de passe
+            </label>
             <input
               type="password"
               required
-              className="w-full border px-3 py-2 rounded"
+              className="w-full px-4 py-3 rounded-lg bg-white/20 text-white placeholder-white/60 
+                         border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/40"
+              placeholder="********"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="********"
             />
           </div>
 
+          {/* Bouton */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-800 text-white py-2 rounded hover:bg-green-700 transition"
+            className="w-full bg-white text-fordacDark font-semibold py-3 rounded-lg 
+                       hover:bg-fordacLight transition border border-white/40"
           >
             {loading ? "Connexion..." : "Se connecter"}
           </button>
-        </form>
 
+        </form>
       </div>
     </div>
   );

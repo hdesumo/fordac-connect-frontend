@@ -1,85 +1,49 @@
-import React from "react";
+"use client";
 
 export default function SousSectionsPage() {
   return (
-    <div className="max-w-5xl mx-auto px-4 py-12">
-      {/* Titre principal */}
-      <h1 className="text-4xl font-bold text-gray-900 mb-6">
-        Les Sous-sections du FORDAC
-      </h1>
+    <main className="min-h-screen bg-fordacDark text-white py-28 px-6">
 
-      {/* Introduction */}
-      <p className="text-lg text-gray-700 leading-relaxed mb-10">
-        Les Sous-sections constituent une articulation essentielle de 
-        l’organisation territoriale du FORDAC.  
-        Situées au niveau des quartiers, elles permettent d’assurer une 
-        présence active du parti au plus près des populations, en renforçant la 
-        coordination et la mobilisation locale.
-      </p>
+      {/* HERO */}
+      <section className="max-w-5xl mx-auto text-center mb-20">
+        <h1 className="text-4xl md:text-5xl font-extrabold">
+          Les Sous-sections du FORDAC
+        </h1>
 
-      {/* Rôle et missions */}
-      <section className="mb-10">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-          Rôle et Missions
-        </h2>
-        <ul className="list-disc pl-6 space-y-3 text-gray-700">
-          <li>
-            Assurer la mise en œuvre des directives des Sections et des 
-            organes supérieurs du parti.
-          </li>
-          <li>
-            Superviser les Cellules de base rattachées à leur territoire.
-          </li>
-          <li>
-            Organiser les réunions, rencontres de proximité et activités 
-            citoyennes.
-          </li>
-          <li>
-            Identifier les problématiques locales et participer à l’élaboration 
-            de solutions adaptées.
-          </li>
-          <li>
-            Contribuer au recrutement, à l’encadrement et à la formation des 
-            militants au niveau de l’arrondissement.
-          </li>
-        </ul>
-      </section>
+        <p className="text-white/80 text-lg md:text-xl mt-6 max-w-3xl mx-auto leading-relaxed">
+          Les Sous-sections représentent l’organisation du FORDAC 
+          au <strong>niveau des quartiers</strong>.  
+        </p>
 
-      {/* Fonctionnement */}
-      <section className="mb-10">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-          Fonctionnement
-        </h2>
-        <p className="text-gray-700 leading-relaxed">
-          Chaque Sous-section est administrée par un Bureau, dirigé par un 
-          Président de Sous-section, accompagné d’un Secrétaire, d’un Trésorier 
-          et d’autres responsables à des postes opérationnels.  
-          Les réunions statutaires permettent d’assurer un suivi régulier des 
-          actions menées et de maintenir un lien constant avec les Sections.
+        <p className="text-white/70 text-lg max-w-3xl mx-auto mt-4 leading-relaxed">
+          Elles jouent un rôle essentiel : assurer la proximité, coordonner les 
+          cellules, mobiliser les habitants et garantir la présence active du 
+          parti dans chaque zone de vie.
         </p>
       </section>
 
-      {/* Implantation */}
-      <section className="mb-10">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-          Implantation Territoriale
-        </h2>
-        <p className="text-gray-700 leading-relaxed">
-          Les Sous-sections constituent le niveau organisationnel qui relie directement 
-          les arrondissements (Sections) à la base militante.
-        </p>
-      </section>
+      {/* EXEMPLES DE QUARTIERS / STRUCTURE */}
+      <section className="max-w-4xl mx-auto grid md:grid-cols-2 gap-10">
 
-      {/* Footer interne */}
-      <div className="mt-16 p-6 bg-green-700 text-white rounded-lg">
-        <h3 className="text-xl font-semibold mb-2">
-          FORDAC — Forces Démocratiques pour l’Action et le Changement
-        </h3>
-        <p className="text-sm opacity-90">
-          Les Sous-sections animent la vie militante locale et contribuent 
-          au rayonnement du parti dans chaque arrondissement.
-        </p>
-      </div>
-    </div>
+        {[
+          "Quartiers urbains",
+          "Bloc villages",
+          "Zones périurbaines",
+          "Communautés rurales"
+        ].map((item, i) => (
+          <div
+            key={i}
+            className="bg-white/10 backdrop-blur-md p-8 rounded-xl border border-white/20 
+                       hover:bg-white/20 transition shadow-xl"
+          >
+            <h3 className="text-xl font-bold mb-2">{item}</h3>
+            <p className="text-white/80 leading-relaxed">
+              Organisation, mobilisation et relais des cellules locales.
+            </p>
+          </div>
+        ))}
+
+      </section>
+    </main>
   );
 }

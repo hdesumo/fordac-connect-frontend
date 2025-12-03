@@ -1,89 +1,54 @@
-import React from "react";
+"use client";
 
 export default function FederationsPage() {
   return (
-    <div className="max-w-5xl mx-auto px-4 py-12">
-      {/* Titre principal */}
-      <h1 className="text-4xl font-bold text-gray-900 mb-6">
-        Les Fédérations du FORDAC
-      </h1>
+    <main className="min-h-screen bg-fordacDark text-white py-28 px-6">
 
-      {/* Introduction */}
-      <p className="text-lg text-gray-700 leading-relaxed mb-10">
-        Les Fédérations constituent le premier niveau des démembrements
-        territoriaux du FORDAC.  
-        Elles assurent la coordination des activités du parti au niveau régional
-        ou d’un groupement territorial défini par les statuts.
-      </p>
+      {/* HERO */}
+      <section className="max-w-5xl mx-auto text-center mb-20">
+        <h1 className="text-4xl md:text-5xl font-extrabold">
+          Les Fédérations du FORDAC
+        </h1>
 
-      {/* Rôle des Fédérations */}
-      <section className="mb-10">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-          Rôle et Responsabilités
-        </h2>
+        <p className="text-white/80 text-lg md:text-xl mt-6 max-w-3xl mx-auto leading-relaxed">
+          Dans le département du Moungo, l’organisation du FORDAC repose 
+          sur deux grands secteurs territoriaux : le <strong>Moungo Nord</strong> 
+          et le <strong>Moungo Sud</strong>.  
+        </p>
 
-        <ul className="list-disc pl-6 space-y-3 text-gray-700">
-          <li>
-            Représenter le parti dans leur ressort territorial et appliquer les
-            orientations nationales.
-          </li>
-          <li>
-            Coordonner les Sections, Sous-sections et Cellules affiliées à leur
-            zone.
-          </li>
-          <li>
-            Mobiliser les militants et assurer la présence du parti sur le
-            terrain.
-          </li>
-          <li>
-            Superviser l'organisation des activités politiques, sociales et
-            communautaires.
-          </li>
-          <li>
-            Contribuer aux stratégies de développement et aux actions de terrain
-            décidées par les organes dirigeants.
-          </li>
-        </ul>
-      </section>
-
-      {/* Fonctionnement */}
-      <section className="mb-10">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-          Fonctionnement
-        </h2>
-        <p className="text-gray-700 leading-relaxed">
-          Les Fédérations sont dirigées par des coordinateurs généraux. 
-          Elles se réunissent périodiquement pour évaluer les activités
-        et planifier les actions futures.
+        <p className="text-white/70 text-lg max-w-3xl mx-auto mt-4 leading-relaxed">
+          Chaque secteur est coordonné par une Fédération, chargée de superviser 
+          les sections (arrondissements), de coordonner la mobilisation, 
+          et d’assurer la cohérence des actions du Parti sur l’ensemble du territoire.
         </p>
       </section>
 
-      {/* Implantation */}
-      <section className="mb-10">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-          Implantation Territoriale
-        </h2>
-        <p className="text-gray-700 leading-relaxed">
-          Le FORDAC est implanté dans l’ensemble du territoire national.  
-          Chaque Fédération couvre un espace géographique correspondant à un
-          département administratif ou à une zone définie par les organes
-          dirigeants.  
-          Leur mission essentielle est d’assurer une coordination fluide entre
-          les structures locales et la direction nationale.
-          Par exemple, dans le département du Moungo, deux fédérations ont été créées. La fédération Moungo Nord et la fédération du Moungo Sud.
-        </p>
-      </section>
+      {/* CARTES */}
+      <section className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10">
 
-      {/* Footer interne */}
-      <div className="mt-16 p-6 bg-green-700 text-white rounded-lg">
-        <h3 className="text-xl font-semibold mb-2">
-          FORDAC — Forces Démocratiques pour l’Action et le Changement
-        </h3>
-        <p className="text-sm opacity-90">
-          Les Fédérations sont le socle de l’organisation territoriale du
-          mouvement.
-        </p>
-      </div>
-    </div>
+        <div className="bg-white/10 backdrop-blur-md p-8 rounded-xl border border-white/20 
+                        hover:bg-white/20 transition shadow-xl">
+          <h3 className="text-2xl font-bold mb-4">Fédération du Moungo Nord</h3>
+          <p className="text-white/80 leading-relaxed">
+            Elle regroupe et coordonne les arrondissements situés dans la partie 
+            septentrionale du Moungo.  
+            Son rôle est de consolider la présence du FORDAC, de mobiliser 
+            les structures de base et de superviser les initiatives locales.
+          </p>
+        </div>
+
+        <div className="bg-white/10 backdrop-blur-md p-8 rounded-xl border border-white/20 
+                        hover:bg-white/20 transition shadow-xl">
+          <h3 className="text-2xl font-bold mb-4">Fédération du Moungo Sud</h3>
+          <p className="text-white/80 leading-relaxed">
+            Elle supervise les arrondissements du sud du département.  
+            Elle veille à la coordination des sections, au suivi des sous-sections 
+            et cellules, et à la mise en œuvre de la vision nationale du Parti 
+            dans le contexte local.
+          </p>
+        </div>
+
+      </section>
+    </main>
   );
 }
