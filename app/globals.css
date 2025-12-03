@@ -1,194 +1,130 @@
-/* ====== TAILWIND CORE ====== */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* =========================================
-   🌍 GLOBAL STYLES — FORDAC CONNECT (2025)
-   ========================================= */
-
-/* ===============================
-   RESET + TYPOGRAPHIE GLOBALE
-   =============================== */
+/* ======= RESET ======= */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
 
 html,
 body {
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
-  background-color: #ffffff;
-  color: #000000;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, Helvetica, Arial, sans-serif;
+  background: #ffffff;
+  color: #0f0f0f;
+  font-family: var(--font-inter), sans-serif;
 }
 
+/* ======= LINKS ======= */
 a {
-  text-decoration: none;
-  color: inherit;
+  @apply transition-colors duration-200;
 }
 
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
+/* ===== NAVBAR DROPDOWN (Desktop) ===== */
+.group:hover .group-hover\\:visible {
+  visibility: visible;
 }
 
-/* ===============================
-   MARQUEE
-   =============================== */
+.group:hover .group-hover\\:opacity-100 {
+  opacity: 1;
+}
 
+/* ===== MOBILE MENU ANIMATIONS ===== */
+.mobile-submenu {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+/* ======= MARQUEE ANIMATION ======= */
 @keyframes marquee {
   0% {
-    transform: translateX(100%);
+    transform: translateX(0);
   }
   100% {
-    transform: translateX(-100%);
+    transform: translateX(-50%);
   }
 }
 
 .animate-marquee {
-  animation: marquee 60s linear infinite;
+  animation: marquee 18s linear infinite;
 }
 
-/* ===============================
-   NAVBAR
-   =============================== */
-
-.navbar-blur {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+/* ======= FONTS ======= */
+:root {
+  --font-inter: 'Inter', sans-serif;
 }
 
-.nav-link {
-  @apply text-white hover:text-yellow-300 transition font-medium;
+/* ======= TITLES ======= */
+h1,
+h2,
+h3 {
+  @apply font-semibold;
 }
 
-.nav-button {
-  @apply px-4 py-2 rounded-full font-semibold text-sm transition;
+/* ======= RESPONSIVE UTILITIES ======= */
+.container {
+  @apply max-w-7xl mx-auto px-4;
 }
 
-.nav-button-adhesion {
-  background-color: #e5a600;
-  color: #ffffff;
+/* ======= GALLERY GRID ======= */
+.gallery-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4;
 }
 
-.nav-button-adhesion:hover {
-  background-color: #f1b72d;
-}
-
-.nav-button-connexion {
-  background-color: #0b5e4d;
-  color: #ffffff;
-}
-
-.nav-button-connexion:hover {
-  background-color: #0f7a62;
-}
-
-/* ===============================
-   HERO / HEADER
-   =============================== */
-
-.hero-section {
-  background: linear-gradient(to bottom, #0a5d48, #80e0a5);
-  padding-top: 6rem;
-  padding-bottom: 6rem;
-  text-align: center;
-  color: #ffffff;
-}
-
-.hero-title {
-  font-size: 2.8rem;
-  font-weight: 800;
-}
-
-.hero-subtitle {
-  font-size: 1.1rem;
-  max-width: 800px;
-  margin: 0 auto;
-  opacity: 0.95;
-}
-
-.hero-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-/* ===============================
-   SECTIONS
-   =============================== */
-
-.section-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #0a8c52;
-}
-
-.section-text {
-  font-size: 1rem;
-  line-height: 1.7rem;
-  opacity: 0.9;
-}
-
-/* ===============================
-   CARDS
-   =============================== */
-
+/* ======= CARDS ======= */
 .card {
-  background-color: #ffffff;
-  color: #000000;
-  border-radius: 0.75rem;
-  padding: 2rem;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  @apply bg-white shadow-md rounded-lg p-4;
 }
 
-/* ===============================
-   FOOTER
-   =============================== */
+/* ======= BUTTONS ======= */
+.btn-primary {
+  @apply bg-[#166534] text-white px-4 py-2 rounded hover:bg-[#14502c] transition;
+}
 
-footer {
-  background-color: #062822;
-  color: #c9c9c9;
-  padding: 40px 20px;
-  margin-top: 3rem;
+.btn-outline {
+  @apply border border-[#166534] text-[#166534] px-4 py-2 rounded hover:bg-[#166534] hover:text-white transition;
+}
+
+/* ======= FORMS ======= */
+input,
+select,
+textarea {
+  @apply w-full border border-gray-300 rounded px-3 py-2;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  @apply outline-none ring-2 ring-[#166534];
+}
+
+/* ======= FOOTER ======= */
+footer p,
+footer a {
+  @apply text-sm;
 }
 
 footer a:hover {
-  color: #ffffff;
+  @apply text-[#4ade80];
 }
 
-/* ===============================
-   RESPONSIVE FIXES — MOBILE ONLY
-   =============================== */
-
-@media (max-width: 768px) {
-
-  /* FIX: le header fixed recouvre la page */
-  body {
-    padding-top: 4.5rem;
+/* ======= MOBILE ADJUSTMENTS ======= */
+@media (max-width: 640px) {
+  h1 {
+    @apply text-xl;
   }
 
-  .hero-title {
-    font-size: 2.1rem;
+  h2 {
+    @apply text-lg;
   }
 
-  .hero-subtitle {
-    font-size: 1rem;
-    padding: 0 1rem;
+  .card {
+    @apply p-3;
   }
 
-  .hero-buttons {
-    flex-direction: column;
-  }
-
-  .section-title {
-    font-size: 1.6rem;
-    text-align: center;
-  }
-
-  .section-text {
-    font-size: 0.95rem;
+  .container {
+    @apply px-3;
   }
 }

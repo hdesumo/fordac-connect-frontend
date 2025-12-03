@@ -4,10 +4,10 @@ import Link from "next/link";
 
 export default function LiguesPage() {
   return (
-    <main className="min-h-screen bg-fordacDark text-white py-28 px-6">
+    <main className="min-h-screen bg-fordacDark text-white py-24 md:py-28 px-6">
 
       {/* HERO */}
-      <section className="max-w-5xl mx-auto text-center mb-20">
+      <section className="max-w-5xl mx-auto text-center mb-14 md:mb-20">
         <h1 className="text-4xl md:text-5xl font-extrabold">
           Les Ligues du FORDAC
         </h1>
@@ -19,8 +19,8 @@ export default function LiguesPage() {
         </p>
       </section>
 
-      {/* LISTE DES LIGUES – Sous-menus réels */}
-      <section className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
+      {/* LISTE DES LIGUES */}
+      <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
         {[
           {
             title: "Ligue des Jeunes",
@@ -41,7 +41,7 @@ export default function LiguesPage() {
           <Link
             key={i}
             href={item.link}
-            className="bg-white/10 backdrop-blur-md p-8 rounded-xl border border-white/20 
+            className="bg-white/10 backdrop-blur-md p-6 md:p-8 rounded-xl border border-white/20 
                        hover:bg-white/20 transition shadow-xl block"
           >
             <h3 className="text-2xl font-bold mb-4">{item.title}</h3>

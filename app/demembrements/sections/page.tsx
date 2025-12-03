@@ -2,10 +2,10 @@
 
 export default function SectionsPage() {
   return (
-    <main className="min-h-screen bg-fordacDark text-white py-28 px-6">
+    <main className="min-h-screen bg-fordacDark text-white py-24 md:py-28 px-6">
 
       {/* HERO */}
-      <section className="max-w-5xl mx-auto text-center mb-20">
+      <section className="max-w-5xl mx-auto text-center mb-14 md:mb-20">
         <h1 className="text-4xl md:text-5xl font-extrabold">
           Les Sections du FORDAC
         </h1>
@@ -24,7 +24,7 @@ export default function SectionsPage() {
       </section>
 
       {/* CARTES DES SECTIONS */}
-      <section className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
+      <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
 
         {[
           "Nkongsamba 1er",
@@ -43,7 +43,7 @@ export default function SectionsPage() {
         ].map((arr, i) => (
           <div
             key={i}
-            className="bg-white/10 backdrop-blur-md p-8 rounded-xl border border-white/20 
+            className="bg-white/10 backdrop-blur-md p-6 md:p-8 rounded-xl border border-white/20 
                        hover:bg-white/20 transition shadow-xl"
           >
             <h3 className="text-xl font-bold">{arr}</h3>

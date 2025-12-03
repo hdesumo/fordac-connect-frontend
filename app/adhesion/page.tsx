@@ -87,12 +87,12 @@ export default function AdhesionPage() {
     : [];
 
   return (
-    <div className="min-h-screen w-full bg-[#0f3e20] text-white">
-      <div className="max-w-4xl mx-auto px-4 py-20">
+    <div className="min-h-screen w-full bg-[#0f3e20] text-white px-4 md:px-0">
+      <div className="max-w-4xl mx-auto py-16 md:py-20">
 
         {/* TITRE */}
         <motion.h1
-          className="text-3xl md:text-5xl font-bold text-center mb-14"
+          className="text-3xl md:text-5xl font-bold text-center mb-10 md:mb-14 leading-tight"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
@@ -108,15 +108,16 @@ export default function AdhesionPage() {
             border border-white/10
             shadow-2xl
             rounded-2xl
-            p-8 md:p-10
+            p-6 md:p-10
             mx-auto
             max-w-3xl
             space-y-6
           "
         >
-          {/* NOM */}
+          {/* CHAMPS — identiques */}
+          {/** Nom */}
           <div>
-            <label className="font-semibold">Nom complet</label>
+            <label className="font-semibold text-sm md:text-base">Nom complet</label>
             <input
               type="text"
               className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 outline-none focus:ring-2 focus:ring-[#4ade80]"
@@ -126,9 +127,9 @@ export default function AdhesionPage() {
             />
           </div>
 
-          {/* EMAIL */}
+          {/** EMAIL */}
           <div>
-            <label className="font-semibold">Adresse e-mail</label>
+            <label className="font-semibold text-sm md:text-base">Adresse e-mail</label>
             <input
               type="email"
               className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 outline-none focus:ring-2 focus:ring-[#4ade80]"
@@ -138,9 +139,9 @@ export default function AdhesionPage() {
             />
           </div>
 
-          {/* TÉLÉPHONE */}
+          {/** PHONE */}
           <div>
-            <label className="font-semibold">Téléphone</label>
+            <label className="font-semibold text-sm md:text-base">Téléphone</label>
             <input
               type="tel"
               className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 outline-none focus:ring-2 focus:ring-[#4ade80]"
@@ -150,9 +151,9 @@ export default function AdhesionPage() {
             />
           </div>
 
-          {/* DATE */}
+          {/** DATE */}
           <div>
-            <label className="font-semibold">Date de naissance</label>
+            <label className="font-semibold text-sm md:text-base">Date de naissance</label>
             <input
               type="date"
               className="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 outline-none focus:ring-2 focus:ring-[#4ade80]"
@@ -161,9 +162,9 @@ export default function AdhesionPage() {
             />
           </div>
 
-          {/* PROFESSION */}
+          {/** PROFESSION */}
           <div>
-            <label className="font-semibold">Profession</label>
+            <label className="font-semibold text-sm md:text-base">Profession</label>
             <input
               type="text"
               className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 outline-none focus:ring-2 focus:ring-[#4ade80]"
@@ -173,9 +174,9 @@ export default function AdhesionPage() {
             />
           </div>
 
-          {/* QUARTIER */}
+          {/** QUARTIER */}
           <div>
-            <label className="font-semibold">Quartier</label>
+            <label className="font-semibold text-sm md:text-base">Quartier</label>
             <input
               type="text"
               className="w-full p-3 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/30 outline-none focus:ring-2 focus:ring-[#4ade80]"
@@ -185,9 +186,9 @@ export default function AdhesionPage() {
             />
           </div>
 
-          {/* DÉPARTEMENT */}
+          {/** DÉPARTEMENT */}
           <div>
-            <label className="font-semibold">Département</label>
+            <label className="font-semibold text-sm md:text-base">Département</label>
             <input
               type="text"
               disabled
@@ -196,9 +197,9 @@ export default function AdhesionPage() {
             />
           </div>
 
-          {/* SECTEUR */}
+          {/** SECTEUR */}
           <div>
-            <label className="font-semibold">Secteur</label>
+            <label className="font-semibold text-sm md:text-base">Secteur</label>
             <select
               className="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 outline-none focus:ring-2 focus:ring-[#4ade80]"
               value={form.secteur}
@@ -211,9 +212,9 @@ export default function AdhesionPage() {
             </select>
           </div>
 
-          {/* ARRONDISSEMENT */}
+          {/** ARRONDISSEMENT */}
           <div>
-            <label className="font-semibold">Arrondissement / Commune</label>
+            <label className="font-semibold text-sm md:text-base">Arrondissement / Commune</label>
             <select
               disabled={!form.secteur}
               className="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 outline-none focus:ring-2 focus:ring-[#4ade80]"
@@ -227,7 +228,7 @@ export default function AdhesionPage() {
             </select>
           </div>
 
-          {/* PARAGRAPHE : Gratuité des cartes */}
+          {/* PARAGRAPHE */}
           <p className="text-white/80 text-sm leading-relaxed bg-white/10 p-3 rounded-lg border border-white/20">
             Je reconnais que la carte de membre est délivrée
             <span className="font-semibold text-white"> gratuitement </span>
@@ -235,15 +236,15 @@ export default function AdhesionPage() {
             <span className="font-semibold text-white"> jusqu’à nouvel ordre</span>.
           </p>
 
-          {/* ACCEPTATION DES STATUTS */}
+          {/* CHECKBOXES */}
           <div className="flex items-start gap-3">
             <input
               type="checkbox"
               checked={form.terms_accepted}
               onChange={(e) => updateField("terms_accepted", e.target.checked)}
-              className="accent-[#4ade80]"
+              className="accent-[#4ade80] mt-1"
             />
-            <span>
+            <span className="text-sm md:text-base">
               J’ai lu et j’accepte les{" "}
               <a
                 href="/statuts.pdf"
@@ -255,27 +256,24 @@ export default function AdhesionPage() {
             </span>
           </div>
 
-          {/* ENGAGEMENT DE DÉMISSION D'UN AUTRE PARTI */}
           <div className="flex items-start gap-3">
             <input
               type="checkbox"
               checked={form.resignation_commitment}
-              onChange={(e) =>
-                updateField("resignation_commitment", e.target.checked)
-              }
-              className="accent-[#4ade80]"
+              onChange={(e) => updateField("resignation_commitment", e.target.checked)}
+              className="accent-[#4ade80] mt-1"
             />
-            <span>
+            <span className="text-sm md:text-base leading-relaxed">
               Si je suis membre d’un autre parti politique, je m’engage à y
-              démissionner et à transmettre une preuve officielle. Mon adhésion
-              ne deviendra définitive qu’après réception et validation de cette
-              preuve.
+              démissionner et à transmettre une preuve officielle.
             </span>
           </div>
 
-          {/* ERRORS */}
+          {/* ERREURS */}
           {error && (
-            <p className="text-red-400 text-center font-semibold">{error}</p>
+            <p className="text-red-400 text-center font-semibold text-sm md:text-base">
+              {error}
+            </p>
           )}
 
           {/* BOUTON */}
@@ -283,7 +281,7 @@ export default function AdhesionPage() {
             type="submit"
             disabled={loading}
             className="
-              w-full py-3 rounded-lg text-lg
+              w-full py-3 md:py-4 rounded-lg text-lg
               bg-[#4ade80] text-[#0f3e20]
               hover:bg-[#4ade80]/80 transition font-semibold
             "

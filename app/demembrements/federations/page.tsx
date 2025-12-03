@@ -2,10 +2,10 @@
 
 export default function FederationsPage() {
   return (
-    <main className="min-h-screen bg-fordacDark text-white py-28 px-6">
+    <main className="min-h-screen bg-fordacDark text-white py-24 md:py-28 px-6">
 
       {/* HERO */}
-      <section className="max-w-5xl mx-auto text-center mb-20">
+      <section className="max-w-5xl mx-auto text-center mb-14 md:mb-20">
         <h1 className="text-4xl md:text-5xl font-extrabold">
           Les Fédérations du FORDAC
         </h1>
@@ -14,7 +14,6 @@ export default function FederationsPage() {
           Dans le département du Moungo, l’organisation du FORDAC repose 
           sur deux grands secteurs territoriaux : le <strong>Moungo Nord</strong>{" "}
           et le <strong>Moungo Sud</strong>.
-
         </p>
 
         <p className="text-white/70 text-lg max-w-3xl mx-auto mt-4 leading-relaxed">
@@ -25,9 +24,9 @@ export default function FederationsPage() {
       </section>
 
       {/* CARTES */}
-      <section className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10">
+      <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
 
-        <div className="bg-white/10 backdrop-blur-md p-8 rounded-xl border border-white/20 
+        <div className="bg-white/10 backdrop-blur-md p-6 md:p-8 rounded-xl border border-white/20 
                         hover:bg-white/20 transition shadow-xl">
           <h3 className="text-2xl font-bold mb-4">Fédération du Moungo Nord</h3>
           <p className="text-white/80 leading-relaxed">
@@ -38,7 +37,7 @@ export default function FederationsPage() {
           </p>
         </div>
 
-        <div className="bg-white/10 backdrop-blur-md p-8 rounded-xl border border-white/20 
+        <div className="bg-white/10 backdrop-blur-md p-6 md:p-8 rounded-xl border border-white/20 
                         hover:bg-white/20 transition shadow-xl">
           <h3 className="text-2xl font-bold mb-4">Fédération du Moungo Sud</h3>
           <p className="text-white/80 leading-relaxed">

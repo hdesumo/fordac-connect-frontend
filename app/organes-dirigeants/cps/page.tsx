@@ -5,8 +5,7 @@ export default function CPSPage() {
     <main className="min-h-screen bg-fordacDark text-white">
 
       {/* HEADER HARMONISÉ */}
-      <header className="relative bg-[#064C32] py-20 px-6 overflow-hidden">
-        {/* texture subtile */}
+      <header className="relative bg-[#064C32] py-16 md:py-20 px-6 overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[url('/textures/pattern-grid.svg')] bg-cover"></div>
 
         <div className="relative z-10 max-w-4xl mx-auto text-center">
@@ -17,7 +16,7 @@ export default function CPSPage() {
       </header>
 
       {/* CONTENU ORIGINAL — strictement respecté */}
-      <section className="max-w-5xl mx-auto px-6 py-16 space-y-12 leading-relaxed text-white/90">
+      <section className="max-w-5xl mx-auto px-6 py-12 md:py-16 space-y-12 leading-relaxed text-white/90">
 
         {/* Intro */}
         <p className="text-lg">
@@ -39,7 +38,7 @@ export default function CPSPage() {
             veille à leur exécution par les organes exécutifs et territoriaux.
           </p>
 
-          <ul className="list-disc pl-6 space-y-2">
+          <ul className="list-disc pl-5 space-y-2">
             <li>Traduire en actions les résolutions du Congrès.</li>
             <li>Superviser l’activité politique générale du parti.</li>
             <li>Garantir la cohérence de la vision et du discours politique.</li>
@@ -58,7 +57,7 @@ export default function CPSPage() {
             Il est composé de :
           </p>
 
-          <ul className="list-disc pl-6 space-y-2">
+          <ul className="list-disc pl-5 space-y-2">
             <li>Membres du Bureau Politique National (BPN)</li>
             <li>Représentants des Fédérations</li>
             <li>Cadres experts issus de la Ligue des Experts</li>
@@ -83,7 +82,7 @@ export default function CPSPage() {
         </section>
 
         {/* FOOTER INTERNE */}
-        <div className="p-6 bg-[#064C32] text-white rounded-lg mt-10">
+        <div className="p-5 md:p-6 bg-[#064C32] text-white rounded-lg mt-10">
           <h3 className="text-xl font-semibold mb-2">
             Un organe au cœur de la vision du FORDAC
           </h3>

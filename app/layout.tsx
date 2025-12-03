@@ -1,7 +1,5 @@
 import "./globals.css";
-import TopNavbar from "@/components/TopNavbar";
-import MainNavbar from "@/components/MainNavbar";
-import MobileMenu from "@/components/MobileMenu";
+import Navbar from "@/components/Navbar";
 import MarqueeBanner from "@/components/MarqueeBanner";
 import Footer from "@/components/Footer";
 import { Inter } from "next/font/google";
@@ -22,25 +20,13 @@ export default function RootLayout({
     <html lang="fr">
       <body className={inter.className}>
 
-        {/* ===== MOBILE MENU (visible only on smartphone) ===== */}
-        <div className="md:hidden fixed top-3 left-3 z-50">
-          <MobileMenu />
-        </div>
-
-        {/* ===== TOP NAVBAR (desktop/tablet) ===== */}
-        <div className="hidden md:block">
-          <TopNavbar />
-        </div>
-
-        {/* ===== MAIN NAVBAR (desktop/tablet) ===== */}
-        <div className="hidden md:block">
-          <MainNavbar />
-        </div>
+        {/* ===== NAVBAR UNIFIÉ (DESKTOP + MOBILE) ===== */}
+        <Navbar />
 
         {/* ===== MARQUEE NATIONAL ===== */}
         <MarqueeBanner />
 
-        {/* ===== PAGE CONTENT ===== */}
+        {/* ===== CONTENU ===== */}
         <main className="min-h-screen pt-4">
           {children}
         </main>

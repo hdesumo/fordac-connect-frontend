@@ -2,10 +2,10 @@
 
 export default function SousSectionsPage() {
   return (
-    <main className="min-h-screen bg-fordacDark text-white py-28 px-6">
+    <main className="min-h-screen bg-fordacDark text-white py-24 md:py-28 px-6">
 
       {/* HERO */}
-      <section className="max-w-5xl mx-auto text-center mb-20">
+      <section className="max-w-5xl mx-auto text-center mb-14 md:mb-20">
         <h1 className="text-4xl md:text-5xl font-extrabold">
           Les Sous-sections du FORDAC
         </h1>
@@ -22,8 +22,8 @@ export default function SousSectionsPage() {
         </p>
       </section>
 
-      {/* EXEMPLES DE QUARTIERS / STRUCTURE */}
-      <section className="max-w-4xl mx-auto grid md:grid-cols-2 gap-10">
+      {/* EXEMPLES DE QUARTIERS */}
+      <section className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
 
         {[
           "Quartiers urbains",
@@ -33,7 +33,7 @@ export default function SousSectionsPage() {
         ].map((item, i) => (
           <div
             key={i}
-            className="bg-white/10 backdrop-blur-md p-8 rounded-xl border border-white/20 
+            className="bg-white/10 backdrop-blur-md p-6 md:p-8 rounded-xl border border-white/20 
                        hover:bg-white/20 transition shadow-xl"
           >
             <h3 className="text-xl font-bold mb-2">{item}</h3>

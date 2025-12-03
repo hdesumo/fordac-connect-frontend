@@ -4,10 +4,9 @@ import Link from "next/link";
 
 export default function DemembrementsPage() {
   return (
-    <main className="min-h-screen bg-fordacDark text-white py-28 px-6">
-
+    <main className="min-h-screen bg-fordacDark text-white px-6 py-24 md:py-28">
       {/* HERO INTRO */}
-      <section className="max-w-5xl mx-auto text-center mb-20">
+      <section className="max-w-5xl mx-auto text-center mb-16 md:mb-20">
         <h1 className="text-4xl md:text-5xl font-extrabold">
           Les Démembrements du FORDAC
         </h1>
@@ -29,11 +28,10 @@ export default function DemembrementsPage() {
       </section>
 
       {/* CARTES D'ACCES */}
-      <section className="max-w-6xl mx-auto grid md:grid-cols-4 gap-10">
-
+      <section className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-10">
         <Link
           href="/demembrements/federations"
-          className="bg-white/10 backdrop-blur-md p-8 rounded-xl border border-white/20 
+          className="bg-white/10 backdrop-blur-md p-6 md:p-8 rounded-xl border border-white/20 
                      hover:bg-white/20 transition shadow-xl block"
         >
           <h3 className="text-2xl font-bold mb-3">Fédérations</h3>
@@ -45,7 +43,7 @@ export default function DemembrementsPage() {
 
         <Link
           href="/demembrements/sections"
-          className="bg-white/10 backdrop-blur-md p-8 rounded-xl border border-white/20 
+          className="bg-white/10 backdrop-blur-md p-6 md:p-8 rounded-xl border border-white/20 
                      hover:bg-white/20 transition shadow-xl block"
         >
           <h3 className="text-2xl font-bold mb-3">Sections</h3>
@@ -57,7 +55,7 @@ export default function DemembrementsPage() {
 
         <Link
           href="/demembrements/sous-sections"
-          className="bg-white/10 backdrop-blur-md p-8 rounded-xl border border-white/20 
+          className="bg-white/10 backdrop-blur-md p-6 md:p-8 rounded-xl border border-white/20 
                      hover:bg-white/20 transition shadow-xl block"
         >
           <h3 className="text-2xl font-bold mb-3">Sous-sections</h3>
@@ -69,7 +67,7 @@ export default function DemembrementsPage() {
 
         <Link
           href="/demembrements/cellules"
-          className="bg-white/10 backdrop-blur-md p-8 rounded-xl border border-white/20 
+          className="bg-white/10 backdrop-blur-md p-6 md:p-8 rounded-xl border border-white/20 
                      hover:bg-white/20 transition shadow-xl block"
         >
           <h3 className="text-2xl font-bold mb-3">Cellules</h3>

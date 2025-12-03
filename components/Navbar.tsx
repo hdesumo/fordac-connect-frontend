@@ -1,229 +1,256 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { useState } from 'react';
+import Link from 'next/link';
+import { ChevronDown } from 'lucide-react';
 
 export default function Navbar() {
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
 
-  // Vérification du token pour Forum des Militants
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token_militant");
-      setIsLoggedIn(!!token);
-    }
-  }, []);
-
-  const toggleMobileMenu = () => setIsMobileOpen(!isMobileOpen);
+  const toggleSubMenu = (menu: string) => {
+    setOpenMenu((prev) => (prev === menu ? null : menu));
+  };
 
   return (
-    <nav className="bg-[#062b26] text-white shadow-md fixed top-0 left-0 w-full z-50">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/">
-          <img
-            src="/logo.png"
-            alt="FORDAC"
-            className="h-12 cursor-pointer"
-          />
+    <header className="w-full bg-[#004225] text-white border-b border-gray-800">
+      {/* TOP BAR */}
+      <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
+        {/* LOGO */}
+        <Link href="/" className="text-xl font-bold">
+          FORDAC
         </Link>
 
-        {/* Desktop Menu */}
-        <ul className="hidden md:flex space-x-8 items-center font-medium">
+        {/* DESKTOP MENU */}
+        <nav className="hidden md:flex items-center space-x-6 font-medium">
 
-          <li>
-            <Link href="/" className="hover:text-yellow-400 transition">
-              Accueil
-            </Link>
-          </li>
+          <Link href="/">Accueil</Link>
 
-          <li>
-            <Link href="/a-propos" className="hover:text-yellow-400 transition">
-              À propos
-            </Link>
-          </li>
-
-          <li>
-            <Link href="/president" className="hover:text-yellow-400 transition">
-              Le Président
-            </Link>
-          </li>
+          <Link href="/a-propos">À propos</Link>
 
           {/* ORGANES DIRIGEANTS */}
-          <li className="group relative cursor-pointer">
-            <span>Organes Dirigeants</span>
-            <ul className="absolute left-0 mt-2 hidden group-hover:block bg-white text-black w-72 rounded shadow-lg py-2">
-              <li><Link href="/organes/congres" className="block px-4 py-2 hover:bg-gray-100">Congrès</Link></li>
-              <li><Link href="/organes/cps" className="block px-4 py-2 hover:bg-gray-100">Comité Politique Stratégique (CPS)</Link></li>
-              <li><Link href="/organes/bpn" className="block px-4 py-2 hover:bg-gray-100">Bureau Politique National (BPN)</Link></li>
-              <li><Link href="/organes/sen" className="block px-4 py-2 hover:bg-gray-100">Secrétariat Exécutif National (SEN)</Link></li>
-              <li><Link href="/organes/ethique" className="block px-4 py-2 hover:bg-gray-100">Comité d’Éthique</Link></li>
-              <li><Link href="/organes/controle-audit" className="block px-4 py-2 hover:bg-gray-100">Comité de Contrôle & Audit</Link></li>
-            </ul>
-          </li>
+          <div className="relative group">
+            <button className="flex items-center space-x-1">
+              <span>Organes Dirigeants</span>
+              <ChevronDown size={16} className="transition-transform group-hover:rotate-180" />
+            </button>
+
+            <div className="absolute top-full left-0 mt-2 w-56 bg-white text-black shadow-lg rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition">
+              <Link href="/organes-dirigeants/congres" className="block px-4 py-2 hover:bg-gray-100">Congrès</Link>
+              <Link href="/organes-dirigeants/cps" className="block px-4 py-2 hover:bg-gray-100">Comité Politique Stratégique</Link>
+              <Link href="/organes-dirigeants/sen" className="block px-4 py-2 hover:bg-gray-100">SEN</Link>
+              <Link href="/organes-dirigeants/ethique" className="block px-4 py-2 hover:bg-gray-100">Éthique</Link>
+              <Link href="/organes-dirigeants/controle-audit" className="block px-4 py-2 hover:bg-gray-100">Contrôle & Audit</Link>
+            </div>
+          </div>
 
           {/* DÉMEMBREMENTS */}
-          <li className="group relative cursor-pointer">
-            <span>Démembrements Territoriaux</span>
-            <ul className="absolute left-0 mt-2 hidden group-hover:block bg-white text-black w-60 rounded shadow-lg py-2">
-              <li><Link href="/territoires/federations" className="block px-4 py-2 hover:bg-gray-100">Fédérations</Link></li>
-              <li><Link href="/territoires/sections" className="block px-4 py-2 hover:bg-gray-100">Sections</Link></li>
-              <li><Link href="/territoires/sous-sections" className="block px-4 py-2 hover:bg-gray-100">Sous-sections</Link></li>
-              <li><Link href="/territoires/cellules" className="block px-4 py-2 hover:bg-gray-100">Cellules</Link></li>
-            </ul>
-          </li>
+          <div className="relative group">
+            <button className="flex items-center space-x-1">
+              <span>Démembrements</span>
+              <ChevronDown size={16} className="transition-transform group-hover:rotate-180" />
+            </button>
+            <div className="absolute top-full left-0 mt-2 w-56 bg-white text-black shadow-lg rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition">
+              <Link href="/demembrements/federations" className="block px-4 py-2 hover:bg-gray-100">Fédérations</Link>
+              <Link href="/demembrements/sections" className="block px-4 py-2 hover:bg-gray-100">Sections</Link>
+              <Link href="/demembrements/sous-sections" className="block px-4 py-2 hover:bg-gray-100">Sous-sections</Link>
+              <Link href="/demembrements/cellules" className="block px-4 py-2 hover:bg-gray-100">Cellules</Link>
+            </div>
+          </div>
 
           {/* LIGUES */}
-          <li className="group relative cursor-pointer">
-            <span>Ligues</span>
-            <ul className="absolute left-0 mt-2 hidden group-hover:block bg-white text-black w-56 rounded shadow-lg py-2">
-              <li><Link href="/ligues/jeunes" className="block px-4 py-2 hover:bg-gray-100">Ligue des Jeunes</Link></li>
-              <li><Link href="/ligues/femmes" className="block px-4 py-2 hover:bg-gray-100">Ligue des Femmes</Link></li>
-              <li><Link href="/ligues/experts" className="block px-4 py-2 hover:bg-gray-100">Ligue des Experts</Link></li>
-            </ul>
-          </li>
+          <div className="relative group">
+            <button className="flex items-center space-x-1">
+              <span>Ligues</span>
+              <ChevronDown size={16} className="transition-transform group-hover:rotate-180" />
+            </button>
+            <div className="absolute top-full left-0 mt-2 w-56 bg-white text-black shadow-lg rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition">
+              <Link href="/ligues/jeunes" className="block px-4 py-2 hover:bg-gray-100">Jeunes</Link>
+              <Link href="/ligues/femmes" className="block px-4 py-2 hover:bg-gray-100">Femmes</Link>
+              <Link href="/ligues/experts" className="block px-4 py-2 hover:bg-gray-100">Experts</Link>
+            </div>
+          </div>
 
           {/* ORGANES ASSOCIÉS */}
-          <li className="group relative cursor-pointer">
-            <span>Organes Associés</span>
-            <ul className="absolute left-0 mt-2 hidden group-hover:block bg-white text-black w-60 rounded shadow-lg py-2">
-              <li><Link href="/organes-associes/presse" className="block px-4 py-2 hover:bg-gray-100">Presse de la Nation</Link></li>
-              <li><Link href="/organes-associes/mutuelle" className="block px-4 py-2 hover:bg-gray-100">La Mutuelle du FORDAC</Link></li>
-            </ul>
-          </li>
+          <div className="relative group">
+            <button className="flex items-center space-x-1">
+              <span>Organes Associés</span>
+              <ChevronDown size={16} className="transition-transform group-hover:rotate-180" />
+            </button>
+            <div className="absolute top-full left-0 mt-2 w-56 bg-white text-black shadow-lg rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition">
+              <Link href="/organes-associes/presse" className="block px-4 py-2 hover:bg-gray-100">Presse de la Nation</Link>
+              <Link href="/organes-associes/mutuelle" className="block px-4 py-2 hover:bg-gray-100">Mutuelle du FORDAC</Link>
+            </div>
+          </div>
 
           {/* GALERIE */}
-          <li className="group relative cursor-pointer">
-            <span>Galerie</span>
-            <ul className="absolute left-0 mt-2 hidden group-hover:block bg-white text-black w-40 rounded shadow-lg py-2">
-              <li><Link href="/galerie/photos" className="block px-4 py-2 hover:bg-gray-100">Photos</Link></li>
-              <li><Link href="/galerie/videos" className="block px-4 py-2 hover:bg-gray-100">Vidéos</Link></li>
-            </ul>
-          </li>
+          <div className="relative group">
+            <button className="flex items-center space-x-1">
+              <span>Galerie</span>
+              <ChevronDown size={16} className="transition-transform group-hover:rotate-180" />
+            </button>
+            <div className="absolute top-full left-0 mt-2 w-48 bg-white text-black shadow-lg rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition">
+              <Link href="/galerie/photos" className="block px-4 py-2 hover:bg-gray-100">Photos</Link>
+              <Link href="/galerie/videos" className="block px-4 py-2 hover:bg-gray-100">Vidéos</Link>
+            </div>
+          </div>
 
-          {/* FORUM (protégé) */}
-          <li>
-            <Link
-              href={isLoggedIn ? "/forum" : "/login"}
-              className="hover:text-yellow-400 transition"
-            >
-              Forum des Militants
-            </Link>
-          </li>
-
-          {/* BOUTONS */}
-          <li>
-            <Link
-              href="/adhesion"
-              className="bg-yellow-600 px-4 py-2 rounded hover:bg-yellow-700 transition flex items-center space-x-2"
-            >
-              <span>Adhésion</span>
-            </Link>
-          </li>
-
-          <li>
-            <Link
-              href="/login"
-              className="border border-yellow-600 px-4 py-2 rounded hover:bg-yellow-600 hover:text-black transition"
-            >
-              Connexion
-            </Link>
-          </li>
-        </ul>
-
-        {/* MOBILE MENU BUTTON */}
-        <button className="md:hidden" onClick={toggleMobileMenu}>
-          {isMobileOpen ? <X size={30} /> : <Menu size={30} />}
-        </button>
-      </div>
-
-      {/* MOBILE MENU PANEL */}
-      {isMobileOpen && (
-        <div className="md:hidden bg-[#083a34] text-white px-6 py-4 space-y-4 shadow-lg">
-
-          <Link href="/" onClick={toggleMobileMenu}>Accueil</Link>
-          <Link href="/a-propos" onClick={toggleMobileMenu}>À propos</Link>
-          <Link href="/president" onClick={toggleMobileMenu}>Le Président</Link>
-
-          {/* Organes dirigeants */}
-          <details className="group">
-            <summary className="cursor-pointer">Organes Dirigeants</summary>
-            <ul className="ml-4 mt-2 space-y-2 text-sm">
-              <li><Link href="/organes/congres" onClick={toggleMobileMenu}>Congrès</Link></li>
-              <li><Link href="/organes/cps" onClick={toggleMobileMenu}>CPS</Link></li>
-              <li><Link href="/organes/bpn" onClick={toggleMobileMenu}>BPN</Link></li>
-              <li><Link href="/organes/sen" onClick={toggleMobileMenu}>SEN</Link></li>
-              <li><Link href="/organes/ethique" onClick={toggleMobileMenu}>Comité d’Éthique</Link></li>
-              <li><Link href="/organes/controle-audit" onClick={toggleMobileMenu}>Contrôle & Audit</Link></li>
-            </ul>
-          </details>
-
-          {/* Démembrements */}
-          <details className="group">
-            <summary className="cursor-pointer">Démembrements Territoriaux</summary>
-            <ul className="ml-4 mt-2 space-y-2 text-sm">
-              <li><Link href="/territoires/federations" onClick={toggleMobileMenu}>Fédérations</Link></li>
-              <li><Link href="/territoires/sections" onClick={toggleMobileMenu}>Sections</Link></li>
-              <li><Link href="/territoires/sous-sections" onClick={toggleMobileMenu}>Sous-sections</Link></li>
-              <li><Link href="/territoires/cellules" onClick={toggleMobileMenu}>Cellules</Link></li>
-            </ul>
-          </details>
-
-          {/* Ligues */}
-          <details className="group">
-            <summary className="cursor-pointer">Ligues</summary>
-            <ul className="ml-4 mt-2 space-y-2 text-sm">
-              <li><Link href="/ligues/jeunes" onClick={toggleMobileMenu}>Ligue des Jeunes</Link></li>
-              <li><Link href="/ligues/femmes" onClick={toggleMobileMenu}>Ligue des Femmes</Link></li>
-              <li><Link href="/ligues/experts" onClick={toggleMobileMenu}>Ligue des Experts</Link></li>
-            </ul>
-          </details>
-
-          {/* Organes associés */}
-          <details className="group">
-            <summary className="cursor-pointer">Organes Associés</summary>
-            <ul className="ml-4 mt-2 space-y-2 text-sm">
-              <li><Link href="/organes-associes/presse" onClick={toggleMobileMenu}>Presse de la Nation</Link></li>
-              <li><Link href="/organes-associes/mutuelle" onClick={toggleMobileMenu}>Mutuelle du FORDAC</Link></li>
-            </ul>
-          </details>
-
-          {/* Galerie */}
-          <details className="group">
-            <summary className="cursor-pointer">Galerie</summary>
-            <ul className="ml-4 mt-2 space-y-2 text-sm">
-              <li><Link href="/galerie/photos" onClick={toggleMobileMenu}>Photos</Link></li>
-              <li><Link href="/galerie/videos" onClick={toggleMobileMenu}>Vidéos</Link></li>
-            </ul>
-          </details>
-
-          {/* Forum */}
-          <Link
-            href={isLoggedIn ? "/forum" : "/login"}
-            onClick={toggleMobileMenu}
-          >
-            Forum des Militants
-          </Link>
+          <Link href="/forum">Forum</Link>
+          <Link href="/adhesion">Adhésion</Link>
 
           <Link
-            href="/adhesion"
-            onClick={toggleMobileMenu}
-            className="block bg-yellow-600 px-4 py-2 rounded text-center"
-          >
-            Adhésion
-          </Link>
-
-          <Link
-            href="/login"
-            onClick={toggleMobileMenu}
-            className="block border border-yellow-600 px-4 py-2 rounded text-center"
+            href="/membre/login"
+            className="px-4 py-2 bg-white text-black rounded shadow hover:bg-gray-200"
           >
             Connexion
           </Link>
-        </div>
+        </nav>
+
+        {/* MOBILE BUTTON */}
+        <button
+          className="md:hidden p-2"
+          onClick={() => {
+            setMobileOpen(!mobileOpen);
+            setOpenMenu(null);
+          }}
+        >
+          <ChevronDown
+            size={28}
+            className={`transition-transform ${mobileOpen ? 'rotate-180' : ''}`}
+          />
+        </button>
+      </div>
+
+      {/* MOBILE MENU */}
+      {mobileOpen && (
+        <nav className="md:hidden bg-[#00321c] border-t border-gray-700 text-white px-4 py-4 space-y-2 font-medium">
+
+          <Link href="/" onClick={() => setMobileOpen(false)}>Accueil</Link>
+          <Link href="/a-propos" onClick={() => setMobileOpen(false)}>À propos</Link>
+
+          {/* MOBILE SUBMENU — ORGANES DIRIGEANTS */}
+          <div>
+            <button
+              onClick={() => toggleSubMenu('dirigeants')}
+              className="w-full flex items-center justify-between"
+            >
+              Organes Dirigeants
+              <ChevronDown size={18} className={`transition ${openMenu === 'dirigeants' ? 'rotate-180' : ''}`} />
+            </button>
+
+            <div
+              className={`overflow-hidden transition-all ${
+                openMenu === 'dirigeants' ? 'max-h-96' : 'max-h-0'
+              }`}
+            >
+              <div className="pl-4 mt-2 space-y-1">
+                <Link href="/organes-dirigeants/congres">Congrès</Link>
+                <Link href="/organes-dirigeants/cps">Comité Politique Stratégique</Link>
+                <Link href="/organes-dirigeants/sen">SEN</Link>
+                <Link href="/organes-dirigeants/ethique">Éthique</Link>
+                <Link href="/organes-dirigeants/controle-audit">Contrôle & Audit</Link>
+              </div>
+            </div>
+          </div>
+
+          {/* MOBILE SUBMENU — DEMEMBREMENTS */}
+          <div>
+            <button
+              onClick={() => toggleSubMenu('demembrements')}
+              className="w-full flex items-center justify-between"
+            >
+              Démembrements
+              <ChevronDown size={18} className={`transition ${openMenu === 'demembrements' ? 'rotate-180' : ''}`} />
+            </button>
+            <div
+              className={`overflow-hidden transition-all ${
+                openMenu === 'demembrements' ? 'max-h-96' : 'max-h-0'
+              }`}
+            >
+              <div className="pl-4 mt-2 space-y-1">
+                <Link href="/demembrements/federations">Fédérations</Link>
+                <Link href="/demembrements/sections">Sections</Link>
+                <Link href="/demembrements/sous-sections">Sous-sections</Link>
+                <Link href="/demembrements/cellules">Cellules</Link>
+              </div>
+            </div>
+          </div>
+
+          {/* MOBILE SUBMENU — LIGUES */}
+          <div>
+            <button
+              onClick={() => toggleSubMenu('ligues')}
+              className="w-full flex items-center justify-between"
+            >
+              Ligues
+              <ChevronDown size={18} className={`transition ${openMenu === 'ligues' ? 'rotate-180' : ''}`} />
+            </button>
+            <div
+              className={`overflow-hidden transition-all ${
+                openMenu === 'ligues' ? 'max-h-96' : 'max-h-0'
+              }`}
+            >
+              <div className="pl-4 mt-2 space-y-1">
+                <Link href="/ligues/jeunes">Jeunes</Link>
+                <Link href="/ligues/femmes">Femmes</Link>
+                <Link href="/ligues/experts">Experts</Link>
+              </div>
+            </div>
+          </div>
+
+          {/* MOBILE SUBMENU — ORGANES ASSOCIÉS */}
+          <div>
+            <button
+              onClick={() => toggleSubMenu('associes')}
+              className="w-full flex items-center justify-between"
+            >
+              Organes Associés
+              <ChevronDown size={18} className={`transition ${openMenu === 'associes' ? 'rotate-180' : ''}`} />
+            </button>
+            <div
+              className={`overflow-hidden transition-all ${
+                openMenu === 'associes' ? 'max-h-96' : 'max-h-0'
+              }`}
+            >
+              <div className="pl-4 mt-2 space-y-1">
+                <Link href="/organes-associes/presse">Presse de la Nation</Link>
+                <Link href="/organes-associes/mutuelle">Mutuelle du FORDAC</Link>
+              </div>
+            </div>
+          </div>
+
+          {/* GALERIE */}
+          <div>
+            <button
+              onClick={() => toggleSubMenu('galerie')}
+              className="w-full flex items-center justify-between"
+            >
+              Galerie
+              <ChevronDown size={18} className={`transition ${openMenu === 'galerie' ? 'rotate-180' : ''}`} />
+            </button>
+            <div
+              className={`overflow-hidden transition-all ${
+                openMenu === 'galerie' ? 'max-h-96' : 'max-h-0'
+              }`}
+            >
+              <div className="pl-4 mt-2 space-y-1">
+                <Link href="/galerie/photos">Photos</Link>
+                <Link href="/galerie/videos">Vidéos</Link>
+              </div>
+            </div>
+          </div>
+
+          <Link href="/forum">Forum</Link>
+          <Link href="/adhesion">Adhésion</Link>
+
+          <Link
+            href="/membre/login"
+            className="block px-4 py-2 bg-white text-black rounded shadow text-center mt-2"
+          >
+            Connexion
+          </Link>
+        </nav>
       )}
-    </nav>
+    </header>
   );
 }

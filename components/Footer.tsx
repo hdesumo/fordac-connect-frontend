@@ -37,10 +37,29 @@ export default function Footer() {
           </h4>
 
           <ul className="space-y-2 text-sm">
-            <li><Link href="/adhesion" className="hover:text-[#4ade80]">Adhésion</Link></li>
-            <li><Link href="/login" className="hover:text-[#4ade80]">Connexion (Membres)</Link></li>
-            <li><Link href="/contact" className="hover:text-[#4ade80]">Contact</Link></li>
-            <li><Link href="/mentions-legales" className="hover:text-[#4ade80]">Mentions légales</Link></li>
+            <li>
+              <Link href="/adhesion" className="hover:text-[#4ade80]">
+                Adhésion
+              </Link>
+            </li>
+
+            {/* FIX EXACTEMENT DEMANDÉ : /login → /membre/login */}
+            <li>
+              <Link href="/membre/login" className="hover:text-[#4ade80]">
+                Connexion (Membres)
+              </Link>
+            </li>
+
+            <li>
+              <Link href="/contact" className="hover:text-[#4ade80]">
+                Contact
+              </Link>
+            </li>
+            <li>
+              <Link href="/mentions-legales" className="hover:text-[#4ade80]">
+                Mentions légales
+              </Link>
+            </li>
           </ul>
         </div>
 
@@ -50,9 +69,19 @@ export default function Footer() {
           </h4>
 
           <ul className="space-y-2 text-sm">
-            <li><Link href="/superadmin-login" className="hover:text-[#4ade80]">Connexion SuperAdmin</Link></li>
-            <li><Link href="/admin-login" className="hover:text-[#4ade80]">Connexion Admin</Link></li>
-            <li className="mt-4 text-gray-200 text-sm">Email : contact@fordac.org</li>
+            <li>
+              <Link href="/superadmin-login" className="hover:text-[#4ade80]">
+                Connexion SuperAdmin
+              </Link>
+            </li>
+            <li>
+              <Link href="/admin-login" className="hover:text-[#4ade80]">
+                Connexion Admin
+              </Link>
+            </li>
+            <li className="mt-4 text-gray-200 text-sm">
+              Email : contact@fordac.org
+            </li>
           </ul>
         </div>
       </div>
