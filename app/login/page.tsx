@@ -30,12 +30,10 @@ export default function LoginPage() {
         return;
       }
 
-      // Stockage Token + rôle + id utilisateur
       localStorage.setItem("fordac_token", data.token);
       localStorage.setItem("fordac_role", data.user.role);
       localStorage.setItem("fordac_user_id", data.user.id);
 
-      // Redirection selon rôle
       switch (data.user.role) {
         case "superadmin":
           router.push("/superadmin");
@@ -57,9 +55,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-fordacDark flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-md bg-white/10 backdrop-blur-md border border-white/20 shadow-xl 
-                      rounded-2xl p-8 animate-fadeIn">
+    <div className="min-h-screen bg-fordacDark flex items-center justify-center px-4 py-16 md:py-10">
+
+      <div className="w-full max-w-sm md:max-w-md bg-white/10 backdrop-blur-md border border-white/20 
+                      shadow-xl rounded-2xl p-8">
 
         <h1 className="text-center text-3xl font-bold text-white mb-6">
           Connexion au FORDAC
@@ -86,7 +85,7 @@ export default function LoginPage() {
               type="email"
               required
               className="w-full px-4 py-3 rounded-lg bg-white/20 text-white placeholder-white/60 
-                         border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/40"
+              border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/40"
               placeholder="exemple@mail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -102,7 +101,7 @@ export default function LoginPage() {
               type="password"
               required
               className="w-full px-4 py-3 rounded-lg bg-white/20 text-white placeholder-white/60 
-                         border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/40"
+              border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/40"
               placeholder="********"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -114,7 +113,7 @@ export default function LoginPage() {
             type="submit"
             disabled={loading}
             className="w-full bg-white text-fordacDark font-semibold py-3 rounded-lg 
-                       hover:bg-fordacLight transition border border-white/40"
+            hover:bg-fordacLight transition border border-white/40"
           >
             {loading ? "Connexion..." : "Se connecter"}
           </button>

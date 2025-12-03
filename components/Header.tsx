@@ -1,97 +1,55 @@
 "use client";
-
-import Link from "next/link";
-import Image from "next/image";
 import { useState } from "react";
-import { UserPlus2, KeyRound } from "lucide-react";
+import Link from "next/link";
+import { Menu, X } from "lucide-react";
 
 export default function Header() {
-  const [showGalerieMenu, setShowGalerieMenu] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
-    <header className="w-full bg-[#0F3C34] text-white shadow-md">
-      <div className="max-w-7xl mx-auto flex items-center justify-between py-4 px-6">
-        {/* ===== Logo ===== */}
-        <Link href="/" className="flex items-center space-x-3">
-          <Image
-            src="/images/logo.png"
-            alt="FORDAC Logo"
-            width={55}
-            height={55}
-            className="object-contain"
-          />
-        </Link>
-
-        {/* ===== Navigation ===== */}
-        <nav className="hidden md:flex items-center space-x-8 font-medium">
-          <Link href="/" className="hover:text-amber-400 transition">
-            Accueil
-          </Link>
-          <Link href="/le-parti" className="hover:text-amber-400 transition">
-            Le Parti
-          </Link>
-          <Link href="/president" className="hover:text-amber-400 transition">
-            Le Président
-          </Link>
-          <Link href="/organes" className="hover:text-amber-400 transition">
-            Les Organes
+    <header className="fixed top-0 left-0 w-full bg-[#0B6623] text-white shadow z-50">
+      {/* Container */}
+      <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16 md:h-20">
+          
+          {/* LOGO */}
+          <Link href="/" className="text-2xl font-bold tracking-wide">
+            FORDAC
           </Link>
 
-          {/* ===== Galerie avec menu déroulant ===== */}
-          <div
-            className="relative"
-            onMouseEnter={() => setShowGalerieMenu(true)}
-            onMouseLeave={() => setShowGalerieMenu(false)}
+          {/* Desktop Menu */}
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
+            <Link href="/demembrements" className="hover:text-gray-200">Démembrements</Link>
+            <Link href="/ligues" className="hover:text-gray-200">Ligues</Link>
+            <Link href="/organes-dirigeants" className="hover:text-gray-200">Organes Dirigeants</Link>
+            <Link href="/organes-associes" className="hover:text-gray-200">Organes Associés</Link>
+            <Link href="/galerie" className="hover:text-gray-200">Galerie</Link>
+            <Link href="/forum" className="hover:text-gray-200">Forum des Militants</Link>
+          </nav>
+
+          {/* Mobile Button */}
+          <button
+            onClick={() => setOpen(!open)}
+            className="md:hidden p-2 rounded focus:outline-none focus:ring-2 focus:ring-white"
           >
-            <button className="hover:text-amber-400 transition flex items-center space-x-1">
-              <span>Galerie</span>
-              <svg
-                className="w-4 h-4 ml-1"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            {showGalerieMenu && (
-              <div className="absolute left-0 mt-2 w-40 bg-white text-gray-800 rounded-md shadow-lg z-50">
-                <Link
-                  href="/galerie/photos"
-                  className="block px-4 py-2 hover:bg-gray-100"
-                >
-                  Photos
-                </Link>
-                <Link
-                  href="/galerie/videos"
-                  className="block px-4 py-2 hover:bg-gray-100"
-                >
-                  Vidéos
-                </Link>
-              </div>
-            )}
-          </div>
-
-          <Link href="/forum" className="hover:text-amber-400 transition">
-            Forum des Militants
-          </Link>
-        </nav>
-
-        {/* ===== Boutons Adhésion & Connexion ===== */}
-        <div className="flex items-center space-x-3">
-          <Link href="/adhesion">
-            <button className="flex items-center bg-amber-600 hover:bg-amber-500 text-black font-semibold px-4 py-2 rounded-md transition">
-              <UserPlus2 size={18} className="mr-1" /> Adhésion
-            </button>
-          </Link>
-          <Link href="/login">
-            <button className="flex items-center border border-amber-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-amber-600 hover:text-black transition">
-              <KeyRound size={18} className="mr-1" /> Connexion
-            </button>
-          </Link>
+            {open ? <X size={28} /> : <Menu size={28} />}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Dropdown */}
+      {open && (
+        <nav className="md:hidden bg-[#0B6623] border-t border-white/10 animate-slideDown">
+          <ul className="flex flex-col py-4 px-6 text-base font-medium space-y-4">
+            <li><Link href="/demembrements" onClick={() => setOpen(false)}>Démembrements</Link></li>
+            <li><Link href="/ligues" onClick={() => setOpen(false)}>Ligues</Link></li>
+            <li><Link href="/organes-dirigeants" onClick={() => setOpen(false)}>Organes Dirigeants</Link></li>
+            <li><Link href="/organes-associes" onClick={() => setOpen(false)}>Organes Associés</Link></li>
+            <li><Link href="/galerie" onClick={() => setOpen(false)}>Galerie</Link></li>
+            <li><Link href="/forum" onClick={() => setOpen(false)}>Forum des Militants</Link></li>
+          </ul>
+        </nav>
+      )}
     </header>
   );
 }
