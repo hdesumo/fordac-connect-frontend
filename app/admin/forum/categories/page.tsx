@@ -33,7 +33,7 @@ export default function AdminCategoriesPage() {
   };
 
   return (
-    <ProtectedRoute adminOnly>
+    <ProtectedRouteAdmin>
       <main className="p-10">
         <h1 className="text-3xl font-bold text-[#166534] mb-6">
           Catégories du Forum
@@ -70,6 +70,6 @@ export default function AdminCategoriesPage() {
           </ul>
         </div>
       </main>
-    </ProtectedRoute>
+    </ProtectedRouteAdmin>
   );
 }
