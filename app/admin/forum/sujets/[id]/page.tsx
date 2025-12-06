@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 
-import ProtectedRoute from "@/components/ProtectedRoute"; // ✅ Import corrigé
-import Pagination from "@/components/Pagination"; // ✅ Import corrigé
+import ProtectedRouteAdmin from "@/components/ProtectedRouteAdmin";
+import Pagination from "@/components/Pagination";
 
 export default function AdminTopicModerationPage() {
   const { id } = useParams();
@@ -20,7 +20,7 @@ export default function AdminTopicModerationPage() {
   const loadData = async () => {
     try {
       const res = await fetch(`${API}/topics/${id}`, {
-        cache: "no-store", // ✅ important pour Vercel/Railway
+        cache: "no-store",
       });
 
       const data = await res.json();
@@ -49,7 +49,7 @@ export default function AdminTopicModerationPage() {
         method: "DELETE",
       });
 
-      loadData(); // refresh
+      loadData();
     } catch (e) {
       console.error("Erreur suppression message admin:", e);
     }
@@ -58,16 +58,10 @@ export default function AdminTopicModerationPage() {
   return (
     <ProtectedRouteAdmin>
       <main className="min-h-screen bg-[#F7F7F7] p-10">
-
-        {/* Bouton retour */}
-        <Link
-          href="/admin/forum"
-          className="text-[#166534] hover:underline text-lg"
-        >
+        <Link href="/admin/forum" className="text-[#166534] hover:underline text-lg">
           ← Retour à la liste des sujets
         </Link>
 
-        {/* Titre */}
         {topic ? (
           <h1 className="text-4xl font-extrabold text-[#166534] mt-6 mb-4">
             Sujet : {topic.title}
@@ -82,17 +76,13 @@ export default function AdminTopicModerationPage() {
           Messages : {posts.length}
         </p>
 
-        {/* Liste des messages */}
         <div className="bg-white p-8 rounded-xl border shadow-sm">
           {paginated.length === 0 ? (
             <p className="text-gray-600 text-center">Aucun message.</p>
           ) : (
             <div className="space-y-8">
               {paginated.map((post) => (
-                <div
-                  key={post.id}
-                  className="border rounded-xl p-6 bg-white shadow-sm"
-                >
+                <div key={post.id} className="border rounded-xl p-6 bg-white shadow-sm">
                   <div className="flex justify-between">
                     <h3 className="text-xl font-semibold text-[#166534]">
                       {post.author || "Membre"}
@@ -115,7 +105,6 @@ export default function AdminTopicModerationPage() {
                     </p>
                   )}
 
-                  {/* Actions admin */}
                   <div className="mt-4 flex gap-4">
                     <button
                       onClick={() => deletePost(post.id)}
@@ -129,7 +118,6 @@ export default function AdminTopicModerationPage() {
             </div>
           )}
 
-          {/* Pagination */}
           <div className="mt-10">
             <Pagination
               page={page}
