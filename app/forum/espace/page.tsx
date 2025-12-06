@@ -13,14 +13,19 @@ export default function ForumEspacePage() {
 
   const fetchTopics = async () => {
     try {
+      const token =
+        typeof window !== "undefined"
+          ? localStorage.getItem("token")
+          : null;
+
+      if (!token) return;
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/forum/topics`,
         {
           headers: {
-            Authorization:
-              "Bearer " + (typeof window !== "undefined"
-                ? localStorage.getItem("memberToken")
-                : ""),
+            Authorization: "Bearer " + token,
+            "Content-Type": "application/json",
           },
         }
       );

@@ -11,7 +11,9 @@ export default function EditPostPage() {
   const [content, setContent] = useState("");
 
   const token =
-    typeof window !== "undefined" ? localStorage.getItem("memberToken") : null;
+    typeof window !== "undefined"
+      ? localStorage.getItem("token")
+      : null;
 
   useEffect(() => {
     loadPost();
@@ -20,7 +22,12 @@ export default function EditPostPage() {
   const loadPost = async () => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/forum/posts/${id}`,
-      { headers: { Authorization: "Bearer " + token } }
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+      }
     );
 
     const data = await res.json();

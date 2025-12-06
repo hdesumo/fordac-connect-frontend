@@ -8,11 +8,12 @@ import EditorBox from "@/components/EditorBox";
 export default function NouveauPostPage() {
   const { id } = useParams();
   const router = useRouter();
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
   const token =
-    typeof window !== "undefined" ? localStorage.getItem("memberToken") : null;
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   const submitPost = async () => {
     if (!title.trim() || content.trim().length < 10) {
@@ -44,7 +45,7 @@ export default function NouveauPostPage() {
 
         <input
           type="text"
-          placeholder="Titre du post"
+          placeholder="Titre du message"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="w-full border rounded-md p-3 mb-6"

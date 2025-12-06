@@ -1,181 +1,146 @@
 "use client";
+<MembreTopbar />
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import ProtectedRouteMembre from "@/components/ProtectedRouteMembre";
+import useMembreAuth from "@/hooks/useMembreAuth";
+import { getSujetById, createCommentaire } from "@/lib/membreForumApi";
 
-export default function ForumTopicPage() {
+export default function ForumSujetPage() {
   const params = useParams();
-  const { id } = params;
+  const id = params?.id;
 
-  const [topic, setTopic] = useState<any>(null);
-  const [comments, setComments] = useState<any[]>([]);
-  const [loaded, setLoaded] = useState(false);
+  const { token, loaded } = useMembreAuth();
+
+  const [loading, setLoading] = useState(true);
+  const [sujet, setSujet] = useState<any>(null);
+  const [commentaires, setCommentaires] = useState<any[]>([]);
 
   const [commentText, setCommentText] = useState("");
-  const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
+  const [msg, setMsg] = useState("");
 
   useEffect(() => {
-    // ⚠️ Placeholder avant connexion API
-    const fakeTopics = [
-      {
-        id: "1",
-        title: "Proposition pour renforcer la mobilisation locale",
-        content:
-          "Voici quelques idées pour dynamiser nos actions au niveau des sections locales...",
-        image: null,
-        date: "2025-01-12",
-        author: "Admin FORDAC",
-      },
-      {
-        id: "2",
-        title: "Idées pour améliorer la participation des jeunes",
-        content:
-          "La jeunesse doit être au cœur du projet FORDAC. Voici quelques pistes pour avancer...",
-        image: null,
-        date: "2025-01-11",
-        author: "Fatou Ndiaye",
-      },
-    ];
+    if (!loaded || !token) return;
 
-    const fakeComments = [
-      {
-        id: 1,
-        author: "Jean Dupont",
-        content: "Très bonne idée ! Je pense qu’on pourrait lancer une campagne régionale.",
-        date: "2025-01-12",
-      },
-      {
-        id: 2,
-        author: "Marie Nguema",
-        content: "Je valide totalement. L’action locale est vraiment essentielle.",
-        date: "2025-01-12",
-      },
-    ];
+    async function fetchData() {
+      try {
+        const data = await getSujetById(id!, token);
+        setSujet(data.sujet);
+        setCommentaires(data.commentaires);
+      } catch (e) {
+        console.error(e);
+      }
+      setLoading(false);
+    }
 
-    const found = fakeTopics.find((t) => t.id === id);
-    setTopic(found || null);
-    setComments(fakeComments);
-    setLoaded(true);
-  }, [id]);
+    fetchData();
+  }, [loaded, token, id]);
 
-  async function handleCommentSubmit(e: any) {
+  async function handleSend(e: any) {
     e.preventDefault();
-    setMessage("");
+    setMsg("");
 
     if (!commentText.trim()) {
-      setMessage("Veuillez écrire un commentaire.");
+      setMsg("Veuillez écrire un commentaire.");
       return;
     }
 
     setSending(true);
 
     try {
-      const token = localStorage.getItem("token");
+      const newComment = await createCommentaire(id!, commentText, token!);
 
-      // ⚠️ Placeholder avant API réelle
-      setTimeout(() => {
-        const newComment = {
-          id: comments.length + 1,
-          author: "Vous",
-          content: commentText,
-          date: new Date().toISOString().substring(0, 10),
-        };
-
-        setComments([newComment, ...comments]);
-        setCommentText("");
-        setMessage("Commentaire publié ✔");
-        setSending(false);
-      }, 800);
-    } catch (error) {
-      setMessage("Erreur lors de l'envoi.");
-      setSending(false);
+      setCommentaires([newComment, ...commentaires]);
+      setCommentText("");
+      setMsg("Commentaire ajouté ✔");
+    } catch (err: any) {
+      setMsg(err.message || "Erreur lors de l'envoi.");
     }
+
+    setSending(false);
   }
 
-  if (!loaded) {
+  if (!loaded || loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen text-gray-700">
-        Chargement...
-      </div>
+      <ProtectedRouteMembre>
+        <div className="flex items-center justify-center min-h-screen text-gray-700">
+          Chargement...
+        </div>
+      </ProtectedRouteMembre>
     );
   }
 
-  if (!topic) {
+  if (!sujet) {
     return (
-      <div className="p-6 text-red-600">
-        Sujet introuvable.
-      </div>
+      <ProtectedRouteMembre>
+        <div className="p-6 text-red-600">Sujet introuvable.</div>
+      </ProtectedRouteMembre>
     );
   }
 
   return (
-    <div className="space-y-8">
+    <ProtectedRouteMembre>
+      <div className="space-y-8">
 
-      {/* TITRE DU SUJET */}
-      <h1 className="text-2xl font-bold text-gray-800">{topic.title}</h1>
+        <h1 className="text-2xl font-bold text-gray-800">{sujet.title}</h1>
 
-      {/* CARTE DU SUJET */}
-      <div className="bg-white p-6 rounded-lg shadow">
+        {/* SUJET */}
+        <div className="bg-white p-6 rounded-lg shadow">
+          <p className="text-gray-700 whitespace-pre-line">{sujet.description}</p>
 
-        {/* Image si elle existe */}
-        {topic.image && (
-          <img src={topic.image} className="w-96 rounded mb-4 shadow" />
-        )}
-
-        <p className="text-gray-700 whitespace-pre-line">{topic.content}</p>
-
-        <div className="mt-4 text-sm text-gray-500">
-          📅 Publié le {topic.date} — par {topic.author}
+          <div className="mt-4 text-sm text-gray-500">
+            📅 {new Date(sujet.created_at).toLocaleDateString()} — par {sujet.author_name}
+          </div>
         </div>
-      </div>
 
-      {/* FORMULAIRE COMMENTAIRE */}
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h2 className="text-lg font-semibold mb-4">Ajouter un commentaire</h2>
+        {/* FORMULAIRE COMMENTAIRE */}
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-lg font-semibold mb-4">Ajouter un commentaire</h2>
 
-        <form onSubmit={handleCommentSubmit} className="space-y-4">
-          <textarea
-            value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
-            className="w-full border p-3 rounded h-32"
-            placeholder="Votre commentaire..."
-          ></textarea>
+          <form onSubmit={handleSend} className="space-y-4">
+            <textarea
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+              className="w-full border p-3 rounded h-32"
+              placeholder="Votre commentaire..."
+            ></textarea>
 
-          {message && <p className="text-blue-600 text-sm">{message}</p>}
+            {msg && <p className="text-blue-600 text-sm">{msg}</p>}
 
-          <button
-            type="submit"
-            disabled={sending}
-            className="bg-[#111827] text-white px-4 py-2 rounded hover:bg-black"
-          >
-            {sending ? "Publication..." : "Publier le commentaire"}
-          </button>
-        </form>
-      </div>
-
-      {/* LISTE DES COMMENTAIRES */}
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h2 className="text-lg font-semibold mb-4">Commentaires</h2>
-
-        {comments.length === 0 && (
-          <p className="text-gray-600">Aucun commentaire pour l'instant.</p>
-        )}
-
-        <div className="space-y-4">
-          {comments.map((c) => (
-            <div
-              key={c.id}
-              className="border-b pb-3"
+            <button
+              type="submit"
+              disabled={sending}
+              className="bg-[#111827] text-white px-4 py-2 rounded hover:bg-black"
             >
-              <p className="font-semibold">{c.author}</p>
-              <p className="text-gray-700">{c.content}</p>
-              <p className="text-sm text-gray-500">📅 {c.date}</p>
-            </div>
-          ))}
+              {sending ? "Publication..." : "Publier le commentaire"}
+            </button>
+          </form>
         </div>
-      </div>
 
-    </div>
+        {/* COMMENTAIRES */}
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-lg font-semibold mb-4">Commentaires</h2>
+
+          {commentaires.length === 0 && (
+            <p className="text-gray-600">Aucun commentaire pour l'instant.</p>
+          )}
+
+          <div className="space-y-4">
+            {commentaires.map((c: any) => (
+              <div key={c.id} className="border-b pb-3">
+                <p className="font-semibold">{c.author_name}</p>
+                <p className="text-gray-700">{c.content}</p>
+                <p className="text-sm text-gray-500">
+                  📅 {new Date(c.created_at).toLocaleDateString()}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+      </div>
+    </ProtectedRouteMembre>
   );
 }

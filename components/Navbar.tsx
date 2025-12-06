@@ -7,6 +7,11 @@ import { Menu, X } from "lucide-react";
 export default function Navbar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  export function logoutMembre() {
+  localStorage.removeItem("memberToken");
+  localStorage.removeItem("memberData");
+}
+
 
   // Vérification du token pour Forum des Militants
   useEffect(() => {

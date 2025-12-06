@@ -3,23 +3,11 @@
 import { useEffect, useState, ReactNode } from "react";
 import { useRouter } from "next/navigation";
 
-/**
- * 🔐 ProtectedRoute étendu
- * - Vérifie la présence du token
- * - Vérifie le rôle si adminOnly ou memberOnly est activé
- */
-
 interface ProtectedRouteProps {
   children: ReactNode;
-  adminOnly?: boolean;
-  memberOnly?: boolean;
 }
 
-export default function ProtectedRoute({
-  children,
-  adminOnly = false,
-  memberOnly = false,
-}: ProtectedRouteProps) {
+export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
 
@@ -30,50 +18,22 @@ export default function ProtectedRoute({
           ? localStorage.getItem("token") || sessionStorage.getItem("token")
           : null;
 
+      // ❌ Aucun token → redirection
       if (!token) {
         setIsAuthorized(false);
         router.push("/login");
         return;
       }
 
-      // 🌟 Vérification du rôle
-      const userData =
-        typeof window !== "undefined"
-          ? localStorage.getItem("fordac_user")
-          : null;
-
-      if (!userData) {
-        setIsAuthorized(false);
-        router.push("/login");
-        return;
-      }
-
-      const user = JSON.parse(userData);
-
-      // 🔐 Admin seulement
-      if (adminOnly && user.role !== "admin") {
-        setIsAuthorized(false);
-        router.push("/login");
-        return;
-      }
-
-      // 👤 Membre seulement
-      if (memberOnly && user.role !== "member") {
-        setIsAuthorized(false);
-        router.push("/login");
-        return;
-      }
-
-      // ✔ Si toutes les conditions sont réunies
+      // ✔ Token présent → accès autorisé
       setIsAuthorized(true);
     } catch (error) {
       console.error("Erreur dans ProtectedRoute :", error);
       setIsAuthorized(false);
       router.push("/login");
     }
-  }, [adminOnly, memberOnly, router]);
+  }, [router]);
 
-  // État de vérification
   if (isAuthorized === null) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#0c2e25] text-white">
@@ -87,9 +47,7 @@ export default function ProtectedRoute({
     );
   }
 
-  // Si non autorisé → redirection
   if (!isAuthorized) return null;
 
-  // Autorisé
   return <>{children}</>;
 }

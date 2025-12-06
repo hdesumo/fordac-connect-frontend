@@ -1,14 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import ProtectedRoute from "../../../../components/ProtectedRoute";
-import IntranetHeader from "../../../../components/IntranetHeader";
-import ForumNav from "../../../../components/ForumNav";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import IntranetHeader from "@/components/IntranetHeader";
+import ForumNav from "@/components/ForumNav";
 
 export default function CreateTopic() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [user, setUser] = useState<any>(null);
+
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   useEffect(() => {
     const u = localStorage.getItem("user");
@@ -16,9 +19,16 @@ export default function CreateTopic() {
   }, []);
 
   const handleSubmit = async () => {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/forum/topics/create`, {
+    if (!title.trim() || !description.trim()) {
+      return alert("Veuillez remplir tous les champs.");
+    }
+
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forum/topics/create`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
       body: JSON.stringify({ title, description }),
     });
 
