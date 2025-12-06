@@ -61,27 +61,27 @@ export default function AdminPostDetails() {
 
   if (loading)
     return (
-      <ProtectedRoute adminOnly>
+      <ProtectedRouteAdmin>
         <main className="p-10 bg-[#F7F7F7] min-h-screen">
           <p className="text-gray-600 italic">Chargement…</p>
         </main>
-      </ProtectedRoute>
+      </ProtectedRouteAdmin>
     );
 
   if (!post)
     return (
-      <ProtectedRoute adminOnly>
+      <ProtectedRouteAdmin>
         <main className="p-10 bg-[#F7F7F7] min-h-screen">
           <p className="text-gray-600">Message introuvable.</p>
           <Link href="/admin/forum/posts" className="text-[#166534] hover:underline">
             ← Retour à la liste
           </Link>
         </main>
-      </ProtectedRoute>
+      </ProtectedRouteAdmin>
     );
 
   return (
-    <ProtectedRoute adminOnly>
+    <ProtectedRouteAdmin>
       <main className="p-10 bg-[#F7F7F7] min-h-screen">
 
         <Link href="/admin/forum/posts" className="text-[#166534] hover:underline">
@@ -142,6 +142,6 @@ export default function AdminPostDetails() {
           )}
         </div>
       </main>
-    </ProtectedRoute>
+    </ProtectedRouteAdmin>
   );
 }

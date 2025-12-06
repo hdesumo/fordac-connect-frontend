@@ -29,7 +29,7 @@ export default function AdminForumDetailPage() {
     const fakeCommentaires = [
       {
         id: 1,
-        auteur: "Jean Dupont",
+        auteur: "Jean Paul Ayissi",
         date: "2025-02-05 08:12",
         texte: "Bonne initiative. Je propose qu'on ajoute une session sur les cartes de membre.",
         statut: "normal", // normal | masque | signale

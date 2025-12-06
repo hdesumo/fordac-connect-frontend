@@ -24,7 +24,7 @@ export default function AdminReportsPage() {
   };
 
   return (
-    <ProtectedRoute adminOnly>
+    <ProtectedRouteAdmin>
       <main className="p-10">
         <h1 className="text-3xl font-bold text-[#166534] mb-6">Signalements</h1>
 
@@ -60,6 +60,6 @@ export default function AdminReportsPage() {
           )}
         </div>
       </main>
-    </ProtectedRoute>
+    </ProtectedRouteAdmin>
   );
 }

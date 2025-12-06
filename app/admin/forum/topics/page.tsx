@@ -70,7 +70,7 @@ export default function AdminTopicsPage() {
   };
 
   return (
-    <ProtectedRoute adminOnly>
+    <ProtectedRouteAdmin>
       <main className="p-10 bg-[#F7F7F7] min-h-screen">
         <h1 className="text-4xl font-extrabold text-[#166534] mb-8">
           Gestion des Sujets du Forum
@@ -170,6 +170,6 @@ export default function AdminTopicsPage() {
           onPrev={() => page > 1 && setPage(page - 1)}
         />
       </main>
-    </ProtectedRoute>
+    </ProtectedRouteAdmin>
   );
 }

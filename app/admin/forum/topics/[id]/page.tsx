@@ -63,15 +63,15 @@ export default function AdminTopicDetails() {
 
   if (loading)
     return (
-      <ProtectedRoute adminOnly>
+      <ProtectedRouteAdmin>
         <main className="p-10 bg-[#F7F7F7] min-h-screen">
           <p className="text-gray-600 italic">Chargement…</p>
         </main>
-      </ProtectedRoute>
+      </ProtectedRouteAdmin>
     );
 
   return (
-    <ProtectedRoute adminOnly>
+    <ProtectedRouteAdmin>
       <main className="min-h-screen p-10 bg-[#F7F7F7]">
 
         <Link
@@ -149,6 +149,6 @@ export default function AdminTopicDetails() {
         </div>
 
       </main>
-    </ProtectedRoute>
+    </ProtectedRouteAdmin>
   );
 }

@@ -56,7 +56,7 @@ export default function AdminTopicModerationPage() {
   };
 
   return (
-    <ProtectedRoute adminOnly>
+    <ProtectedRouteAdmin>
       <main className="min-h-screen bg-[#F7F7F7] p-10">
 
         {/* Bouton retour */}
@@ -140,6 +140,6 @@ export default function AdminTopicModerationPage() {
           </div>
         </div>
       </main>
-    </ProtectedRoute>
+    </ProtectedRouteAdmin>
   );
 }

@@ -46,7 +46,7 @@ export default function AdminForumPosts() {
   };
 
   return (
-    <ProtectedRoute adminOnly>
+    <ProtectedRouteAdmin>
       <main className="min-h-screen p-10 bg-[#F7F7F7]">
 
         <h1 className="text-4xl font-extrabold text-[#166534] mb-8">
@@ -124,6 +124,6 @@ export default function AdminForumPosts() {
           )}
         </div>
       </main>
-    </ProtectedRoute>
+    </ProtectedRouteAdmin>
   );
 }
