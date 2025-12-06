@@ -11,7 +11,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  // 🚀 Si le membre est déjà connecté → redirection automatique
+  // Redirection automatique si membre déjà connecté
   useEffect(() => {
     const existingToken = localStorage.getItem("memberToken");
     if (existingToken) {
@@ -45,13 +45,11 @@ export default function LoginPage() {
         return setErrorMsg(data.message || "Identifiants incorrects.");
       }
 
-      // ✔ Enregistrement correct des données de session
+      // Stockage session membre
       localStorage.setItem("memberToken", data.token);
       localStorage.setItem("memberData", JSON.stringify(data.member));
 
-      // ✔ Redirection membre
       router.push("/membre/dashboard");
-
     } catch (error) {
       console.error("Erreur login :", error);
       setErrorMsg("Une erreur est survenue. Réessayez.");
@@ -66,3 +64,50 @@ export default function LoginPage() {
 
         <h1 className="text-3xl font-bold text-center text-[#166534] mb-6">
           Connexion Membre
+        </h1>
+
+        {errorMsg && (
+          <p className="bg-red-100 text-red-700 p-3 rounded mb-4 text-center">
+            {errorMsg}
+          </p>
+        )}
+
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Téléphone
+            </label>
+            <input
+              type="text"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="w-full border p-3 rounded-lg"
+              placeholder="+237690000111"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Code PIN
+            </label>
+            <input
+              type="password"
+              value={pin}
+              onChange={(e) => setPin(e.target.value)}
+              className="w-full border p-3 rounded-lg"
+              placeholder="Votre code PIN"
+            />
+          </div>
+        </div>
+
+        <button
+          onClick={handleLogin}
+          disabled={loading}
+          className="w-full mt-6 bg-[#166534] text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition"
+        >
+          {loading ? "Connexion..." : "Se connecter"}
+        </button>
+      </div>
+    </main>
+  );
+}
