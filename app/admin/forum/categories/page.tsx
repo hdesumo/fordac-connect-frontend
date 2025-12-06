@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ProtectedRoute from "../../../../components/ProtectedRoute";
+import ProtectedRouteAdmin from "@/components/ProtectedRouteAdmin";
 
 export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState<any[]>([]);
