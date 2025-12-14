@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 
-import ProtectedRouteAdmin from "@/components/ProtectedRouteAdmin";
 import Pagination from "@/components/Pagination";
 
 export default function AdminTopicModerationPage() {
@@ -56,78 +55,81 @@ export default function AdminTopicModerationPage() {
   };
 
   return (
-    <ProtectedRouteAdmin>
-      <main className="min-h-screen bg-[#F7F7F7] p-10">
-        <Link href="/admin/forum" className="text-[#166534] hover:underline text-lg">
-          ← Retour à la liste des sujets
-        </Link>
+    <main className="space-y-6">
 
-        {topic ? (
-          <h1 className="text-4xl font-extrabold text-[#166534] mt-6 mb-4">
-            Sujet : {topic.title}
-          </h1>
+      <Link
+        href="/admin/forum"
+        className="text-[#145331] hover:underline text-sm font-medium"
+      >
+        ← Retour au module forum
+      </Link>
+
+      {topic ? (
+        <h1 className="text-3xl font-extrabold text-[#145331]">
+          Sujet : {topic.title}
+        </h1>
+      ) : (
+        <h1 className="text-xl text-gray-500">Sujet introuvable</h1>
+      )}
+
+      <p className="text-gray-600">
+        Messages : {posts.length}
+      </p>
+
+      <div className="bg-white p-8 rounded-xl border shadow-sm">
+        {paginated.length === 0 ? (
+          <p className="text-gray-600 text-center">Aucun message.</p>
         ) : (
-          <h1 className="text-2xl mt-6 mb-4 text-gray-600">
-            Sujet introuvable
-          </h1>
+          <div className="space-y-8">
+            {paginated.map((post) => (
+              <div
+                key={post.id}
+                className="border rounded-xl p-6 bg-white shadow-sm"
+              >
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-semibold text-[#145331]">
+                    {post.author || "Membre"}
+                  </h3>
+
+                  <span className="text-sm text-gray-500">
+                    {post.created_at
+                      ? new Date(post.created_at).toLocaleString("fr-FR")
+                      : "—"}
+                  </span>
+                </div>
+
+                <p className="mt-3 text-gray-800">
+                  {post.content}
+                </p>
+
+                {post.edited_by_user && (
+                  <p className="text-sm text-gray-500 mt-2 italic">
+                    (Message modifié par l'utilisateur)
+                  </p>
+                )}
+
+                <div className="mt-4 flex gap-4">
+                  <button
+                    onClick={() => deletePost(post.id)}
+                    className="px-5 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 text-sm"
+                  >
+                    Supprimer le message
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         )}
 
-        <p className="text-gray-600 mb-10">
-          Messages : {posts.length}
-        </p>
-
-        <div className="bg-white p-8 rounded-xl border shadow-sm">
-          {paginated.length === 0 ? (
-            <p className="text-gray-600 text-center">Aucun message.</p>
-          ) : (
-            <div className="space-y-8">
-              {paginated.map((post) => (
-                <div key={post.id} className="border rounded-xl p-6 bg-white shadow-sm">
-                  <div className="flex justify-between">
-                    <h3 className="text-xl font-semibold text-[#166534]">
-                      {post.author || "Membre"}
-                    </h3>
-
-                    <span className="text-sm text-gray-500">
-                      {post.created_at
-                        ? new Date(post.created_at).toLocaleString("fr-FR")
-                        : "—"}
-                    </span>
-                  </div>
-
-                  <p className="mt-3 text-gray-800">
-                    {post.content}
-                  </p>
-
-                  {post.edited_by_user && (
-                    <p className="text-sm text-gray-500 mt-2 italic">
-                      (Message modifié par l'utilisateur)
-                    </p>
-                  )}
-
-                  <div className="mt-4 flex gap-4">
-                    <button
-                      onClick={() => deletePost(post.id)}
-                      className="px-5 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 text-sm"
-                    >
-                      Supprimer le message
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <div className="mt-10">
-            <Pagination
-              page={page}
-              total={totalPages}
-              onNext={() => page < totalPages && setPage(page + 1)}
-              onPrev={() => page > 1 && setPage(page - 1)}
-            />
-          </div>
+        <div className="mt-10">
+          <Pagination
+            page={page}
+            total={totalPages}
+            onNext={() => page < totalPages && setPage(page + 1)}
+            onPrev={() => page > 1 && setPage(page - 1)}
+          />
         </div>
-      </main>
-    </ProtectedRouteAdmin>
+      </div>
+    </main>
   );
 }

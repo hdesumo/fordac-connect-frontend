@@ -3,61 +3,33 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import ProtectedRoute from "@/components/ProtectedRoute"; // ✅ Import corrigé
+import ProtectedRouteAdmin from "@/components/ProtectedRouteAdmin";
 
-export default function AdminPostDetails() {
+export default function AdminPostDetailPage() {
   const { id } = useParams();
-  const API = process.env.NEXT_PUBLIC_API_URL;
 
   const [post, setPost] = useState<any>(null);
-  const [reports, setReports] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const API = process.env.NEXT_PUBLIC_API_URL;
 
   const load = async () => {
     try {
-      const res = await fetch(`${API}/admin/forum/posts/${id}`, {
-        cache: "no-store", // ✅ important pour Vercel/Railway
-      });
-
+      const res = await fetch(`${API}/admin/forum/posts/${id}`);
       const data = await res.json();
 
       setPost(data.post || null);
-      setReports(Array.isArray(data.reports) ? data.reports : []);
+      setLoading(false);
     } catch (e) {
-      console.error("Erreur chargement détails message admin:", e);
+      console.error("Erreur chargement post admin:", e);
       setPost(null);
-      setReports([]);
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   useEffect(() => {
-    if (id) load();
+    load();
   }, [id]);
-
-  const deletePost = async () => {
-    if (!confirm("Supprimer ce message ?")) return;
-
-    try {
-      await fetch(`${API}/admin/forum/posts/${id}`, {
-        method: "DELETE",
-      });
-
-      window.location.href = "/admin/forum/posts";
-    } catch (e) {
-      console.error("Erreur suppression message:", e);
-    }
-  };
-
-  const deleteReport = async (rid: number) => {
-    try {
-      await fetch(`${API}/admin/reports/${rid}`, { method: "DELETE" });
-      load(); // reload
-    } catch (e) {
-      console.error("Erreur suppression signalement:", e);
-    }
-  };
 
   if (loading)
     return (
@@ -68,79 +40,38 @@ export default function AdminPostDetails() {
       </ProtectedRouteAdmin>
     );
 
-  if (!post)
-    return (
-      <ProtectedRouteAdmin>
-        <main className="p-10 bg-[#F7F7F7] min-h-screen">
-          <p className="text-gray-600">Message introuvable.</p>
-          <Link href="/admin/forum/posts" className="text-[#166534] hover:underline">
-            ← Retour à la liste
-          </Link>
-        </main>
-      </ProtectedRouteAdmin>
-    );
-
   return (
     <ProtectedRouteAdmin>
       <main className="p-10 bg-[#F7F7F7] min-h-screen">
 
-        <Link href="/admin/forum/posts" className="text-[#166534] hover:underline">
+        <Link
+          href="/admin/forum/posts"
+          className="text-[#166534] hover:underline text-lg"
+        >
           ← Retour aux messages
         </Link>
 
-        <h1 className="text-3xl font-bold text-[#166534] mt-6 mb-4">
-          Détail du message
-        </h1>
+        {post ? (
+          <div className="bg-white shadow rounded-xl p-8 mt-6 border border-gray-200">
+            <h1 className="text-3xl font-bold text-[#166534] mb-4">
+              Message #{post.id}
+            </h1>
 
-        {/* Bloc message */}
-        <div className="bg-white p-8 rounded-xl shadow border mb-10">
-          <p className="text-lg text-[#166534] font-semibold">{post.author}</p>
+            <p className="text-gray-700 text-lg mb-6">{post.content}</p>
 
-          <p className="text-sm text-gray-600">
-            {post.created_at
-              ? new Date(post.created_at).toLocaleString("fr-FR")
-              : "—"}
-          </p>
+            <div className="text-sm text-gray-500">
+              Posté par : {post.author || "Membre inconnu"}  
+              <br />
+              Le :{" "}
+              {post.created_at
+                ? new Date(post.created_at).toLocaleString("fr-FR")
+                : "—"}
+            </div>
+          </div>
+        ) : (
+          <p className="text-gray-600 italic mt-10">Message introuvable.</p>
+        )}
 
-          <p className="mt-4 whitespace-pre-line">{post.content || "—"}</p>
-
-          <button
-            onClick={deletePost}
-            className="mt-6 bg-red-600 text-white px-6 py-3 rounded-lg"
-          >
-            Supprimer le message
-          </button>
-        </div>
-
-        {/* Bloc signalements */}
-        <h2 className="text-2xl font-bold text-[#166534] mb-4">Signalements</h2>
-
-        <div className="bg-white p-8 rounded-xl shadow border">
-          {reports.length === 0 ? (
-            <p className="text-gray-600">Aucun signalement.</p>
-          ) : (
-            <ul className="space-y-6">
-              {reports.map((r) => (
-                <li key={r.id} className="border p-4 rounded-xl">
-                  <p>
-                    <strong>Signalé par :</strong> {r.reporter || "—"}
-                  </p>
-
-                  <p className="text-sm text-gray-700 mt-2">
-                    {r.reason || "—"}
-                  </p>
-
-                  <button
-                    onClick={() => deleteReport(r.id)}
-                    className="mt-3 text-red-600 hover:underline text-sm"
-                  >
-                    Supprimer le signalement
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
       </main>
     </ProtectedRouteAdmin>
   );

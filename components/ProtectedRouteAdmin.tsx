@@ -16,7 +16,7 @@ export default function ProtectedRouteAdmin({ children }: { children: React.Reac
 
   if (!loaded) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen text-white">
         Vérification de la session admin...
       </div>
     );
