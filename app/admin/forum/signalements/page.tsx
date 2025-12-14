@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ProtectedRoute from "../../../../components/ProtectedRoute";
+import ProtectedRouteAdmin from "@/components/ProtectedRouteAdmin";
 
 export default function AdminReportsPage() {
-  const [reports, setReports] = useState([]);
+  const [reports, setReports] = useState<any[]>([]);
   const API = process.env.NEXT_PUBLIC_API_URL;
 
   const load = async () => {
@@ -26,7 +26,9 @@ export default function AdminReportsPage() {
   return (
     <ProtectedRouteAdmin>
       <main className="p-10">
-        <h1 className="text-3xl font-bold text-[#166534] mb-6">Signalements</h1>
+        <h1 className="text-3xl font-bold text-[#166534] mb-6">
+          Signalements
+        </h1>
 
         <div className="bg-white p-8 rounded-xl shadow">
           {reports.length === 0 ? (

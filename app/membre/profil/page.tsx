@@ -1,36 +1,44 @@
 "use client";
 
-<MembreTopbar />
-
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import MembreTopbar from "@/components/MembreTopbar";
 
 export default function ProfilPage() {
   const [profile, setProfile] = useState<any>(null);
-  const [loaded, setLoaded] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  async function loadProfile() {
+  async function fetchProfile() {
     const token = localStorage.getItem("memberToken");
 
-    if (!token) return;
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/members/profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/members/profile`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
+      if (!res.ok) {
+        throw new Error("Erreur chargement profil");
       }
-    );
 
-    const data = await res.json();
-    setProfile(data);
-    setLoaded(true);
+      const data = await res.json();
+      setProfile(data);
+    } catch (err) {
+      console.error(err);
+    }
+
+    setLoading(false);
   }
 
   useEffect(() => {
-    loadProfile();
+    fetchProfile();
   }, []);
 
-  if (!loaded) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen text-white">
         Chargement...
@@ -40,61 +48,66 @@ export default function ProfilPage() {
 
   if (!profile) {
     return (
-      <div className="p-6 text-white">
-        Impossible de charger votre profil.
+      <div className="flex items-center justify-center min-h-screen text-red-400">
+        Profil introuvable
       </div>
     );
   }
 
   return (
-    <div className="p-6 space-y-6 text-white">
+    <div className="min-h-screen bg-[#0f2f1e] text-white">
+      <MembreTopbar />
 
-      {/* TITRE */}
-      <h1 className="text-3xl font-bold">
-        Mon profil
-      </h1>
+      <div className="p-6 max-w-3xl mx-auto space-y-6">
+        <h1 className="text-3xl font-bold">Mon profil</h1>
 
-      {/* PROFIL CARD */}
-      <div className="bg-[#145331] p-6 rounded-xl border border-green-800 space-y-3">
+        <div className="bg-[#145331] p-6 rounded-xl border border-green-800 space-y-4">
+          <div>
+            <span className="font-semibold">Nom :</span>{" "}
+            {profile.name}
+          </div>
 
-        <p><strong>Nom :</strong> {profile.name}</p>
-        <p><strong>Email :</strong> {profile.email}</p>
-        <p><strong>Téléphone :</strong> {profile.phone}</p>
+          <div>
+            <span className="font-semibold">Email :</span>{" "}
+            {profile.email}
+          </div>
 
-        <p>
-          <strong>Quartier :</strong>{" "}
-          {profile.quartier || "Non renseigné"}
-        </p>
+          <div>
+            <span className="font-semibold">Téléphone :</span>{" "}
+            {profile.phone}
+          </div>
 
-        <p>
-          <strong>Secteur :</strong>{" "}
-          {profile.secteur || "Non renseigné"}
-        </p>
+          {profile.quartier && (
+            <div>
+              <span className="font-semibold">Quartier :</span>{" "}
+              {profile.quartier}
+            </div>
+          )}
 
-        <p>
-          <strong>Arrondissement :</strong>{" "}
-          {profile.arrondissement || "Non renseigné"}
-        </p>
+          {profile.secteur && (
+            <div>
+              <span className="font-semibold">Secteur :</span>{" "}
+              {profile.secteur}
+            </div>
+          )}
 
-        <p>
-          <strong>Niveau d’adhésion :</strong>{" "}
-          {profile.membership_level || "Non défini"}
-        </p>
-
-        <p>
-          <strong>Date d'inscription :</strong>{" "}
-          {profile.created_at?.substring(0, 10)}
-        </p>
+          {profile.arrondissement && (
+            <div>
+              <span className="font-semibold">
+                Arrondissement :
+              </span>{" "}
+              {profile.arrondissement}
+            </div>
+          )}
+        </div>
 
         <Link
           href="/membre/profil/edit"
-          className="mt-4 inline-block bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-bold"
+          className="inline-block bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded font-bold"
         >
           Modifier mon profil
         </Link>
-
       </div>
-
     </div>
   );
 }

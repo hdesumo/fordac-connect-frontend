@@ -1,6 +1,6 @@
 "use client";
-<MembreTopbar />
 
+import MembreTopbar from "@/components/MembreTopbar";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -42,13 +42,16 @@ export default function CreatePublicationPage() {
       formData.append("content", content);
       if (image) formData.append("image", image);
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/publications/create`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/publications/create`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
 
       const data = await res.json();
 
@@ -61,7 +64,6 @@ export default function CreatePublicationPage() {
       setMessage("Publication créée avec succès ✔");
 
       setTimeout(() => {
-        // à terme : router.push(`/membre/publications/${data.id}`);
         router.push("/membre/publications");
       }, 1200);
 
@@ -73,76 +75,79 @@ export default function CreatePublicationPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <>
+      <MembreTopbar />
 
-      <h1 className="text-2xl font-bold text-gray-800">Créer une publication</h1>
+      <div className="space-y-6 p-6">
 
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-lg shadow space-y-4 max-w-2xl"
-      >
-        {/* TITRE */}
-        <div>
-          <label className="block font-semibold mb-1">Titre *</label>
-          <input
-            type="text"
-            value={title}
-            className="w-full border p-2 rounded"
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-        </div>
+        <h1 className="text-2xl font-bold text-gray-800">
+          Créer une publication
+        </h1>
 
-        {/* CONTENU */}
-        <div>
-          <label className="block font-semibold mb-1">Contenu *</label>
-          <textarea
-            value={content}
-            className="w-full border p-2 rounded h-40"
-            onChange={(e) => setContent(e.target.value)}
-            required
-          ></textarea>
-        </div>
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white p-6 rounded-lg shadow space-y-4 max-w-2xl"
+        >
+          {/* TITRE */}
+          <div>
+            <label className="block font-semibold mb-1">Titre *</label>
+            <input
+              type="text"
+              value={title}
+              className="w-full border p-2 rounded"
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+          </div>
 
-        {/* IMAGE */}
-        <div>
-          <label className="block font-semibold mb-2">Illustration (optionnelle)</label>
-          <input
-            type="file"
-            accept="image/*"
-            className="w-full"
-            onChange={handleImageChange}
-          />
+          {/* CONTENU */}
+          <div>
+            <label className="block font-semibold mb-1">Contenu *</label>
+            <textarea
+              value={content}
+              className="w-full border p-2 rounded h-40"
+              onChange={(e) => setContent(e.target.value)}
+              required
+            />
+          </div>
 
-          {/* Prévisualisation */}
-          {preview && (
-            <div className="mt-4">
-              <img
-                src={preview}
-                alt="Prévisualisation"
-                className="w-48 rounded shadow"
-              />
+          {/* IMAGE */}
+          <div>
+            <label className="block font-semibold mb-2">
+              Illustration (optionnelle)
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+
+            {preview && (
+              <div className="mt-4">
+                <img
+                  src={preview}
+                  alt="Prévisualisation"
+                  className="w-48 rounded shadow"
+                />
+              </div>
+            )}
+          </div>
+
+          {message && (
+            <div className="text-center text-sm text-blue-600">
+              {message}
             </div>
           )}
-        </div>
 
-        {/* MESSAGE */}
-        {message && (
-          <div className="text-center text-sm text-blue-600">
-            {message}
-          </div>
-        )}
-
-        {/* BOUTON */}
-        <button
-          type="submit"
-          disabled={loadingSubmit}
-          className="bg-[#111827] text-white px-4 py-2 rounded hover:bg-black w-full"
-        >
-          {loadingSubmit ? "Publication..." : "Publier"}
-        </button>
-      </form>
-
-    </div>
+          <button
+            type="submit"
+            disabled={loadingSubmit}
+            className="bg-[#111827] text-white px-4 py-2 rounded hover:bg-black w-full"
+          >
+            {loadingSubmit ? "Publication..." : "Publier"}
+          </button>
+        </form>
+      </div>
+    </>
   );
 }

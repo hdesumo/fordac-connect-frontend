@@ -1,36 +1,33 @@
 "use client";
-<MembreTopbar />
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import ProtectedRouteMembre from "@/components/ProtectedRouteMembre";
+import MembreTopbar from "@/components/MembreTopbar";
 import useMembreAuth from "@/hooks/useMembreAuth";
 import { getSujets } from "@/lib/membreForumApi";
 
-export default function ForumIndexPage() {
+export default function MembreForumPage() {
   const { token, loaded } = useMembreAuth();
 
-  const [loading, setLoading] = useState(true);
   const [sujets, setSujets] = useState<any[]>([]);
-  const [totalPages, setTotalPages] = useState(1);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!loaded || !token) return;
 
     async function fetchData() {
       try {
-        const data = await getSujets(currentPage, token);
-        setSujets(data.items);
-        setTotalPages(data.totalPages);
-      } catch (err) {
-        console.error(err);
+        const data = await getSujets(1, token);
+        setSujets(data);
+      } catch (e) {
+        console.error(e);
       }
       setLoading(false);
     }
 
     fetchData();
-  }, [loaded, token, currentPage]);
+  }, [loaded, token]);
 
   if (!loaded || loading) {
     return (
@@ -44,67 +41,51 @@ export default function ForumIndexPage() {
 
   return (
     <ProtectedRouteMembre>
-      <div className="space-y-6">
+      <div className="min-h-screen bg-[#F7F7F7]">
+        <MembreTopbar />
 
-        <h1 className="text-2xl font-bold text-gray-800">
-          Forum des membres
-        </h1>
+        <main className="p-6 max-w-5xl mx-auto space-y-6">
+          <div className="flex justify-between items-center">
+            <h1 className="text-3xl font-bold text-[#166534]">
+              Forum des membres
+            </h1>
 
-        <div>
-          <Link
-            href="/membre/forum/create"
-            className="bg-[#111827] text-white px-4 py-2 rounded hover:bg-black"
-          >
-            📝 Créer un sujet
-          </Link>
-        </div>
-
-        <div className="bg-white rounded-lg shadow">
-          <table className="w-full">
-            <thead className="bg-gray-200 text-gray-800">
-              <tr>
-                <th className="text-left p-3">Sujet</th>
-                <th className="p-3">Auteur</th>
-                <th className="p-3">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sujets.map((s: any) => (
-                <tr key={s.id} className="border-b hover:bg-gray-50">
-                  <td className="p-3">
-                    <Link
-                      href={`/membre/forum/${s.id}`}
-                      className="font-medium text-blue-600 hover:underline"
-                    >
-                      {s.title}
-                    </Link>
-                  </td>
-                  <td className="p-3">{s.author_name}</td>
-                  <td className="p-3 text-gray-500">
-                    {new Date(s.created_at).toLocaleDateString()}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* PAGINATION */}
-        <div className="flex space-x-3">
-          {Array.from({ length: totalPages }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`px-3 py-1 rounded ${
-                currentPage === i + 1
-                  ? "bg-[#111827] text-white"
-                  : "bg-gray-200"
-              }`}
+            <Link
+              href="/membre/forum/create"
+              className="bg-[#166534] text-white px-4 py-2 rounded hover:bg-[#145f48]"
             >
-              {i + 1}
-            </button>
-          ))}
-        </div>
+              + Nouveau sujet
+            </Link>
+          </div>
+
+          {sujets.length === 0 && (
+            <p className="text-gray-600">
+              Aucun sujet pour le moment.
+            </p>
+          )}
+
+          <div className="space-y-4">
+            {sujets.map((s) => (
+              <Link
+                key={s.id}
+                href={`/membre/forum/${s.id}`}
+                className="block bg-white p-4 rounded shadow hover:bg-gray-50"
+              >
+                <h2 className="text-lg font-semibold text-gray-800">
+                  {s.title}
+                </h2>
+                <p className="text-gray-600 line-clamp-2">
+                  {s.description}
+                </p>
+                <p className="text-sm text-gray-500 mt-2">
+                  📅{" "}
+                  {new Date(s.created_at).toLocaleDateString()} —{" "}
+                  {s.author_name}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </main>
       </div>
     </ProtectedRouteMembre>
   );

@@ -1,67 +1,63 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import ProtectedRouteAdmin from "@/components/ProtectedRouteAdmin";
 
-import ProtectedRoute from "@/components/ProtectedRoute"; // 🔥 Import corrigé
+interface Topic {
+  id: number;
+  title: string;
+  description: string;
+  created_at: string;
+}
 
-export default function AdminTopicDetails() {
-  const { id } = useParams();
-  const API = process.env.NEXT_PUBLIC_API_URL;
+export default function AdminForumTopicPage() {
+  const params = useParams();
+  const router = useRouter();
+  const topicId = params?.id as string;
 
-  const [topic, setTopic] = useState<any>(null);
-  const [posts, setPosts] = useState<any[]>([]);
+  const [topic, setTopic] = useState<Topic | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const load = async () => {
-    try {
-      const res = await fetch(`${API}/topics/${id}`, {
-        cache: "no-store", // 🔥 indispensable
-      });
-
-      const data = await res.json();
-
-      setTopic(data.topic || null);
-      setPosts(Array.isArray(data.posts) ? data.posts : []);
-    } catch (e) {
-      console.error("Erreur chargement détails sujet admin:", e);
-      setTopic(null);
-      setPosts([]);
-    }
-
-    setLoading(false);
-  };
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (id) load();
-  }, [id]);
+    if (!topicId) return;
 
-  const lockTopic = async () => {
-    await fetch(`${API}/admin/forum/topics/${id}/lock`, { method: "PUT" });
-    load();
-  };
+    const fetchTopic = async () => {
+      try {
+        const token = localStorage.getItem("adminToken");
 
-  const unlockTopic = async () => {
-    await fetch(`${API}/admin/forum/topics/${id}/unlock`, { method: "PUT" });
-    load();
-  };
+        if (!token) {
+          router.push("/admin-login");
+          return;
+        }
 
-  const deleteTopic = async () => {
-    if (!confirm("Supprimer définitivement ce sujet ?")) return;
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/admin/forum/topics/${topicId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-    await fetch(`${API}/admin/forum/topics/${id}`, { method: "DELETE" });
-    window.location.href = "/admin/forum/topics";
-  };
+        if (!res.ok) {
+          throw new Error("Impossible de charger le sujet");
+        }
 
-  const deletePost = async (postId: number) => {
-    if (!confirm("Supprimer ce message ?")) return;
+        const data = await res.json();
+        setTopic(data.topic || data);
+      } catch (err: any) {
+        setError(err.message || "Erreur inconnue");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    await fetch(`${API}/admin/forum/posts/${postId}`, { method: "DELETE" });
-    load();
-  };
+    fetchTopic();
+  }, [topicId, router]);
 
-  if (loading)
+  if (loading) {
     return (
       <ProtectedRouteAdmin>
         <main className="p-10 bg-[#F7F7F7] min-h-screen">
@@ -69,85 +65,58 @@ export default function AdminTopicDetails() {
         </main>
       </ProtectedRouteAdmin>
     );
+  }
+
+  if (error) {
+    return (
+      <ProtectedRouteAdmin>
+        <main className="p-10 bg-[#F7F7F7] min-h-screen">
+          <p className="text-red-600 font-semibold">{error}</p>
+        </main>
+      </ProtectedRouteAdmin>
+    );
+  }
+
+  if (!topic) {
+    return (
+      <ProtectedRouteAdmin>
+        <main className="p-10 bg-[#F7F7F7] min-h-screen">
+          <p className="text-gray-600">Sujet introuvable.</p>
+        </main>
+      </ProtectedRouteAdmin>
+    );
+  }
 
   return (
     <ProtectedRouteAdmin>
-      <main className="min-h-screen p-10 bg-[#F7F7F7]">
+      <main className="p-10 bg-[#F7F7F7] min-h-screen">
+        <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-card p-6">
+          <h1 className="text-3xl font-bold text-[#166534] mb-4">
+            {topic.title}
+          </h1>
 
-        <Link
-          href="/admin/forum/topics"
-          className="text-[#166534] hover:underline"
-        >
-          ← Retour à la liste des sujets
-        </Link>
+          <p className="text-gray-700 mb-6 whitespace-pre-line">
+            {topic.description}
+          </p>
 
-        <h1 className="text-4xl font-extrabold text-[#166534] mt-6 mb-4">
-          Modération du Sujet
-        </h1>
+          <p className="text-sm text-gray-500">
+            Créé le{" "}
+            {new Date(topic.created_at).toLocaleDateString("fr-FR", {
+              day: "2-digit",
+              month: "long",
+              year: "numeric",
+            })}
+          </p>
 
-        {topic && (
-          <div className="bg-white shadow p-8 rounded-xl border mb-10">
-            <h2 className="text-2xl font-bold text-[#166534] mb-2">
-              {topic.title}
-            </h2>
-
-            <p className="text-gray-600 mb-4">
-              Auteur : <strong>{topic.author}</strong>
-            </p>
-
-            <div className="flex gap-4">
-              {topic.locked ? (
-                <button
-                  onClick={unlockTopic}
-                  className="bg-blue-600 text-white px-6 py-3 rounded-lg"
-                >
-                  Déverrouiller le sujet
-                </button>
-              ) : (
-                <button
-                  onClick={lockTopic}
-                  className="bg-orange-600 text-white px-6 py-3 rounded-lg"
-                >
-                  Verrouiller le sujet
-                </button>
-              )}
-
-              <button
-                onClick={deleteTopic}
-                className="bg-red-700 text-white px-6 py-3 rounded-lg"
-              >
-                Supprimer le sujet
-              </button>
-            </div>
-          </div>
-        )}
-
-        <h3 className="text-2xl font-bold text-[#166534] mb-4">
-          Messages ({posts.length})
-        </h3>
-
-        <div className="space-y-6">
-          {posts.map((p: any) => (
-            <div
-              key={p.id}
-              className="bg-white p-6 rounded-xl shadow border"
+          <div className="mt-8">
+            <button
+              onClick={() => router.back()}
+              className="btn btn-secondary"
             >
-              <p className="font-semibold text-[#166534]">{p.author}</p>
-              <p className="text-sm text-gray-500">
-                {new Date(p.created_at).toLocaleString("fr-FR")}
-              </p>
-              <p className="mt-3">{p.content}</p>
-
-              <button
-                onClick={() => deletePost(p.id)}
-                className="mt-4 text-red-600 hover:underline text-sm"
-              >
-                Supprimer
-              </button>
-            </div>
-          ))}
+              ← Retour
+            </button>
+          </div>
         </div>
-
       </main>
     </ProtectedRouteAdmin>
   );

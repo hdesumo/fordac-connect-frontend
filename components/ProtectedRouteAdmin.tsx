@@ -1,28 +1,27 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import useAdminAuth from "@/hooks/useAdminAuth";
 
-export default function ProtectedRouteAdmin({ children }: { children: React.ReactNode }) {
+export default function ProtectedRouteAdmin({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const router = useRouter();
-  const { isAuthenticated, loaded } = useAdminAuth();
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    if (loaded && !isAuthenticated) {
+    const token = localStorage.getItem("adminToken");
+
+    if (!token) {
       router.replace("/admin-login");
+    } else {
+      setChecked(true);
     }
-  }, [loaded, isAuthenticated, router]);
+  }, [router]);
 
-  if (!loaded) {
-    return (
-      <div className="flex items-center justify-center min-h-screen text-white">
-        Vérification de la session admin...
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) return null;
+  if (!checked) return null;
 
   return <>{children}</>;
 }

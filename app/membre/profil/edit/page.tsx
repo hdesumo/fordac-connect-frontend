@@ -1,8 +1,8 @@
 "use client";
-<MembreTopbar />
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import MembreTopbar from "@/components/MembreTopbar";
 
 export default function EditProfilPage() {
   const router = useRouter();
@@ -107,106 +107,108 @@ export default function EditProfilPage() {
   }
 
   return (
-    <div className="p-6 text-white space-y-6">
+    <div className="min-h-screen bg-[#0f2f1e]">
+      <MembreTopbar />
 
-      <h1 className="text-3xl font-bold mb-4">
-        Modifier mon profil
-      </h1>
+      <div className="p-6 text-white space-y-6">
+        <h1 className="text-3xl font-bold mb-4">
+          Modifier mon profil
+        </h1>
 
-      <form
-        onSubmit={handleSubmit}
-        className="bg-[#145331] p-6 rounded-xl border border-green-800 space-y-6 max-w-xl"
-      >
-        {/* NOM */}
-        <div>
-          <label className="block mb-2 font-semibold">Nom complet</label>
-          <input
-            type="text"
-            value={name}
-            className="w-full p-3 rounded text-black"
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-
-        {/* TÉLÉPHONE */}
-        <div>
-          <label className="block mb-2 font-semibold">Téléphone</label>
-          <input
-            type="text"
-            value={phone}
-            className="w-full p-3 rounded text-black"
-            onChange={(e) => setPhone(e.target.value)}
-            required
-          />
-        </div>
-
-        {/* EMAIL */}
-        <div>
-          <label className="block mb-2 font-semibold">Email</label>
-          <input
-            type="email"
-            value={email}
-            className="w-full p-3 rounded text-black"
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-
-        {/* QUARTIER */}
-        <div>
-          <label className="block mb-2 font-semibold">Quartier</label>
-          <input
-            type="text"
-            value={quartier}
-            className="w-full p-3 rounded text-black"
-            onChange={(e) => setQuartier(e.target.value)}
-          />
-        </div>
-
-        {/* SECTEUR */}
-        <div>
-          <label className="block mb-2 font-semibold">Secteur</label>
-          <select
-            value={secteur}
-            onChange={(e) => setSecteur(e.target.value)}
-            className="w-full p-3 rounded text-black"
-          >
-            <option value="">-- Choisir un secteur --</option>
-            <option value="Moungo Nord">Moungo Nord</option>
-            <option value="Moungo Sud">Moungo Sud</option>
-          </select>
-        </div>
-
-        {/* ARRONDISSEMENT */}
-        <div>
-          <label className="block mb-2 font-semibold">Arrondissement</label>
-          <input
-            type="text"
-            value={arrondissement}
-            className="w-full p-3 rounded text-black"
-            onChange={(e) => setArrondissement(e.target.value)}
-            placeholder="Njombé, Penja, etc."
-          />
-        </div>
-
-        {/* MESSAGE */}
-        {message && (
-          <div className="text-center text-sm font-semibold text-yellow-200">
-            {message}
-          </div>
-        )}
-
-        {/* BOUTON */}
-        <button
-          type="submit"
-          disabled={loadingSubmit}
-          className="bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded w-full font-bold"
+        <form
+          onSubmit={handleSubmit}
+          className="bg-[#145331] p-6 rounded-xl border border-green-800 space-y-6 max-w-xl"
         >
-          {loadingSubmit ? "Enregistrement..." : "Enregistrer"}
-        </button>
-      </form>
+          {/* NOM */}
+          <div>
+            <label className="block mb-2 font-semibold">Nom complet</label>
+            <input
+              type="text"
+              value={name}
+              className="w-full p-3 rounded text-black"
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
 
+          {/* TÉLÉPHONE */}
+          <div>
+            <label className="block mb-2 font-semibold">Téléphone</label>
+            <input
+              type="text"
+              value={phone}
+              className="w-full p-3 rounded text-black"
+              onChange={(e) => setPhone(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* EMAIL */}
+          <div>
+            <label className="block mb-2 font-semibold">Email</label>
+            <input
+              type="email"
+              value={email}
+              className="w-full p-3 rounded text-black"
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* QUARTIER */}
+          <div>
+            <label className="block mb-2 font-semibold">Quartier</label>
+            <input
+              type="text"
+              value={quartier}
+              className="w-full p-3 rounded text-black"
+              onChange={(e) => setQuartier(e.target.value)}
+            />
+          </div>
+
+          {/* SECTEUR */}
+          <div>
+            <label className="block mb-2 font-semibold">Secteur</label>
+            <select
+              value={secteur}
+              onChange={(e) => setSecteur(e.target.value)}
+              className="w-full p-3 rounded text-black"
+            >
+              <option value="">-- Choisir un secteur --</option>
+              <option value="Moungo Nord">Moungo Nord</option>
+              <option value="Moungo Sud">Moungo Sud</option>
+            </select>
+          </div>
+
+          {/* ARRONDISSEMENT */}
+          <div>
+            <label className="block mb-2 font-semibold">Arrondissement</label>
+            <input
+              type="text"
+              value={arrondissement}
+              className="w-full p-3 rounded text-black"
+              onChange={(e) => setArrondissement(e.target.value)}
+              placeholder="Njombé, Penja, etc."
+            />
+          </div>
+
+          {/* MESSAGE */}
+          {message && (
+            <div className="text-center text-sm font-semibold text-yellow-200">
+              {message}
+            </div>
+          )}
+
+          {/* BOUTON */}
+          <button
+            type="submit"
+            disabled={loadingSubmit}
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded w-full font-bold"
+          >
+            {loadingSubmit ? "Enregistrement..." : "Enregistrer"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
