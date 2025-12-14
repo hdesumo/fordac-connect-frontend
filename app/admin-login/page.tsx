@@ -5,92 +5,105 @@ import { useState } from "react";
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPwd, setShowPwd] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
-      const res = await fetch("https://api.fordac-connect.org/api/admin/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || "Erreur serveur.");
+        setError(data.message || "Route introuvable");
+        setLoading(false);
         return;
       }
 
-      localStorage.setItem("token", data.token);
+      // 🔐 Stockage du token admin
+      localStorage.setItem("adminToken", data.adminToken);
+
+      // ✅ Redirection vers le dashboard admin
       window.location.href = "/admin/dashboard";
-    } catch (err: any) {
+    } catch (err) {
       setError("Impossible de joindre le serveur.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#002F2F] px-4">
-      
-      <div className="w-full max-w-xl bg-white/10 backdrop-blur-xl p-8 rounded-xl shadow-lg border border-white/10">
-
-        <h1 className="text-center text-3xl font-bold text-white mb-6">
+    <div className="min-h-screen flex items-center justify-center bg-[#002F2F] px-4">
+      <div className="w-full max-w-lg bg-white/10 backdrop-blur-md rounded-xl shadow-xl p-8 border border-white/10">
+        <h1 className="text-3xl font-bold text-center text-white mb-6">
           Connexion Admin
         </h1>
 
         {error && (
-          <div className="mb-4 bg-red-500 text-white px-4 py-2 rounded-lg text-center font-semibold">
+          <div className="mb-4 bg-red-500 text-white text-center px-4 py-2 rounded-lg font-semibold">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleLogin} className="space-y-6">
-          
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* Email */}
           <div>
-            <label className="block text-white font-semibold mb-1">Email</label>
+            <label className="block text-white font-semibold mb-1">
+              Email
+            </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@fordac-connect.org"
-              className="w-full px-4 py-3 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/20 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+              required
+              className="w-full px-4 py-3 rounded-lg bg-white/20 text-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-yellow-500"
             />
           </div>
 
-          {/* Password */}
+          {/* Mot de passe */}
           <div>
-            <label className="block text-white font-semibold mb-1">Mot de passe</label>
-
+            <label className="block text-white font-semibold mb-1">
+              Mot de passe
+            </label>
             <div className="relative">
               <input
-                type={showPwd ? "text" : "password"}
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full px-4 py-3 rounded-lg bg-white/20 text-white placeholder-white/60 border border-white/20 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+                required
+                className="w-full px-4 py-3 rounded-lg bg-white/20 text-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-yellow-500"
               />
-
               <button
                 type="button"
-                onClick={() => setShowPwd(!showPwd)}
+                onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white"
               >
-                {showPwd ? "👁️" : "👁️‍🗨️"}
+                {showPassword ? "🙈" : "👁️"}
               </button>
             </div>
           </div>
 
-          {/* Submit */}
+          {/* Bouton */}
           <button
             type="submit"
-            className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-3 rounded-lg transition"
+            disabled={loading}
+            className="w-full bg-yellow-500 hover:bg-yellow-600 disabled:opacity-60 text-black font-bold py-3 rounded-lg transition"
           >
-            Se connecter
+            {loading ? "Connexion..." : "Se connecter"}
           </button>
         </form>
       </div>
