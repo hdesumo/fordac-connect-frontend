@@ -1,18 +1,22 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
+import js from "@eslint/js";
+import next from "eslint-config-next";
 
-const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
-]);
+/**
+ * ESLint Flat Config for Next.js 15+
+ * Compatible with Vercel build
+ */
+export default [
+  js.configs.recommended,
 
-export default eslintConfig;
+  ...next,
+
+  {
+    ignores: [
+      ".next/**",
+      "node_modules/**",
+      "dist/**",
+      "build/**",
+      "out/**"
+    ],
+  },
+];
